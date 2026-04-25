@@ -148,6 +148,80 @@ input, select, textarea {
   padding: 1.5rem 2rem; border-bottom: 1px solid var(--gray-200);
   display: flex; justify-content: space-between; align-items: center;
 }
+/* Loader styles */
+#loader {
+  position: fixed;
+  z-index: 5000;
+  inset: 0;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s;
+}
+#loader .spinner {
+  border: 4px solid var(--gray-200);
+  border-top: 4px solid var(--black);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loader.hidden { opacity: 0; pointer-events: none; }
+
+/* Under Development Modal styles */
+#devModal {
+  position: fixed;
+  z-index: 6000;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#devModal .modal-box {
+  background: var(--white);
+  padding: 2.5rem 2rem;
+  border-radius: 8px;
+  max-width: 350px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  text-align: center;
+  position: relative;
+}
+#devModal .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--gray-500);
+  cursor: pointer;
+}
+#devModal .countdown {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0.5rem;
+}
+#devModal .cd-box {
+  background: var(--gray-100);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  min-width: 40px;
+  font-size: 1.2rem;
+  font-family: monospace;
+  font-weight: 600;
+}
+#devModal .cd-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--gray-500);
+  margin-top: 0.2rem;
+}
+
 .drawer-header h3 { font-size: 1.3rem; }
 .drawer-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
 .drawer-body { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
@@ -641,8 +715,59 @@ input, select, textarea {
 </style>
 </head>
 <body>
+<div id="loader"><div class="spinner"></div></div>
+<div id="devModal">
+  <div class="modal-box">
+    <button id="closeDevModal" class="close-btn" title="Close">&times;</button>
+    <h2 style="font-size:1.2rem;margin-bottom:0.5rem">We're Launching Soon</h2>
+    <p style="color:var(--gray-600);font-size:0.95rem;margin-bottom:1.2rem">This site is under development.<br>Countdown to launch:</p>
+    <div class="countdown">
+      <div><div class="cd-box" id="cdDays">00</div><span class="cd-label">Days</span></div>
+      <div><div class="cd-box" id="cdHours">00</div><span class="cd-label">Hours</span></div>
+      <div><div class="cd-box" id="cdMinutes">00</div><span class="cd-label">Minutes</span></div>
+      <div><div class="cd-box" id="cdSeconds">00</div><span class="cd-label">Seconds</span></div>
+    </div>
+  </div>
+</div>    
 <div id="app"></div>
 <script>
+
+
+// ── Under Development Modal Countdown ──
+(function() {
+    // Set your launch date here (YYYY-MM-DDTHH:MM:SSZ or local)
+    var launchDate = new Date('2026-06-15T12:00:00'); // Example: June 15, 2026, noon
+    var modal = document.getElementById('devModal');
+    var closeBtn = document.getElementById('closeDevModal');
+    function updateCountdown() {
+        var now = new Date();
+        var diff = launchDate - now;
+        if (diff < 0) diff = 0;
+        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        var minutes = Math.floor((diff / (1000 * 60)) % 60);
+        var seconds = Math.floor((diff / 1000) % 60);
+        document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
+        document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    // Optional: allow closing modal
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    });
+    // Prevent scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+})();
+// ── Loader ──
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+    }, 1200);
+});
 // ═══════════════════════════════════════════════════════════════
 // DUMMY DATA
 // ═══════════════════════════════════════════════════════════════
@@ -669,10 +794,10 @@ const products = [
   { id: 11, name: 'Chronograph Watch', slug: 'chronograph-watch', category: 'watches', price: 3200, salePrice: null, stock: 4, rating: 4.8, reviews: 5, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1585123334904-845d60e97b29?w=600&h=800&fit=crop'], description: 'Swiss-made chronograph with sapphire crystal and stainless steel case. Water resistant to 100m. A statement piece for the modern gentleman.', details: 'Stainless steel. Swiss quartz movement. 42mm case. 5ATM water resistance.', shipping: 'Insured shipping. 3-5 business days.', new: false },
   { id: 12, name: 'Leather Crossbody Bag', slug: 'leather-crossbody-bag', category: 'bags', price: 760, salePrice: null, stock: 14, rating: 4.3, reviews: 21, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=800&fit=crop'], description: 'Compact crossbody in supple lambskin with adjustable strap and gold-tone hardware. Fits phone, wallet, and keys with elegant ease.', details: 'Lambskin leather. Wipe clean. Made in Italy.', shipping: 'Complimentary shipping. 2-3 days.', new: true },
   { id: 13, name: 'Tailored Wool Trousers', slug: 'tailored-wool-trousers', category: 'men', price: 640, salePrice: null, stock: 19, rating: 4.4, reviews: 27, image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1506629082955-511b1aa6a9e0?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584370848010-d7d6febc462c?w=600&h=800&fit=crop'], description: 'Sharp tailored trousers in super 120s wool. Flat front with side adjusters. The perfect foundation for formal and smart-casual looks.', details: '100% Super 120s Wool. Dry clean. Made in Portugal.', shipping: 'Standard shipping. 3-5 days.', new: false },
-  { id: 14, name: 'Pleated Midi Skirt', slug: 'pleated-midi-skirt', category: 'women', price: 560, salePrice: 420, stock: 9, rating: 4.2, reviews: 15, image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0uj1a?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1583496661160-fb5886a0uj1a?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=600&h=800&fit=crop'], description: 'Elegant pleated midi skirt in crepe de chine. Flowing silhouette with an elasticated waist for comfort. Moves beautifully with every step.', details: '100% Silk crepe de chine. Dry clean. Made in Italy.', shipping: 'Standard shipping. 3-5 days.', new: true },
+  { id: 14, name: 'Pleated Midi Skirt', slug: 'pleated-midi-skirt', category: 'women', price: 560, salePrice: 420, stock: 9, rating: 4.2, reviews: 15, image: 'https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop', thumbs: ['https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop','https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop','https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop','https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop'], description: 'Elegant pleated midi skirt in crepe de chine. Flowing silhouette with an elasticated waist for comfort. Moves beautifully with every step.', details: '100% Silk crepe de chine. Dry clean. Made in Italy.', shipping: 'Standard shipping. 3-5 days.', new: true },
   { id: 15, name: 'Bomber Jacket', slug: 'bomber-jacket', category: 'men', price: 780, salePrice: null, stock: 11, rating: 4.6, reviews: 19, image: 'https://images.unsplash.com/photo-1551028919-ac76c90f27b9?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1551028919-ac76c90f27b9?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=800&fit=crop'], description: 'Modern bomber jacket in technical satin with ribbed collar and cuffs. Lightweight insulation for transitional weather. Zip front with internal pocket.', details: 'Polyester satin. Machine wash 30C. Made in Vietnam.', shipping: 'Standard shipping. 3-5 days.', new: false },
   { id: 16, name: 'Ankle Boots', slug: 'ankle-boots', category: 'shoes', price: 920, salePrice: null, stock: 7, rating: 4.7, reviews: 22, image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&h=800&fit=crop'], description: 'Handcrafted ankle boots in polished calfskin leather. Side zip, stacked heel, and leather sole. A versatile staple that pairs with everything.', details: 'Calfskin leather. Leather sole. Made in Italy.', shipping: 'Complimentary shipping. 2-3 days.', new: false },
-  { id: 17, name: 'Silk Scarf', slug: 'silk-scarf', category: 'accessories', price: 240, salePrice: null, stock: 38, rating: 4.0, reviews: 45, image: 'https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&h=800&fit=crop'], description: 'Square silk twill scarf with hand-rolled edges and abstract print. A versatile accessory for neck, bag, or hair.', details: '100% Silk twill. Dry clean. Made in France. 90x90cm.', shipping: 'Standard shipping.', new: false },
+  { id: 17, name: 'Silk Scarf', slug: 'silk-scarf', category: 'accessories', price: 240, salePrice: null, stock: 38, rating: 4.0, reviews: 45, image: 'https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-160192https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d4994987-69e26d50dc26?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&h=800&fit=crop'], description: 'Square silk twill scarf with hand-rolled edges and abstract print. A versatile accessory for neck, bag, or hair.', details: '100% Silk twill. Dry clean. Made in France. 90x90cm.', shipping: 'Standard shipping.', new: false },
   { id: 18, name: 'Dive Watch', slug: 'dive-watch', category: 'watches', price: 4500, salePrice: null, stock: 2, rating: 4.9, reviews: 3, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1585123334904-845d60e97b29?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=800&fit=crop'], description: 'Professional dive watch in titanium with ceramic bezel and 300m water resistance. Automatic movement with 72-hour power reserve. Serious tool watch aesthetics.', details: 'Titanium case. Automatic movement. 300m WR. 43mm.', shipping: 'Insured shipping. 3-5 days.', new: true },
   { id: 19, name: 'Tote Bag', slug: 'tote-bag', category: 'bags', price: 520, salePrice: null, stock: 16, rating: 4.3, reviews: 29, image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=800&fit=crop'], description: 'Spacious canvas tote with leather handles and base. Interior zip pocket. Perfect for work, travel, or weekend errands.', details: 'Cotton canvas with leather trim. Spot clean. Made in UK.', shipping: 'Standard shipping. 3-5 days.', new: false },
   { id: 20, name: 'Oxford Shoes', slug: 'oxford-shoes', category: 'shoes', price: 1100, salePrice: null, stock: 5, rating: 4.8, reviews: 11, image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop'], description: 'Hand-burnished oxford shoes in full-grain leather. Goodyear welted for durability and future resoling. The quintessential formal shoe.', details: 'Full-grain leather. Goodyear welt. Leather sole. Made in England.', shipping: 'Complimentary shipping. 2-3 days.', new: false }
