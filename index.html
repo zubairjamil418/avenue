@@ -166,7 +166,7 @@ input, select, textarea {
   transition: all 0.18s ease; z-index: 4000; pointer-events: none;
   background: var(--gray-50); box-shadow: 0 12px 40px rgba(0,0,0,0.06);
 }
-.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; }
+.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu, .mega-menu.open { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; }
 .mega-menu .mega-inner {
   max-width: 1280px; margin: 0 auto; display: grid;
   grid-template-columns: 200px 220px 1fr 1fr; gap: 2rem; padding: 28px 2.5rem; background: var(--white);
@@ -809,6 +809,31 @@ input, select, textarea {
 .w-full { width: 100%; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .hidden { display: none !important; }
+
+/* ================================
+  Light typography and spacing tweaks
+  Removes bold weights and increases overall whitespace
+  ================================ */
+body { line-height: 1.65; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 { font-weight: 400; }
+strong, b { font-weight: 400; }
+
+/* Increase breathing room for navigation and grids */
+.nav-links { gap: 2.25rem; }
+.product-grid, .wishlist-grid { gap: 2rem; }
+.section-header { margin-bottom: 2.5rem; }
+.mega-menu .mega-inner { padding: 36px 3rem; gap: 2.5rem; }
+
+/* Force lighter weights for commonly emphasized elements */
+.btn, .btn-cta, .btn-primary, .btn-outline, .btn-ghost,
+.product-card-price .current, .product-card-name, .cart-item-name, .cart-item-price,
+.footer-column h4, .mega-caption, .stat-value, .form-label, .progress-step.active,
+.checkout-summary-total { font-weight: 400 !important; }
+
+/* Make headings slightly more airy */
+h1 { line-height: 1.05; letter-spacing: 0.01em; }
+h2 { line-height: 1.08; }
+
 </style>
 </head>
 <body>
@@ -899,6 +924,18 @@ const products = [
   { id: 19, name: 'Tote Bag', slug: 'tote-bag', category: 'bags', price: 520, salePrice: null, stock: 16, rating: 4.3, reviews: 29, image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=800&fit=crop'], description: 'Spacious canvas tote with leather handles and base. Interior zip pocket. Perfect for work, travel, or weekend errands.', details: 'Cotton canvas with leather trim. Spot clean. Made in UK.', shipping: 'Standard shipping. 3-5 days.', new: false },
   { id: 20, name: 'Oxford Shoes', slug: 'oxford-shoes', category: 'shoes', price: 1100, salePrice: null, stock: 5, rating: 4.8, reviews: 11, image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop'], description: 'Hand-burnished oxford shoes in full-grain leather. Goodyear welted for durability and future resoling. The quintessential formal shoe.', details: 'Full-grain leather. Goodyear welt. Leather sole. Made in England.', shipping: 'Complimentary shipping. 2-3 days.', new: false }
 ];
+
+// Product selection helpers — ensure different page sections show diverse, non-overlapping items
+let __usedProductIds = new Set();
+function resetUsedProductIds() { __usedProductIds.clear(); }
+function pickUniqueFromList(list, count) {
+  if (!Array.isArray(list) || list.length === 0) return [];
+  const available = list.filter(p => !__usedProductIds.has(p.id));
+  const picks = available.slice(0, count);
+  picks.forEach(p => __usedProductIds.add(p.id));
+  return picks;
+}
+function pickUniqueProducts(count) { return pickUniqueFromList(products, count); }
 
 const orders = [
   { id: 'ORD-2026-001', date: '2026-04-20', status: 'delivered', total: 2870, items: [{productId:1,qty:1},{productId:2,qty:1}], shipping: {name:'Alex Morgan',email:'alex@example.com',phone:'+44 7700 900001',address:'12 Kensington High St',city:'London',postcode:'W8 4NX',country:'United Kingdom'}, payment: 'Visa ending in 4242' },
@@ -1106,7 +1143,7 @@ function skeletonCard() {
 function renderHeader() {
   const user = state.user;
   const adminLink = state.isAdmin ? `<a href="#/admin">Admin</a>` : '';
-  const highlights = products.filter(p => p.new).slice(0,4);
+  const highlights = pickUniqueFromList(products.filter(p => p.new), 4);
   return `
   <header class="header">
     <div style="display:flex;align-items:center;gap:1.5rem;width:100%;justify-content:flex-start">
@@ -1391,6 +1428,7 @@ function renderCurrentPage() {
     default: content = renderNotFound();
   }
 
+  resetUsedProductIds();
   app.innerHTML = renderHeader() + `<div class="page"><div class="page-content">${content}</div>${renderFooter()}</div><div id="cartWrapper">` + renderCartDrawer() + `</div>` + renderModals();
   updateCartBadge(); updateWishlistBadge(); updateUserMenu();
   attachPageEvents(route);
@@ -1398,10 +1436,13 @@ function renderCurrentPage() {
 }
 
 function attachPageEvents(route) {
-  // Close dropdowns on outside click
+  // Close dropdowns and mega menus on outside click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.dropdown')) {
       document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+    }
+    if (!e.target.closest('.has-mega')) {
+      document.querySelectorAll('.mega-menu.open').forEach(m => m.classList.remove('open'));
     }
   });
   // Initialize filters on product listing pages after skeleton delay
@@ -1416,6 +1457,25 @@ function attachPageEvents(route) {
       if (skel && content) { skel.classList.add('hidden'); content.classList.remove('hidden'); }
     }, 500);
   }
+  // Mega menu hover delay: keep the menu open briefly while the cursor travels
+  (function setupMegaHover() {
+    const HIDE_DELAY = 400; // ms
+    document.querySelectorAll('.nav-links li.has-mega').forEach(li => {
+      const menu = li.querySelector('.mega-menu');
+      if (!menu) return;
+      let hideTimer = null;
+      const clearHide = () => { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } };
+      li.addEventListener('mouseenter', () => { clearHide(); menu.classList.add('open'); });
+      li.addEventListener('mouseleave', () => { clearHide(); hideTimer = setTimeout(() => menu.classList.remove('open'), HIDE_DELAY); });
+      menu.addEventListener('mouseenter', () => { clearHide(); menu.classList.add('open'); });
+      menu.addEventListener('mouseleave', () => { clearHide(); hideTimer = setTimeout(() => menu.classList.remove('open'), HIDE_DELAY); });
+      // keyboard accessibility: open on focus, close on blur after delay
+      li.querySelectorAll('a,button').forEach(el => {
+        el.addEventListener('focus', () => { clearHide(); menu.classList.add('open'); });
+        el.addEventListener('blur', () => { clearHide(); hideTimer = setTimeout(() => menu.classList.remove('open'), HIDE_DELAY); });
+      });
+    });
+  })();
 }
 
 function updateUserMenu() {
@@ -1426,7 +1486,7 @@ function updateUserMenu() {
 // PAGES: HOME
 // ═══════════════════════════════════════════════════════════════
 function renderHome() {
-  const newArrivals = products.filter(p => p.new).slice(0,4);
+  const newArrivals = pickUniqueFromList(products.filter(p => p.new), 4);
   return `
   <div>
     <div style="position:relative;">
@@ -1480,7 +1540,7 @@ function renderHome() {
           <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;margin-bottom:0.5rem">What's Trending</h2>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;align-items:start">
-          ${products.slice(0,4).map(p => `
+          ${pickUniqueProducts(4).map(p => `
             <div style="background:var(--white);padding:1rem;text-align:center;border:1px solid var(--gray-100)">
               <img src="${p.image}" style="width:100%;height:220px;object-fit:cover;margin-bottom:0.75rem">
               <a href="#/products/${p.slug}" style="display:block;color:var(--black);font-weight:600;margin-bottom:0.25rem">${p.name}</a>
@@ -1510,7 +1570,7 @@ function renderHome() {
           <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;">Avenue Stories</h2>
         </div>
       <div style="display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem">
-        ${products.slice(0,6).map(p => `
+        ${pickUniqueProducts(6).map(p => `
             <div style="min-width:220px">
             <img src="${p.image}" style="width:100%;height:200px;object-fit:cover;margin-bottom:0.6rem">
             <div style="font-family:'Poppins',sans-serif;font-size:1rem;margin-bottom:0.25rem">${p.name}</div>
