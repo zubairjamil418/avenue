@@ -110,7 +110,7 @@ input, select, textarea {
 @media (max-width: 768px) {
   .logo img.logo-img { height: 30px; }
 }
-.nav-links { display: flex; gap: 1.75rem; list-style: none; align-items: center; }
+.nav-links { display: flex; gap: 1.75rem; list-style: none; align-items: center; position: relative; z-index: 1200; }
 .nav-links a, .nav-links button {
   font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
   font-weight: 500; color: rgba(255,255,255,0.85); background: none; border: none;
@@ -166,7 +166,7 @@ input, select, textarea {
   transition: all 0.18s ease; z-index: 4000; pointer-events: none;
   background: var(--gray-50); box-shadow: 0 12px 40px rgba(0,0,0,0.06);
 }
-.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu, .mega-menu.open { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; }
+.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; }
 .mega-menu .mega-inner {
   max-width: 1280px; margin: 0 auto; display: grid;
   grid-template-columns: 200px 220px 1fr 1fr; gap: 2rem; padding: 28px 2.5rem; background: var(--white);
@@ -180,13 +180,21 @@ input, select, textarea {
 .mega-inner .mega-col:last-child { border-right: none; padding-right: 0; }
 /* Constrain images in the mega menu to a small fixed thumbnail size so they don't expand
    to fill the entire column. Targets the non-list columns inside .mega-inner. */
-.mega-inner > div:not(.mega-col) { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+.mega-inner > div:not(.mega-col) {
+  display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;
+  /* give each image tile an opaque card background so page content (hero) doesn't show through */
+  background: var(--white);
+  padding: 0.5rem; border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
 .mega-inner > div:not(.mega-col) img {
   width: 220px;
   height: 220px;
   object-fit: cover;
   display: block;
   border-radius: 2px;
+  /* fallback fill behind images (in case of transparency) */
+  background: var(--gray-100);
 }
 .mega-caption { margin-top: 0.6rem; font-weight: 600; color: var(--brand-black); }
 @media (max-width: 1280px) {
@@ -834,9 +842,27 @@ strong, b { font-weight: 400; }
 h1 { line-height: 1.05; letter-spacing: 0.01em; }
 h2 { line-height: 1.08; }
 
-</style>
-</head>
-<body>
+  .hidden { display: none !important; }
+
+  /* Stories carousel: hide native scrollbar and show side nav buttons */
+  .stories-wrap { position: relative; }
+  .stories-carousel {
+    display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem;
+    scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .stories-carousel::-webkit-scrollbar { display: none; }
+  .stories-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
+    background: rgba(255,255,255,0.95); border-radius: 999px; border: none;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    cursor: pointer; z-index: 2000;
+  }
+  .stories-prev { left: 0.5rem; }
+  .stories-next { right: 0.5rem; }
+  .stories-nav svg { width: 18px; height: 18px; }
+  .stories-prev svg { transform: rotate(180deg); }
+  @media (max-width: 768px) { .stories-nav { display: none; } }
+  </style>
 <div id="loader"><div class="spinner"></div></div>
 <div id="devModal">
   <div class="modal-box">
@@ -1436,13 +1462,10 @@ function renderCurrentPage() {
 }
 
 function attachPageEvents(route) {
-  // Close dropdowns and mega menus on outside click
+  // Close dropdowns on outside click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.dropdown')) {
       document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
-    }
-    if (!e.target.closest('.has-mega')) {
-      document.querySelectorAll('.mega-menu.open').forEach(m => m.classList.remove('open'));
     }
   });
   // Initialize filters on product listing pages after skeleton delay
@@ -1457,29 +1480,18 @@ function attachPageEvents(route) {
       if (skel && content) { skel.classList.add('hidden'); content.classList.remove('hidden'); }
     }, 500);
   }
-  // Mega menu hover delay: keep the menu open briefly while the cursor travels
-  (function setupMegaHover() {
-    const HIDE_DELAY = 400; // ms
-    document.querySelectorAll('.nav-links li.has-mega').forEach(li => {
-      const menu = li.querySelector('.mega-menu');
-      if (!menu) return;
-      let hideTimer = null;
-      const clearHide = () => { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } };
-      li.addEventListener('mouseenter', () => { clearHide(); menu.classList.add('open'); });
-      li.addEventListener('mouseleave', () => { clearHide(); hideTimer = setTimeout(() => menu.classList.remove('open'), HIDE_DELAY); });
-      menu.addEventListener('mouseenter', () => { clearHide(); menu.classList.add('open'); });
-      menu.addEventListener('mouseleave', () => { clearHide(); hideTimer = setTimeout(() => menu.classList.remove('open'), HIDE_DELAY); });
-      // keyboard accessibility: open on focus, close on blur after delay
-      li.querySelectorAll('a,button').forEach(el => {
-        el.addEventListener('focus', () => { clearHide(); menu.classList.add('open'); });
-        el.addEventListener('blur', () => { clearHide(); hideTimer = setTimeout(() => menu.classList.remove('open'), HIDE_DELAY); });
-      });
-    });
-  })();
+  
 }
 
 function updateUserMenu() {
   // handled in render
+}
+
+function scrollStories(dir) {
+  const car = document.querySelector('.stories-carousel');
+  if (!car) return;
+  const scrollAmount = Math.round(car.clientWidth * 0.75);
+  car.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1569,7 +1581,9 @@ function renderHome() {
         <div style="text-align:center;margin-bottom:2rem">
           <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;">Avenue Stories</h2>
         </div>
-      <div style="display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem">
+      <div class="stories-wrap" style="position:relative">
+        <button class="stories-nav stories-prev" onclick="scrollStories(-1)" aria-label="Scroll left">${icons.arrow}</button>
+        <div class="stories-carousel" style="display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;scroll-behavior:smooth;">
         ${pickUniqueProducts(6).map(p => `
             <div style="min-width:220px">
             <img src="${p.image}" style="width:100%;height:200px;object-fit:cover;margin-bottom:0.6rem">
@@ -1577,6 +1591,8 @@ function renderHome() {
             <a href="#/products/${p.slug}" style="font-size:0.85rem;color:var(--gray-600)">Read & Shop</a>
           </div>
         `).join('')}
+        </div>
+        <button class="stories-nav stories-next" onclick="scrollStories(1)" aria-label="Scroll right">${icons.arrow}</button>
       </div>
       <div style="text-align:center;margin-top:1.5rem">
         <a href="#/stories" class="btn btn-outline">Read the Latest Stories</a>
