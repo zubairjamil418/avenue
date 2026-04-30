@@ -1,15 +1,44 @@
+<!--
+  ===============================
+  AVENUE ECOMMERCE MANAGEMENT SYSTEM MOCKUP
+  ===============================
+  Each section is commented for easy future changes.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Meta and Title Section -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avenue | Curated Fashion</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Google Fonts (Poppins + Playfair Display for logo) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Favicon (SVG) -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<!-- Fallback PNG touch icon (optional) -->
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#F37021">
 <style>
+/*
+  ===============================
+  GLOBAL STYLES & VARIABLES
+  ===============================
+  - CSS variables for colors, layout
+  - Base element resets
+*/
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 :root {
-  --black: #111111;
+  --black: #000000;
+  --brand-black: #000000;
   --white: #ffffff;
+  --brand-orange: #F37021; /* RGB: 243,112,33 */
+  --footer-bg: #f5f5f5;
+  --footer-text: #222222;
+  --brand-green: #0b2f1e;
+  --brand-gold: #b88b55;
+  --site-gutter: 3rem;
+  --footer-gutter: calc(var(--site-gutter) + 2rem);
   --gray-50: #fafafa;
   --gray-100: #f5f5f5;
   --gray-200: #eeeeee;
@@ -26,55 +55,75 @@
 }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: var(--white);
-  color: var(--black);
+  color: var(--brand-black);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 a { color: inherit; text-decoration: none; }
-button { font-family: 'Inter', sans-serif; cursor: pointer; }
+button { font-family: 'Poppins', sans-serif; cursor: pointer; }
 input, select, textarea {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
 }
 
-/* ── Layout ── */
+/*
+  ===============================
+  LAYOUT CLASSES
+  ===============================
+  - Page wrapper, container, content
+*/
 .page { min-height: 100vh; display: flex; flex-direction: column; }
 .page-content { flex: 1; padding-top: var(--nav-height); }
-.container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 var(--site-gutter); }
 
-/* ── Header ── */
+/*
+  ===============================
+  HEADER & NAVIGATION
+  ===============================
+  - Fixed header, logo, nav links, icons
+*/
 .header {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height);
-  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--gray-200); z-index: 1000;
+  background: var(--black); color: var(--white); z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 var(--site-gutter); box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 .header-left { display: flex; align-items: center; gap: 2.5rem; }
 .logo {
-  font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
-  font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  font-family: 'Playfair Display', serif; font-size: 1.6rem;
+  font-weight: 400; letter-spacing: 0.08em; text-transform: none;
+  color: var(--white);
+}
+/* Center the logo visually while keeping nav left/right items */
+.header .logo {
+  position: absolute; left: 50%; transform: translateX(-50%); z-index: 1100;
+  height: var(--nav-height); display:flex; align-items:center; gap:0.5rem;
+}
+.logo img.logo-img { height: 36px; width: auto; display: block; }
+.logo .logo-text { display: inline-block; font-family: 'Playfair Display', serif; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; font-size:1.4rem; }
+@media (max-width: 768px) {
+  .logo img.logo-img { height: 30px; }
 }
 .nav-links { display: flex; gap: 1.75rem; list-style: none; align-items: center; }
 .nav-links a, .nav-links button {
   font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-  font-weight: 500; color: var(--gray-700); background: none; border: none;
+  font-weight: 500; color: rgba(255,255,255,0.85); background: none; border: none;
   transition: color 0.2s; padding: 0.25rem 0;
 }
-.nav-links a:hover, .nav-links button:hover { color: var(--black); }
-.nav-links a.active { color: var(--black); border-bottom: 1px solid var(--black); }
+.nav-links a:hover, .nav-links button:hover { color: var(--white); }
+.nav-links a.active { color: var(--white); border-bottom: 1px solid rgba(255,255,255,0.08); }
 
 .header-right { display: flex; align-items: center; gap: 1rem; }
 .icon-btn {
   background: none; border: none; cursor: pointer; position: relative;
   display: flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; color: var(--black);
+  width: 36px; height: 36px; color: var(--white);
 }
 .icon-btn svg { width: 20px; height: 20px; }
 .badge {
@@ -86,11 +135,11 @@ input, select, textarea {
 
 .search-bar {
   display: flex; align-items: center; gap: 0.5rem;
-  background: var(--gray-100); border-radius: 4px; padding: 0.4rem 0.75rem;
+  background: rgba(255,255,255,0.06); border-radius: 4px; padding: 0.45rem 0.9rem;
 }
 .search-bar input {
-  background: none; border: none; outline: none; font-size: 0.8rem;
-  width: 160px;
+  background: none; border: none; outline: none; font-size: 0.85rem;
+  width: 180px; color: rgba(255,255,255,0.95);
 }
 
 /* Dropdown */
@@ -109,9 +158,45 @@ input, select, textarea {
 }
 .dropdown-menu a:hover, .dropdown-menu button:hover { background: var(--gray-50); color: var(--black); }
 
+.nav-links li { position: static; }
+/* Mega menu styles (centered within the header, constrained to site width) */
+.has-mega .mega-menu {
+  position: absolute; left: 50%; top: 100%; width: 100%; max-width: 100%;
+  opacity: 0; visibility: hidden; transform: translate(-50%, -8px);
+  transition: all 0.18s ease; z-index: 4000; pointer-events: none;
+  background: var(--gray-50); box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+}
+.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; }
+.mega-menu .mega-inner {
+  max-width: 1280px; margin: 0 auto; display: grid;
+  grid-template-columns: 200px 220px 1fr 1fr; gap: 2rem; padding: 28px 2.5rem; background: var(--white);
+  border-top: 1px solid var(--gray-100);
+}
+.mega-col h5 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); margin-bottom: 1rem; }
+.mega-col ul { list-style: none; padding: 0; margin: 0; }
+.mega-col li { margin-bottom: 0.75rem; }
+.mega-col a { color: var(--brand-black); font-size: 0.95rem; }
+.mega-inner .mega-col { padding-right: 1.25rem; border-right: 1px solid var(--gray-100); }
+.mega-inner .mega-col:last-child { border-right: none; padding-right: 0; }
+/* Constrain images in the mega menu to a small fixed thumbnail size so they don't expand
+   to fill the entire column. Targets the non-list columns inside .mega-inner. */
+.mega-inner > div:not(.mega-col) { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+.mega-inner > div:not(.mega-col) img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+}
+.mega-caption { margin-top: 0.6rem; font-weight: 600; color: var(--brand-black); }
+@media (max-width: 1280px) {
+  .mega-inner > div:not(.mega-col) img { width: 160px; height: 160px; }
+}
+@media (max-width: 1024px) { .has-mega .mega-menu { display: none !important; } }
+
 /* Mobile */
 .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; }
-.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--black); }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--white); }
 
 /* ── Buttons ── */
 .btn {
@@ -130,6 +215,13 @@ input, select, textarea {
 .btn-sm { padding: 0.5rem 1rem; font-size: 0.65rem; }
 .btn-lg { padding: 1rem 2.5rem; font-size: 0.8rem; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Green CTA used in in-store section */
+.btn-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem 1.5rem; background: var(--brand-green); color: var(--white);
+  border-radius: 4px; border: none; font-weight: 600; text-transform: none;
+}
 
 /* ── Cart Drawer ── */
 .drawer-overlay {
@@ -292,30 +384,32 @@ input, select, textarea {
 
 /* ── Footer ── */
 .footer {
-  background: var(--black); color: var(--white); padding: 4rem 2rem 2rem;
+  background: var(--footer-bg); color: var(--footer-text); padding: 4rem var(--footer-gutter) 2rem;
 }
 .footer-grid {
   max-width: 1280px; margin: 0 auto;
-  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
-  padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem;
+  padding-bottom: 3rem; border-bottom: 1px solid rgba(0,0,0,0.06);
 }
-.footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; margin-bottom: 1rem; }
-.footer-desc { font-size: 0.85rem; color: var(--gray-400); line-height: 1.7; max-width: 280px; }
-.footer-column h4 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1.25rem; font-weight: 500; }
-.footer-column ul { list-style: none; }
-.footer-column li { margin-bottom: 0.75rem; }
-.footer-column a { font-size: 0.85rem; color: var(--gray-400); transition: color 0.2s; }
-.footer-column a:hover { color: var(--white); }
+.footer-brand { display:flex; align-items:center; justify-content:center; gap:0.6rem; margin-bottom: 1rem; }
+.footer-brand .footer-logo { height: 36px; width: auto; display:block; }
+.footer-brand .footer-logo-text { font-family: 'Playfair Display', serif; font-weight:400; font-size:1.6rem; color: var(--brand-black); text-transform:uppercase; letter-spacing:0.12em; }
+.footer-desc { font-size: 0.95rem; color: rgba(34,34,34,0.9); line-height: 1.7; max-width: 320px; }
+.footer-column h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1rem; font-weight: 600; color: rgba(34,34,34,0.9); }
+.footer-column ul { list-style: none; padding: 0; }
+.footer-column li { margin-bottom: 0.6rem; }
+.footer-column a { font-size: 0.9rem; color: rgba(34,34,34,0.75); transition: color 0.15s; }
+.footer-column a:hover { color: var(--brand-orange); }
 .footer-bottom {
   max-width: 1280px; margin: 0 auto; padding-top: 2rem;
   display: flex; justify-content: space-between; align-items: center;
-  font-size: 0.8rem; color: var(--gray-500);
+  font-size: 0.85rem; color: rgba(34,34,34,0.6);
 }
 .payment-icons { display: flex; gap: 0.75rem; }
 .payment-icon {
-  width: 40px; height: 26px; background: var(--gray-800); border-radius: 3px;
+  width: 44px; height: 28px; background: rgba(0,0,0,0.04); border-radius: 3px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400);
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.04em; color: rgba(34,34,34,0.9);
 }
 
 /* ── Breadcrumb ── */
@@ -363,7 +457,7 @@ input, select, textarea {
 .product-card:hover .product-card-quick { transform: translateY(0); }
 .product-card-body { padding: 1rem 0.25rem; }
 .product-card-cat { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-500); margin-bottom: 0.35rem; }
-.product-card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; margin-bottom: 0.5rem; line-height: 1.3; }
+.product-card-name { font-family: 'Poppins', sans-serif; font-size: 1.15rem; margin-bottom: 0.5rem; line-height: 1.3; }
 .product-card-price { font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
 .product-card-price .sale { color: var(--gray-400); text-decoration: line-through; }
 .product-card-price .current { font-weight: 500; }
@@ -428,7 +522,7 @@ input, select, textarea {
   border: 1px solid var(--gray-200);
 }
 .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-500); margin-bottom: 0.75rem; }
-.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; }
+.stat-value { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 600; }
 .stat-change { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem; }
 
 /* ── Tables ── */
@@ -527,10 +621,9 @@ input, select, textarea {
   .header { padding: 0 1rem; }
   .container { padding: 0 1rem; }
   .stats-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 520px) {
-  .product-grid { grid-template-columns: 1fr 1fr; }
-  .footer-grid { grid-template-columns: 1fr; }
+.btn-accent { background: var(--brand-orange); color: var(--white); border: none; }
+.btn-accent:hover { opacity: 0.95; }
+.accent { color: var(--brand-orange); }
 }
 
 /* ── Auth Card ── */
@@ -589,7 +682,11 @@ input, select, textarea {
 }
 .hero-home-left { padding: 4rem 3rem 4rem 4rem; }
 .hero-home-right { height: 100%; }
-.hero-home-right img { width: 100%; height: 100%; object-fit: cover; }
+.hero-home-right img { width: 100%; height: 100%; object-fit: cover; display:block }
+/* Hero video background classes */
+.hero-bg { position: relative; height: calc(70vh); overflow: hidden; background: #000; }
+.hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; display:block; }
+.hero-overlay { position: absolute; left: var(--site-gutter); bottom: 12%; color: var(--white); max-width: 540px; z-index: 2; }
 .hero-title { font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; }
 .hero-subtitle { font-size: 1rem; color: var(--gray-600); line-height: 1.7; margin-bottom: 2rem; max-width: 420px; }
 
@@ -609,7 +706,7 @@ input, select, textarea {
   position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
   display: flex; align-items: flex-end; padding: 1.25rem;
 }
-.category-card-home .name { color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; }
+.category-card-home .name { color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1.2rem; }
 
 /* ── Search page ── */
 .search-header { padding: 2rem 0; }
@@ -659,7 +756,7 @@ input, select, textarea {
   opacity: 0; visibility: hidden; transition: all 0.3s;
 }
 .mobile-overlay.open { opacity: 1; visibility: visible; }
-.mobile-overlay a { font-family: 'Cormorant Garamond', serif; font-size: 2rem; }
+.mobile-overlay a { font-family: 'Poppins', sans-serif; font-size: 2rem; }
 
 /* ── Sort dropdown ── */
 .sort-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
@@ -797,7 +894,7 @@ const products = [
   { id: 14, name: 'Pleated Midi Skirt', slug: 'pleated-midi-skirt', category: 'women', price: 560, salePrice: 420, stock: 9, rating: 4.2, reviews: 15, image: 'https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop', thumbs: ['https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop','https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop','https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop','https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d?w=600&h=800&fit=crop'], description: 'Elegant pleated midi skirt in crepe de chine. Flowing silhouette with an elasticated waist for comfort. Moves beautifully with every step.', details: '100% Silk crepe de chine. Dry clean. Made in Italy.', shipping: 'Standard shipping. 3-5 days.', new: true },
   { id: 15, name: 'Bomber Jacket', slug: 'bomber-jacket', category: 'men', price: 780, salePrice: null, stock: 11, rating: 4.6, reviews: 19, image: 'https://images.unsplash.com/photo-1551028919-ac76c90f27b9?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1551028919-ac76c90f27b9?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&h=800&fit=crop'], description: 'Modern bomber jacket in technical satin with ribbed collar and cuffs. Lightweight insulation for transitional weather. Zip front with internal pocket.', details: 'Polyester satin. Machine wash 30C. Made in Vietnam.', shipping: 'Standard shipping. 3-5 days.', new: false },
   { id: 16, name: 'Ankle Boots', slug: 'ankle-boots', category: 'shoes', price: 920, salePrice: null, stock: 7, rating: 4.7, reviews: 22, image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&h=800&fit=crop'], description: 'Handcrafted ankle boots in polished calfskin leather. Side zip, stacked heel, and leather sole. A versatile staple that pairs with everything.', details: 'Calfskin leather. Leather sole. Made in Italy.', shipping: 'Complimentary shipping. 2-3 days.', new: false },
-  { id: 17, name: 'Silk Scarf', slug: 'silk-scarf', category: 'accessories', price: 240, salePrice: null, stock: 38, rating: 4.0, reviews: 45, image: 'https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-160192https://plus.unsplash.com/premium_photo-1671379102281-7225f3d3d97d4994987-69e26d50dc26?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&h=800&fit=crop'], description: 'Square silk twill scarf with hand-rolled edges and abstract print. A versatile accessory for neck, bag, or hair.', details: '100% Silk twill. Dry clean. Made in France. 90x90cm.', shipping: 'Standard shipping.', new: false },
+  { id: 17, name: 'Silk Scarf', slug: 'silk-scarf', category: 'accessories', price: 240, salePrice: null, stock: 38, rating: 4.0, reviews: 45, image: 'https://images.unsplash.com/photo-1677478863154-55ecce8c7536?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1677478863154-55ecce8c7536?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584030373081-f37b7bb4fa33?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&h=800&fit=crop'], description: 'Square silk twill scarf with hand-rolled edges and abstract print. A versatile accessory for neck, bag, or hair.', details: '100% Silk twill. Dry clean. Made in France. 90x90cm.', shipping: 'Standard shipping.', new: false },
   { id: 18, name: 'Dive Watch', slug: 'dive-watch', category: 'watches', price: 4500, salePrice: null, stock: 2, rating: 4.9, reviews: 3, image: 'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1585123334904-845d60e97b29?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=800&fit=crop'], description: 'Professional dive watch in titanium with ceramic bezel and 300m water resistance. Automatic movement with 72-hour power reserve. Serious tool watch aesthetics.', details: 'Titanium case. Automatic movement. 300m WR. 43mm.', shipping: 'Insured shipping. 3-5 days.', new: true },
   { id: 19, name: 'Tote Bag', slug: 'tote-bag', category: 'bags', price: 520, salePrice: null, stock: 16, rating: 4.3, reviews: 29, image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=800&fit=crop'], description: 'Spacious canvas tote with leather handles and base. Interior zip pocket. Perfect for work, travel, or weekend errands.', details: 'Cotton canvas with leather trim. Spot clean. Made in UK.', shipping: 'Standard shipping. 3-5 days.', new: false },
   { id: 20, name: 'Oxford Shoes', slug: 'oxford-shoes', category: 'shoes', price: 1100, salePrice: null, stock: 5, rating: 4.8, reviews: 11, image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&h=800&fit=crop', thumbs: ['https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&h=800&fit=crop','https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&h=800&fit=crop'], description: 'Hand-burnished oxford shoes in full-grain leather. Goodyear welted for durability and future resoling. The quintessential formal shoe.', details: 'Full-grain leather. Goodyear welt. Leather sole. Made in England.', shipping: 'Complimentary shipping. 2-3 days.', new: false }
@@ -1009,34 +1106,71 @@ function skeletonCard() {
 function renderHeader() {
   const user = state.user;
   const adminLink = state.isAdmin ? `<a href="#/admin">Admin</a>` : '';
+  const highlights = products.filter(p => p.new).slice(0,4);
   return `
   <header class="header">
-    <div class="header-left">
-      <a href="#/" class="logo">Avenue</a>
-      <ul class="nav-links">
-        <li><a href="#/" class="${isActive('/')}">Home</a></li>
-        <li class="dropdown" id="catDropdown">
-          <button onclick="toggleDropdown()">Categories</button>
-          <div class="dropdown-menu">
-            ${categories.map(c => `<a href="#/categories/${c.slug}">${c.name}</a>`).join('')}
-          </div>
-        </li>
-        <li><a href="#/products" class="${isActive('/products')}">Shop</a></li>
-        ${adminLink}
-      </ul>
+    <div style="display:flex;align-items:center;gap:1.5rem;width:100%;justify-content:flex-start">
+      <button class="hamburger" onclick="toggleMobileMenu()" style="margin-right:8px"><span></span><span></span><span></span></button>
+      <a href="#/" class="logo" aria-label="Avenue home">
+        <img src="/logo.png" alt="Avenue" class="logo-img" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" />
+        <span class="logo-text">Avenue</span>
+      </a>
+      <nav style="margin-left:2rem;">
+        <ul class="nav-links">
+          ${categories.map(c => `
+            <li class="${c.slug === 'women' ? 'has-mega' : ''}">
+              <a href="#/categories/${c.slug}" class="${isActive('/categories/' + c.slug)}">${c.name}</a>
+              ${c.slug === 'women' ? `
+                <div class="mega-menu">
+                  <div class="mega-inner">
+                    <div class="mega-col">
+                      <h5>Only at Avenue</h5>
+                      <ul>
+                        <li><a href="#/products?filter=bestsellers">Bestsellers</a></li>
+                        <li><a href="#/products?filter=exclusives">Exclusives</a></li>
+                        <li><a href="#/products?filter=runway">Runway</a></li>
+                        <li><a href="#/products?filter=new-designers">New Designers</a></li>
+                        <li><a href="#/sustainability">Sustain</a></li>
+                      </ul>
+                    </div>
+                    <div class="mega-col">
+                      <h5>Wear to Where</h5>
+                      <ul>
+                        <li><a href="#/stories?edit=destination-wedding">The Destination Wedding</a></li>
+                        <li><a href="#/stories?edit=ex-wedding">Your Ex's Wedding</a></li>
+                        <li><a href="#/stories?edit=all-eyes">All Eyes on the Bride</a></li>
+                        <li><a href="#/stories?edit=garden-party">The Garden Party</a></li>
+                        <li><a href="#/stories?edit=a-list">The A-List Event</a></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <a href="#/products/${(highlights[0]||{}).slug || ''}"><img src="${(highlights[0]||{}).image || ''}" alt="${(highlights[0]||{}).name || ''}"></a>
+                      <div class="mega-caption">${(highlights[0]||{}).name || ''}<div style="font-size:0.95rem;color:var(--gray-600);font-weight:400;margin-top:6px">Shop the vacation edit</div></div>
+                    </div>
+                    <div>
+                      <a href="#/products/${(highlights[1]||{}).slug || ''}"><img src="${(highlights[1]||{}).image || ''}" alt="${(highlights[1]||{}).name || ''}"></a>
+                      <div class="mega-caption">${(highlights[1]||{}).name || ''}<div style="font-size:0.95rem;color:var(--gray-600);font-weight:400;margin-top:6px">Shop now</div></div>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+            </li>
+          `).join('')}
+        </ul>
+      </nav>
     </div>
     <div class="header-right">
       <div class="search-bar">
         ${icons.search}
         <input type="text" id="headerSearch" placeholder="Search..." onkeydown="if(event.key==='Enter'){navigate('/search?q='+encodeURIComponent(this.value))}">
       </div>
-      <button class="icon-btn" onclick="toggleCart()" aria-label="Cart">
-        ${icons.bag}
-        <span class="badge" id="cartBadge" style="display:${cartCount()?'flex':'none'}">${cartCount()}</span>
-      </button>
       <button class="icon-btn" onclick="navigate('/account/wishlist')" aria-label="Wishlist">
         ${icons.heart}
         <span class="badge" id="wishlistBadge" style="display:${state.wishlist.length?'flex':'none'};background:var(--red)">${state.wishlist.length}</span>
+      </button>
+      <button class="icon-btn" onclick="toggleCart()" aria-label="Cart">
+        ${icons.bag}
+        <span class="badge" id="cartBadge" style="display:${cartCount()?'flex':'none'}">${cartCount()}</span>
       </button>
       <div class="dropdown" id="userDropdown">
         <button class="icon-btn" onclick="toggleUserDropdown()" aria-label="Account">${icons.user}</button>
@@ -1052,7 +1186,6 @@ function renderHeader() {
           `}
         </div>
       </div>
-      <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></button>
     </div>
   </header>`;
 }
@@ -1060,36 +1193,51 @@ function renderHeader() {
 function renderFooter() {
   return `
   <footer class="footer">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">Avenue</div>
-        <p class="footer-desc">Curating the world's finest fashion since 2010. Timeless elegance, sustainable luxury, and transformative personal style.</p>
+    <div style="text-align:center;margin-bottom:2rem">
+      <div class="footer-brand">
+        <img src="/logo.png" alt="Avenue" class="footer-logo" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" />
+        <span class="footer-logo-text">Avenue</span>
       </div>
+    </div>
+    <div class="footer-grid">
       <div class="footer-column">
         <h4>Shop</h4>
         <ul>
-          <li><a href="#/products">All Products</a></li>
-          <li><a href="#/categories/women">Women</a></li>
-          <li><a href="#/categories/men">Men</a></li>
+          <li><a href="#/">New In</a></li>
+          <li><a href="#/products">Designers</a></li>
+          <li><a href="#/categories/women">Clothing</a></li>
+          <li><a href="#/categories/shoes">Shoes</a></li>
+          <li><a href="#/categories/bags">Bags</a></li>
           <li><a href="#/categories/accessories">Accessories</a></li>
         </ul>
       </div>
       <div class="footer-column">
-        <h4>Customer Service</h4>
+        <h4>Account & Orders</h4>
         <ul>
-          <li><a href="#/account/orders">Track Order</a></li>
-          <li><a href="#">Shipping & Returns</a></li>
-          <li><a href="#">Size Guide</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="#/account">My Account</a></li>
+          <li><a href="#/account/orders">Orders</a></li>
+          <li><a href="#/account/wishlist">Wishlist</a></li>
+          <li><a href="#/cart">Shopping Bag</a></li>
+          <li><a href="#/checkout/shipping">Checkout</a></li>
         </ul>
       </div>
       <div class="footer-column">
-        <h4>Newsletter</h4>
-        <p style="font-size:0.85rem;color:var(--gray-400);margin-bottom:1rem;line-height:1.6">Subscribe for new arrivals and exclusive offers.</p>
-        <div class="search-bar" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2)">
-          <input type="email" placeholder="Email" style="color:white;width:100%">
-          <button class="btn btn-sm" style="background:var(--white);color:var(--black);border:none" onclick="showToast('Subscribed!')">Join</button>
-        </div>
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#/login">Login</a></li>
+          <li><a href="#/register">Register</a></li>
+          <li><a href="#/plan">Plan Your Visit</a></li>
+          <li><a href="#/stories">Stories</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#/products">Shop All</a></li>
+          <li><a href="#/search">Search</a></li>
+          <li><a href="#/plan">Made to Measure</a></li>
+          <li><a href="#/">Privacy & Terms</a></li>
+        </ul>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1281,37 +1429,40 @@ function renderHome() {
   const newArrivals = products.filter(p => p.new).slice(0,4);
   return `
   <div>
-    <div class="hero-home">
-      <div class="hero-home-left">
-        <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray-500);margin-bottom:1rem">SS 2026 Collection</p>
-        <h1 class="hero-title">Timeless Elegance, Modern Edge</h1>
-        <p class="hero-subtitle">Curated collections from the world's most distinguished designers. Discover pieces that transcend seasons.</p>
-        <div style="display:flex;gap:1rem">
-          <a href="#/products" class="btn btn-primary">Shop Now ${icons.arrow}</a>
-          <a href="#/categories/women" class="btn btn-outline">Women</a>
+    <div style="position:relative;">
+      <div class="hero-bg">
+        <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=2000&h=900&fit=crop">
+          <source src="https://www.net-a-porter.com/content/images/cms/ycm/resource/blob/2763518/5349101f4ffb8aa39785475bf3fd83a2/desktop-video-data.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay">
+          <p style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.28em;color:rgba(255,255,255,0.85);margin-bottom:0.5rem">Roll on summer</p>
+          <h1 class="hero-title" style="color:var(--white);font-size:clamp(2.5rem,5vw,4rem);margin-bottom:0.5rem">Everything you need for a stylish escape</h1>
+          <div style="margin-top:1.25rem">
+            <a href="#/products" class="btn btn-primary btn-lg">Shop now</a>
+          </div>
         </div>
       </div>
-      <div class="hero-home-right">
-        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&h=1600&fit=crop" alt="Fashion">
-      </div>
     </div>
-    <div class="container" style="padding:4rem 2rem">
-      <div class="section-header">
-        <div>
-          <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray-500);margin-bottom:0.5rem">Browse by Category</p>
-          <h2>Shop Your Style</h2>
+    <div class="container" style="padding:4rem var(--site-gutter)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:2rem;">
+        <div style="max-width:480px">
+          <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray-500);margin-bottom:0.5rem">492 new items</p>
+          <h2 style="font-size:3rem;font-family:'Poppins',sans-serif;margin-bottom:1rem">New In</h2>
+          <p style="color:var(--gray-600);line-height:1.7;margin-bottom:1.5rem">New arrivals, now dropping five days a week – discover the latest launches onsite from Monday to Friday</p>
+          <a href="#/products" class="btn btn-outline btn-lg">Shop New In</a>
         </div>
-        <a href="#/products">View All</a>
-      </div>
-      <div class="category-grid">
-        ${categories.map(c => `
-        <div class="category-card-home" onclick="navigate('/categories/${c.slug}')">
-          <img src="${productImageForCategory(c.slug)}" alt="${c.name}">
-          <div class="overlay"><div class="name">${c.name}</div></div>
-        </div>`).join('')}
+        <div style="display:flex;gap:1.5rem;align-items:center;justify-content:center">
+          ${newArrivals.map(p => `
+            <div style="width:200px;text-align:center">
+              <img src="${p.image}" style="width:100%;height:260px;object-fit:cover;margin-bottom:0.75rem">
+              <div style="font-weight:700;font-size:0.85rem">${p.name.split(' ')[0]}</div>
+            </div>
+          `).join('')}
+        </div>
       </div>
     </div>
-    <div class="container" style="padding:2rem 2rem 4rem">
+    <div class="container" style="padding:2rem var(--site-gutter) 4rem">
       <div class="section-header">
         <div>
           <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray-500);margin-bottom:0.5rem">Just In</p>
@@ -1323,14 +1474,64 @@ function renderHome() {
         ${newArrivals.map(p => productCard(p)).join('')}
       </div>
     </div>
-    <div style="background:var(--gray-100);padding:4rem 2rem">
-      <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1000&h=1200&fit=crop" style="width:100%;height:500px;object-fit:cover">
+    <div style="background:var(--gray-100);padding:2rem var(--site-gutter)">
+      <div class="container" style="padding:2rem 0">
+        <div style="text-align:center;margin-bottom:2rem">
+          <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;margin-bottom:0.5rem">What's Trending</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;align-items:start">
+          ${products.slice(0,4).map(p => `
+            <div style="background:var(--white);padding:1rem;text-align:center;border:1px solid var(--gray-100)">
+              <img src="${p.image}" style="width:100%;height:220px;object-fit:cover;margin-bottom:0.75rem">
+              <a href="#/products/${p.slug}" style="display:block;color:var(--black);font-weight:600;margin-bottom:0.25rem">${p.name}</a>
+              <a href="#/categories/${p.category}" style="font-size:0.85rem;color:var(--gray-500);display:block">${getCategory(p.category)?.name || p.category}</a>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding:3rem var(--site-gutter)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
         <div>
-          <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray-500);margin-bottom:1rem">Timepieces</p>
-          <h2 style="font-size:2.2rem;margin-bottom:1rem">New Watch Releases 2026</h2>
-          <p style="color:var(--gray-600);line-height:1.7;margin-bottom:1.5rem">Discover highlights from Watches and Wonders Geneva. From colourful dials to the return of iconic models, find your next heirloom.</p>
-          <a href="#/categories/watches" class="btn btn-outline">Explore Watches</a>
+          <img src="https://d1l7zeynh7e3dn.cloudfront.net/image/095972681933/image_h01525vqh16mrfmabk98lthk15/-S2048x4096-FJPG" style="width:100%;height:220px;object-fit:cover">
+        </div>
+        <div>
+          <p style="font-size:0.75rem;text-transform:uppercase;color:var(--gray-600);margin-bottom:0.5rem">Reward Exclusive</p>
+          <h3 style="font-size:1.8rem;margin-bottom:0.75rem">Up to 20% off Beauty</h3>
+          <p style="color:var(--gray-600);line-height:1.7;margin-bottom:1rem">Ready for a spring beauty refresh? Enjoy up to 20% off selected beauty purchases when you shop on the site and in-store. Terms and conditions apply.</p>
+          <a href="#/categories/accessories" class="btn btn-ghost">Shop Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding:3rem var(--site-gutter)">
+        <div style="text-align:center;margin-bottom:2rem">
+          <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;">Avenue Stories</h2>
+        </div>
+      <div style="display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem">
+        ${products.slice(0,6).map(p => `
+            <div style="min-width:220px">
+            <img src="${p.image}" style="width:100%;height:200px;object-fit:cover;margin-bottom:0.6rem">
+            <div style="font-family:'Poppins',sans-serif;font-size:1rem;margin-bottom:0.25rem">${p.name}</div>
+            <a href="#/products/${p.slug}" style="font-size:0.85rem;color:var(--gray-600)">Read & Shop</a>
+          </div>
+        `).join('')}
+      </div>
+      <div style="text-align:center;margin-top:1.5rem">
+        <a href="#/stories" class="btn btn-outline">Read the Latest Stories</a>
+      </div>
+    </div>
+
+    <div class="container" style="padding:3rem var(--site-gutter) 6rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+        <div>
+          <img src="https://d2wd7685k000to.cloudfront.net/image/306683987547/image_uqsnibrott7rb1lto36m5sfr01/-S2048x4096-FJPG" style="width:100%;height:260px;object-fit:cover">
+        </div>
+        <div>
+          <h3 style="font-size:1.6rem;font-family:'Poppins',sans-serif;margin-bottom:0.5rem">Made to Measure</h3>
+          <p style="color:var(--gray-600);line-height:1.7;margin-bottom:1rem">Our made to measure service allows you to personalise your suit to your exact measurements and tastes from a range of world-class brands. Book an appointment to experience true tailoring.</p>
+          <a href="#/plan" class="btn-cta">Plan Your Visit</a>
         </div>
       </div>
     </div>
