@@ -51,7 +51,7 @@
   --gray-900: #212121;
   --red: #c62828;
   --green: #2e7d32;
-  --nav-height: 64px;
+  --nav-height: 105px;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -89,41 +89,47 @@ input, select, textarea {
   - Fixed header, logo, nav links, icons
 */
 .header {
-  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height);
-  background: var(--black); color: var(--white); z-index: 1000;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 var(--site-gutter); box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--gray-200); color: var(--black); z-index: 1000;
+  display: flex; flex-direction: column;
+  padding: 0 var(--site-gutter); box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
-.header-left { display: flex; align-items: center; gap: 2.5rem; }
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; height: 64px; position: relative;
+}
+.header-bottom {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; padding-bottom: 0.5rem;
+}
+.header-left { display: flex; align-items: center; width: 33%; }
+.header-center { display: flex; align-items: center; justify-content: center; width: 34%; }
 .logo {
   font-family: 'Playfair Display', serif; font-size: 1.6rem;
   font-weight: 400; letter-spacing: 0.08em; text-transform: none;
-  color: var(--white);
-}
-/* Center the logo visually while keeping nav left/right items */
-.header .logo {
-  position: absolute; left: 50%; transform: translateX(-50%); z-index: 1100;
-  height: var(--nav-height); display:flex; align-items:center; gap:0.5rem;
+  color: var(--black); display: flex; align-items: center; justify-content: center; gap: 0.5rem; height: 64px;
 }
 .logo img.logo-img { height: 36px; width: auto; display: block; }
 .logo .logo-text { display: inline-block; font-family: 'Playfair Display', serif; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; font-size:1.4rem; }
 @media (max-width: 768px) {
   .logo img.logo-img { height: 30px; }
+  .header-bottom { display: none; }
 }
-.nav-links { display: flex; gap: 1.75rem; list-style: none; align-items: center; position: relative; z-index: 1200; }
+.nav-links { display: flex; gap: 0.75rem; list-style: none; align-items: center; position: relative; z-index: 1200; width: 100%; justify-content: center; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.nav-links::-webkit-scrollbar { display: none; }
 .nav-links a, .nav-links button {
-  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-  font-weight: 500; color: rgba(255,255,255,0.85); background: none; border: none;
-  transition: color 0.2s; padding: 0.25rem 0;
+  font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase;
+  font-weight: 500; color: var(--black); background: none; border: none;
+  transition: color 0.2s; padding: 0.25rem 0.25rem; white-space: nowrap;
 }
-.nav-links a:hover, .nav-links button:hover { color: var(--white); }
-.nav-links a.active { color: var(--white); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.nav-links a:hover, .nav-links button:hover { color: var(--gray-600); }
+.nav-links a.active { color: var(--black); border-bottom: 1px solid var(--black); }
 
-.header-right { display: flex; align-items: center; gap: 1rem; }
+.header-right { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; width: 33%; }
 .icon-btn {
   background: none; border: none; cursor: pointer; position: relative;
   display: flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; color: var(--white);
+  width: 36px; height: 36px; color: var(--black);
 }
 .icon-btn svg { width: 20px; height: 20px; }
 .badge {
@@ -135,11 +141,11 @@ input, select, textarea {
 
 .search-bar {
   display: flex; align-items: center; gap: 0.5rem;
-  background: rgba(255,255,255,0.06); border-radius: 4px; padding: 0.45rem 0.9rem;
+  background: var(--gray-300); border-radius: 4px; padding: 0.45rem 0.9rem;
 }
 .search-bar input {
   background: none; border: none; outline: none; font-size: 0.85rem;
-  width: 180px; color: rgba(255,255,255,0.95);
+  width: 180px; color: var(--black);
 }
 
 /* Dropdown */
@@ -159,14 +165,22 @@ input, select, textarea {
 .dropdown-menu a:hover, .dropdown-menu button:hover { background: var(--gray-50); color: var(--black); }
 
 .nav-links li { position: static; }
-/* Mega menu styles (centered within the header, constrained to site width) */
 .has-mega .mega-menu {
-  position: absolute; left: 50%; top: 100%; width: 100%; max-width: 100%;
-  opacity: 0; visibility: hidden; transform: translate(-50%, -8px);
-  transition: all 0.18s ease; z-index: 4000; pointer-events: none;
-  background: var(--gray-50); box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+  /* Position the mega menu fixed to the viewport so it breaks out of overflow constraints */
+  position: fixed;
+  top: var(--nav-height);
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: none;
+  opacity: 0; visibility: hidden; transform: none;
+  transition: all 0.18s ease; z-index: 1100; pointer-events: none;
+  background: var(--white); box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+  border-top-left-radius: 0; border-top-right-radius: 0;
 }
-.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto; }
+.has-mega:hover .mega-menu, .has-mega:focus-within .mega-menu, .has-mega .mega-menu:hover, .has-mega.open .mega-menu {
+  opacity: 1; visibility: visible; transform: none; pointer-events: auto;
+}
 .mega-menu .mega-inner {
   max-width: 1280px; margin: 0 auto; display: grid;
   grid-template-columns: 200px 220px 1fr 1fr; gap: 2rem; padding: 28px 2.5rem; background: var(--white);
@@ -196,6 +210,64 @@ input, select, textarea {
   /* fallback fill behind images (in case of transparency) */
   background: var(--gray-100);
 }
+/* Fix: ensure mega menu has solid unified background and sits on top */
+.has-mega .mega-menu {
+  background: rgba(255,255,255,1) !important;
+  z-index: 7000;
+  box-shadow: 0 20px 48px rgba(0,0,0,0.12);
+  border-radius: 6px;
+}
+
+/* Ensure inner columns have solid background */
+.mega-menu .mega-inner,
+.mega-inner > div:not(.mega-col) {
+  background: #ffffff !important;
+}
+
+/* Add full-width backdrop to mega menu to prevent page bleed-through on translucent images */
+.has-mega .mega-menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#ffffff, #ffffff);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Distinctive 'New Arrivals' product card styling */
+.product-card.new-arrival {
+  border: 2px solid rgba(243,112,33,0.10);
+  box-shadow: 0 12px 32px rgba(243,112,33,0.06);
+  border-radius: 6px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(243,112,33,0.02), rgba(255,255,255,0));
+}
+.product-card.new-arrival .product-card-img {
+  background: linear-gradient(180deg, #fff, #fff);
+}
+.product-card.new-arrival .product-card-img img {
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s ease;
+}
+.product-card.new-arrival .product-card-img::after {
+  content: "New Arrival";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  background: var(--brand-orange);
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(243,112,33,0.12);
+}
+
+/* Reduce hover scale for new arrival to make it visually different */
+.product-card.new-arrival:hover .product-card-img img { transform: scale(1.02); }
 .mega-caption { margin-top: 0.6rem; font-weight: 600; color: var(--brand-black); }
 @media (max-width: 1280px) {
   .mega-inner > div:not(.mega-col) img { width: 160px; height: 160px; }
@@ -827,7 +899,6 @@ h1, h2, h3, h4, h5, h6 { font-weight: 400; }
 strong, b { font-weight: 400; }
 
 /* Increase breathing room for navigation and grids */
-.nav-links { gap: 2.25rem; }
 .product-grid, .wishlist-grid { gap: 2rem; }
 .section-header { margin-bottom: 2.5rem; }
 .mega-menu .mega-inner { padding: 36px 3rem; gap: 2.5rem; }
@@ -920,12 +991,17 @@ window.addEventListener('load', () => {
 // DUMMY DATA
 // ═══════════════════════════════════════════════════════════════
 const categories = [
+  { id: 'designers', name: 'Designers', slug: 'designers', count: 50 },
+  { id: 'new-trending', name: 'New & Trending', slug: 'new-trending', count: 120 },
   { id: 'women', name: 'Women', slug: 'women', count: 42 },
   { id: 'men', name: 'Men', slug: 'men', count: 35 },
-  { id: 'accessories', name: 'Accessories', slug: 'accessories', count: 28 },
-  { id: 'shoes', name: 'Shoes', slug: 'shoes', count: 20 },
-  { id: 'watches', name: 'Watches', slug: 'watches', count: 15 },
-  { id: 'bags', name: 'Bags', slug: 'bags', count: 18 }
+  { id: 'beauty', name: 'Beauty', slug: 'beauty', count: 28 },
+  { id: 'jewellery-watches', name: 'Jewellery & Watches', slug: 'jewellery-watches', count: 20 },
+  { id: 'kids', name: 'Kids', slug: 'kids', count: 15 },
+  { id: 'home-lifestyle', name: 'Home & Lifestyle', slug: 'home-lifestyle', count: 18 },
+  { id: 'food-wine', name: 'Food & Wine', slug: 'food-wine', count: 30 },
+  { id: 'gifts', name: 'Gifts', slug: 'gifts', count: 45 },
+  { id: 'visit', name: 'Visit Our Stores', slug: 'visit', count: 0 }
 ];
 
 const products = [
@@ -962,6 +1038,16 @@ function pickUniqueFromList(list, count) {
   return picks;
 }
 function pickUniqueProducts(count) { return pickUniqueFromList(products, count); }
+
+/* Shuffle helper: returns a new shuffled copy of an array (Fisher-Yates) */
+function shuffleArray(arr) {
+  const a = Array.isArray(arr) ? arr.slice() : [];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
 
 const orders = [
   { id: 'ORD-2026-001', date: '2026-04-20', status: 'delivered', total: 2870, items: [{productId:1,qty:1},{productId:2,qty:1}], shipping: {name:'Alex Morgan',email:'alex@example.com',phone:'+44 7700 900001',address:'12 Kensington High St',city:'London',postcode:'W8 4NX',country:'United Kingdom'}, payment: 'Visa ending in 4242' },
@@ -1167,18 +1253,68 @@ function skeletonCard() {
 // HEADER / FOOTER / DRAWER
 // ═══════════════════════════════════════════════════════════════
 function renderHeader() {
+function getMegaMenuHTML(slug, highlights) {
+  const h1 = highlights[0] || {};
+  const h2 = highlights[1] || {};
+  const img1 = `<div><a href="#/products/${h1.slug||''}"><img src="${h1.image||''}" alt="${h1.name||''}"></a><div class="mega-caption">${h1.name||''}<div style="font-size:0.95rem;color:var(--gray-600);font-weight:400;margin-top:6px">Shop now</div></div></div>`;
+  const img2 = `<div><a href="#/products/${h2.slug||''}"><img src="${h2.image||''}" alt="${h2.name||''}"></a><div class="mega-caption">${h2.name||''}<div style="font-size:0.95rem;color:var(--gray-600);font-weight:400;margin-top:6px">Discover more</div></div></div>`;
+  if (slug === 'women') return `<div class="mega-inner"><div class="mega-col"><h5>Shop Women</h5><ul><li><a href="#/">New In</a></li><li><a href="#/">Clothing</a></li><li><a href="#/">Shoes</a></li><li><a href="#/">Bags</a></li><li><a href="#/">Accessories</a></li><li><a href="#/">Jewellery & Watches</a></li></ul></div><div class="mega-col"><h5>Explore</h5><ul><li><a href="#/">Designers</a></li><li><a href="#/">Sale</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'men') return `<div class="mega-inner"><div class="mega-col"><h5>Shop Men</h5><ul><li><a href="#/">New In</a></li><li><a href="#/">Clothing</a></li><li><a href="#/">Shoes</a></li><li><a href="#/">Bags & Luggage</a></li><li><a href="#/">Accessories</a></li><li><a href="#/">Jewellery & Watches</a></li><li><a href="#/">Grooming</a></li></ul></div><div class="mega-col"><h5>Explore</h5><ul><li><a href="#/">Designers</a></li><li><a href="#/">Sale</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'beauty') return `<div class="mega-inner" style="grid-template-columns: 200px 200px 200px 1fr 1fr;"><div class="mega-col"><h5>Fragrance</h5><ul><li><a href="#/">All Fragrance</a></li><li><a href="#/">Women's Perfume</a></li><li><a href="#/">Men's Aftershave</a></li><li><a href="#/">Hair Perfume & Mists</a></li></ul><h5 style="margin-top:1.5rem">Skincare</h5><ul><li><a href="#/">All Skincare</a></li><li><a href="#/">Cleansers</a></li><li><a href="#/">Serums</a></li><li><a href="#/">Moisturisers</a></li><li><a href="#/">SPF Skincare</a></li><li><a href="#/">Skincare Tools</a></li></ul></div><div class="mega-col"><h5>Make-up</h5><ul><li><a href="#/">All Make-up</a></li><li><a href="#/">Face</a></li><li><a href="#/">Lips</a></li><li><a href="#/">Eyes</a></li></ul><h5 style="margin-top:1.5rem">Haircare</h5><ul><li><a href="#/">All Haircare</a></li><li><a href="#/">Shampoo</a></li><li><a href="#/">Conditioner</a></li><li><a href="#/">Hair Tools</a></li></ul></div><div class="mega-col"><h5>Bath & Body</h5><ul><li><a href="#/">Bath & Shower</a></li><li><a href="#/">Body Care</a></li></ul><h5 style="margin-top:1.5rem">Gifting & Edits</h5><ul><li><a href="#/">Beauty Gift Sets</a></li><li><a href="#/">Limited Editions</a></li><li><a href="#/">Trending</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'jewellery-watches') return `<div class="mega-inner" style="grid-template-columns: 200px 200px 200px 1fr 1fr;"><div class="mega-col"><h5>Fine Jewellery</h5><ul><li><a href="#/">All Fine Jewellery</a></li><li><a href="#/">Fine Bracelets</a></li><li><a href="#/">Fine Earrings</a></li><li><a href="#/">Fine Necklaces</a></li><li><a href="#/">Fine Rings</a></li></ul><h5 style="margin-top:1.5rem">Fine Watches</h5><ul><li><a href="#/">All Fine Watches</a></li><li><a href="#/">Women's Fine Watches</a></li><li><a href="#/">Men's Fine Watches</a></li></ul></div><div class="mega-col"><h5>Fashion Jewellery</h5><ul><li><a href="#/">All Fashion Jewellery</a></li><li><a href="#/">Fashion Watches</a></li></ul></div><div class="mega-col"><h5>Discover</h5><ul><li><a href="#/">Bridal Jewellery</a></li><li><a href="#/">Jewellery Gifts</a></li><li><a href="#/">Gems & Birthstones</a></li><li><a href="#/">Bestselling Jewellery</a></li></ul><h5 style="margin-top:1.5rem">In-Store</h5><ul><li><a href="#/">Fine Jewellery Department</a></li><li><a href="#/">Fine Watches Department</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'kids') return `<div class="mega-inner"><div class="mega-col"><h5>Kids</h5><ul><li><a href="#/">New In</a></li><li><a href="#/">The Holiday Edit</a></li><li><a href="#/">Girls (3-16)</a></li><li><a href="#/">Boys (3-16)</a></li><li><a href="#/">Baby (0-3)</a></li></ul></div><div class="mega-col"><h5>Explore</h5><ul><li><a href="#/">Nursery & Travel</a></li><li><a href="#/">Toys</a></li><li><a href="#/">Gifts</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'home-lifestyle') return `<div class="mega-inner"><div class="mega-col"><h5>Kitchen & Dining</h5><ul><li><a href="#/">All Kitchenware</a></li><li><a href="#/">Dining</a></li><li><a href="#/">Coffee Machines & Cookware</a></li></ul><h5 style="margin-top:1.5rem">Living Room</h5><ul><li><a href="#/">Home Accessories</a></li><li><a href="#/">Furnishings</a></li><li><a href="#/">Candles</a></li></ul></div><div class="mega-col"><h5>Explore</h5><ul><li><a href="#/">Bedroom</a></li><li><a href="#/">Bathroom</a></li><li><a href="#/">Luxury Stationery & Games</a></li><li><a href="#/">Technology</a></li><li><a href="#/">In-Store Departments</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'food-wine') return `<div class="mega-inner"><div class="mega-col"><h5>Hampers</h5><ul><li><a href="#/">All Hampers</a></li><li><a href="#/">Food Hampers</a></li><li><a href="#/">Wine Hampers</a></li></ul></div><div class="mega-col"><h5>Food & Drinks</h5><ul><li><a href="#/">Tea, Coffee & Drinks</a></li><li><a href="#/">Food (Chocolate, Biscuits)</a></li><li><a href="#/">Wine & Spirits</a></li><li><a href="#/">Health & Wellbeing</a></li><li><a href="#/">Edits & Inspiration</a></li></ul></div>${img1}${img2}</div>`;
+  if (slug === 'gifts') return `<div class="mega-inner"><div class="mega-col"><h5>Gifting</h5><ul><li><a href="#/">Gifts by Recipient</a></li><li><a href="#/">Gifts by Category</a></li><li><a href="#/">The Harrods Collection</a></li><li><a href="#/">Hampers & Food</a></li></ul></div><div class="mega-col"></div>${img1}${img2}</div>`;
+  if (slug === 'visit') return `<div class="mega-inner"><div class="mega-col"><h5>Visit Our Stores</h5><ul><li><a href="#/">Store Information</a></li><li><a href="#/">Restaurants</a></li><li><a href="#/">Departments</a></li><li><a href="#/">Services</a></li></ul></div><div class="mega-col"></div>${img1}${img2}</div>`;
+  return '';
+}
   const user = state.user;
   const adminLink = state.isAdmin ? `<a href="#/admin">Admin</a>` : '';
   const highlights = pickUniqueFromList(products.filter(p => p.new), 4);
   return `
   <header class="header">
-    <div style="display:flex;align-items:center;gap:1.5rem;width:100%;justify-content:flex-start">
-      <button class="hamburger" onclick="toggleMobileMenu()" style="margin-right:8px"><span></span><span></span><span></span></button>
-      <a href="#/" class="logo" aria-label="Avenue home">
-        <img src="/logo.png" alt="Avenue" class="logo-img" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" />
-        <span class="logo-text">Avenue</span>
-      </a>
-      <nav style="margin-left:2rem;">
+    <div class="header-top">
+      <div class="header-left">
+        <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+      </div>
+      <div class="header-center">
+        <a href="#/" class="logo" aria-label="Avenue home">
+          <img src="/logo.png" alt="Avenue" class="logo-img" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" />
+          <span class="logo-text">Avenue</span>
+        </a>
+      </div>
+      <div class="header-right">
+        <div class="search-bar">
+          ${icons.search}
+          <input type="text" id="headerSearch" placeholder="Search..." onkeydown="if(event.key==='Enter'){navigate('/search?q='+encodeURIComponent(this.value))}">
+        </div>
+        <button class="icon-btn" onclick="navigate('/account/wishlist')" aria-label="Wishlist">
+          ${icons.heart}
+          <span class="badge" id="wishlistBadge" style="display:${state.wishlist.length?'flex':'none'};background:var(--red)">${state.wishlist.length}</span>
+        </button>
+        <button class="icon-btn" onclick="toggleCart()" aria-label="Cart">
+          ${icons.bag}
+          <span class="badge" id="cartBadge" style="display:${cartCount()?'flex':'none'}">${cartCount()}</span>
+        </button>
+        <div class="dropdown" id="userDropdown">
+          <button class="icon-btn" onclick="toggleUserDropdown()" aria-label="Account">${icons.user}</button>
+          <div class="dropdown-menu" style="right:0;left:auto;min-width:160px">
+            ${user ? `
+              <a href="#/account">My Account</a>
+              <a href="#/account/orders">Orders</a>
+              <a href="#/account/wishlist">Wishlist</a>
+              <button onclick="logout(); navigate('/');">Logout</button>
+            ` : `
+              <a href="#/login">Login</a>
+              <a href="#/register">Register</a>
+            `}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <nav style="width: 100%;">
         <ul class="nav-links">
           ${categories.map(c => `
             <li class="${c.slug === 'women' ? 'has-mega' : ''}">
@@ -1222,34 +1358,6 @@ function renderHeader() {
         </ul>
       </nav>
     </div>
-    <div class="header-right">
-      <div class="search-bar">
-        ${icons.search}
-        <input type="text" id="headerSearch" placeholder="Search..." onkeydown="if(event.key==='Enter'){navigate('/search?q='+encodeURIComponent(this.value))}">
-      </div>
-      <button class="icon-btn" onclick="navigate('/account/wishlist')" aria-label="Wishlist">
-        ${icons.heart}
-        <span class="badge" id="wishlistBadge" style="display:${state.wishlist.length?'flex':'none'};background:var(--red)">${state.wishlist.length}</span>
-      </button>
-      <button class="icon-btn" onclick="toggleCart()" aria-label="Cart">
-        ${icons.bag}
-        <span class="badge" id="cartBadge" style="display:${cartCount()?'flex':'none'}">${cartCount()}</span>
-      </button>
-      <div class="dropdown" id="userDropdown">
-        <button class="icon-btn" onclick="toggleUserDropdown()" aria-label="Account">${icons.user}</button>
-        <div class="dropdown-menu" style="right:0;left:auto;min-width:160px">
-          ${user ? `
-            <a href="#/account">My Account</a>
-            <a href="#/account/orders">Orders</a>
-            <a href="#/account/wishlist">Wishlist</a>
-            <button onclick="logout(); navigate('/');">Logout</button>
-          ` : `
-            <a href="#/login">Login</a>
-            <a href="#/register">Register</a>
-          `}
-        </div>
-      </div>
-    </div>
   </header>`;
 }
 
@@ -1271,7 +1379,6 @@ function renderFooter() {
           <li><a href="#/categories/women">Clothing</a></li>
           <li><a href="#/categories/shoes">Shoes</a></li>
           <li><a href="#/categories/bags">Bags</a></li>
-          <li><a href="#/categories/accessories">Accessories</a></li>
         </ul>
       </div>
       <div class="footer-column">
@@ -1287,6 +1394,7 @@ function renderFooter() {
       <div class="footer-column">
         <h4>Help</h4>
         <ul>
+          <li><a href="#/contact">Contact</a></li>
           <li><a href="#/login">Login</a></li>
           <li><a href="#/register">Register</a></li>
           <li><a href="#/plan">Plan Your Visit</a></li>
@@ -1298,8 +1406,9 @@ function renderFooter() {
         <ul>
           <li><a href="#/products">Shop All</a></li>
           <li><a href="#/search">Search</a></li>
-          <li><a href="#/plan">Made to Measure</a></li>
-          <li><a href="#/">Privacy & Terms</a></li>
+          <li><a href="/accessibility.html">Accessibility</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/terms.html">Terms & Conditions</a></li>
         </ul>
       </div>
     </div>
@@ -1480,6 +1589,32 @@ function attachPageEvents(route) {
       if (skel && content) { skel.classList.add('hidden'); content.classList.remove('hidden'); }
     }, 500);
   }
+  // Attach megamenu hover handlers so menu doesn't disappear immediately when
+  // moving cursor from the nav item to the mega panel.
+  document.querySelectorAll('.has-mega').forEach(li => {
+    // avoid re-attaching handlers on re-render
+    if (li.dataset.megaHandlersAttached) return;
+    li.dataset.megaHandlersAttached = '1';
+    let hideTimer = null;
+    const menu = li.querySelector('.mega-menu');
+    if (!menu) return;
+    const show = () => {
+      clearTimeout(hideTimer);
+      li.classList.add('open');
+      menu.classList.add('open');
+    };
+    const hide = () => {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        li.classList.remove('open');
+        menu.classList.remove('open');
+      }, 300); // 300ms delay before hiding
+    };
+    li.addEventListener('mouseenter', show);
+    li.addEventListener('mouseleave', hide);
+    menu.addEventListener('mouseenter', show);
+    menu.addEventListener('mouseleave', hide);
+  });
   
 }
 
@@ -1534,81 +1669,80 @@ function renderHome() {
         </div>
       </div>
     </div>
-    <div class="container" style="padding:2rem var(--site-gutter) 4rem">
-      <div class="section-header">
-        <div>
-          <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray-500);margin-bottom:0.5rem">Just In</p>
-          <h2>New Arrivals</h2>
-        </div>
-        <a href="#/products">View All</a>
+    <div class="container" style="padding: 4rem var(--site-gutter); display:grid; grid-template-columns:1fr 1fr; gap:3rem;">
+      <div style="text-align:left">
+        <img src="https://d1l7zeynh7e3dn.cloudfront.net/image/095972681933/image_uv43npivjl2vp9cunqiaidmd28/-S2048x4096-FJPG" sizes="(max-width: 640px) 320px, (max-width: 768px) 640px, (max-width: 1024px) 768px, (max-width: 1280px) 1024px, (max-width: 1536px) 1280px, 1536px" style="width:100%; aspect-ratio:4/5; height:auto; object-fit:cover; margin-bottom:2rem;">
+        <h3 style="font-family:'Playfair Display', serif; font-size:1.8rem; color:var(--brand-black); margin-bottom:1rem;">Change of Dress</h3>
+        <p style="font-size:0.85rem; color:var(--gray-600); max-width:100%; margin-bottom:2rem; line-height:1.7;">Are the invites flooding in? Rise to the occasion in the season's finest dresses from Victoria Beckham, Erdem, Ulla Johnson and more.</p>
+        <a href="#/categories/women" class="btn btn-outline" style="min-width:240px; justify-content:center;">Shop Dresses</a>
       </div>
-      <div class="product-grid">
-        ${newArrivals.map(p => productCard(p)).join('')}
+      <div style="text-align:left">
+        <img src="https://d1l7zeynh7e3dn.cloudfront.net/image/095972681933/image_o0l500k35d3m978ncb2ccleo1u/-S2048x4096-FJPG" sizes="(max-width: 640px) 320px, (max-width: 768px) 640px, (max-width: 1024px) 768px, (max-width: 1280px) 1024px, (max-width: 1536px) 1280px, 1536px" style="width:100%; aspect-ratio:4/5; height:auto; object-fit:cover; margin-bottom:2rem;">
+        <h3 style="font-family:'Playfair Display', serif; font-size:1.8rem; color:var(--brand-black); margin-bottom:1rem;">DIOR Summer Riviera Collection</h3>
+        <p style="font-size:0.85rem; color:var(--gray-600); max-width:100%; margin-bottom:2rem; line-height:1.7;">Sunkissed skin and vibrant pops of colour – escape to Provence with Dior's new, exclusive line of covetable summer make-up essentials.</p>
+        <a href="#/categories/women" class="btn btn-outline" style="min-width:240px; justify-content:center;">Shop Dior Beauty</a>
       </div>
     </div>
-    <div style="background:var(--gray-100);padding:2rem var(--site-gutter)">
-      <div class="container" style="padding:2rem 0">
-        <div style="text-align:center;margin-bottom:2rem">
-          <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;margin-bottom:0.5rem">What's Trending</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;align-items:start">
-          ${pickUniqueProducts(4).map(p => `
-            <div style="background:var(--white);padding:1rem;text-align:center;border:1px solid var(--gray-100)">
-              <img src="${p.image}" style="width:100%;height:220px;object-fit:cover;margin-bottom:0.75rem">
-              <a href="#/products/${p.slug}" style="display:block;color:var(--black);font-weight:600;margin-bottom:0.25rem">${p.name}</a>
-              <a href="#/categories/${p.category}" style="font-size:0.85rem;color:var(--gray-500);display:block">${getCategory(p.category)?.name || p.category}</a>
+
+    <div class="container" style="padding: 4rem var(--site-gutter)">
+      <h2 style="font-family:'Playfair Display', serif; font-size:2.2rem; text-align:center; margin-bottom:2.5rem;">What's Trending</h2>
+      <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:1rem;">
+        ${pickUniqueProducts(5).map(p => `
+          <div>
+            <div style="background:var(--gray-100); padding:1rem; aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; margin-bottom:1rem;">
+              <img src="${p.image}" style="max-width:100%; max-height:100%; object-fit:cover;">
             </div>
-          `).join('')}
-        </div>
+            <a href="#/categories/${p.category}" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--brand-black); text-decoration:underline;">Shop ${getCategory(p.category)?.name || p.category}</a>
+          </div>
+        `).join('')}
       </div>
     </div>
 
-    <div class="container" style="padding:3rem var(--site-gutter)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
-        <div>
-          <img src="https://d1l7zeynh7e3dn.cloudfront.net/image/095972681933/image_h01525vqh16mrfmabk98lthk15/-S2048x4096-FJPG" style="width:100%;height:220px;object-fit:cover">
+    <div class="container" style="padding: 4rem var(--site-gutter)">
+      <div style="display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:4rem;">
+        <img src="https://d1l7zeynh7e3dn.cloudfront.net/rendition/095972681933/image_5u3kgi641h1ir608mo0dvk9a1j/-S2048x4096-FJPG" style="width:100%; height:300px; object-fit:cover;">
+        <div style="max-width:420px;">
+          <p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--gray-500); margin-bottom:0.75rem;">REWARDS EXCLUSIVE</p>
+          <h3 style="font-family:'Playfair Display', serif; font-size:2.2rem; color:var(--brand-black); margin-bottom:1rem;">Up to 20% off Beauty</h3>
+          <p style="font-size:0.9rem; color:var(--gray-600); line-height:1.6; margin-bottom:1.5rem;">Ready for a spring beauty refresh? Enjoy up to 20% off selected beauty purchases when you shop on the Avenue app, online and in-store with Avenue Rewards until Monday 4th May. <u>T&Cs apply.</u></p>
+          <a href="#/categories/women" style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--brand-black); text-decoration:underline;">Shop Now</a>
         </div>
-        <div>
-          <p style="font-size:0.75rem;text-transform:uppercase;color:var(--gray-600);margin-bottom:0.5rem">Reward Exclusive</p>
-          <h3 style="font-size:1.8rem;margin-bottom:0.75rem">Up to 20% off Beauty</h3>
-          <p style="color:var(--gray-600);line-height:1.7;margin-bottom:1rem">Ready for a spring beauty refresh? Enjoy up to 20% off selected beauty purchases when you shop on the site and in-store. Terms and conditions apply.</p>
-          <a href="#/categories/accessories" class="btn btn-ghost">Shop Now</a>
-        </div>
+      </div>
+      <div style="text-align:center; margin-top:3rem;">
+        <a href="#/products" class="btn btn-outline" style="min-width:200px;">Shop Prada</a>
       </div>
     </div>
 
-    <div class="container" style="padding:3rem var(--site-gutter)">
-        <div style="text-align:center;margin-bottom:2rem">
-          <h2 style="font-family:'Poppins',sans-serif;font-size:2rem;">Avenue Stories</h2>
-        </div>
+    <div class="container" style="padding: 4rem var(--site-gutter)">
+      <h2 style="font-family:'Playfair Display', serif; font-size:2.2rem; text-align:center; margin-bottom:2.5rem;">Avenue Stories</h2>
       <div class="stories-wrap" style="position:relative">
-        <button class="stories-nav stories-prev" onclick="scrollStories(-1)" aria-label="Scroll left">${icons.arrow}</button>
-        <div class="stories-carousel" style="display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;scroll-behavior:smooth;">
+        <div class="stories-carousel" style="display:flex; gap:1.5rem; overflow-x:auto; padding-bottom:1.5rem; scroll-behavior:smooth;">
         ${pickUniqueProducts(6).map(p => `
-            <div style="min-width:220px">
-            <img src="${p.image}" style="width:100%;height:200px;object-fit:cover;margin-bottom:0.6rem">
-            <div style="font-family:'Poppins',sans-serif;font-size:1rem;margin-bottom:0.25rem">${p.name}</div>
-            <a href="#/products/${p.slug}" style="font-size:0.85rem;color:var(--gray-600)">Read & Shop</a>
+          <div style="min-width:240px">
+            <img src="${p.image}" style="width:100%; height:320px; object-fit:cover; margin-bottom:1rem;">
+            <h4 style="font-family:'Playfair Display', serif; font-size:1.3rem; line-height:1.3; margin-bottom:0.75rem; color:var(--brand-black);">${p.name}</h4>
+            <a href="#/products/${p.slug}" style="font-size:0.75rem; color:var(--gray-600); text-decoration:underline; text-transform:uppercase; letter-spacing:0.05em;">Read & Shop</a>
           </div>
         `).join('')}
         </div>
-        <button class="stories-nav stories-next" onclick="scrollStories(1)" aria-label="Scroll right">${icons.arrow}</button>
       </div>
-      <div style="text-align:center;margin-top:1.5rem">
-        <a href="#/stories" class="btn btn-outline">Read the Latest Stories</a>
+      <div style="text-align:center; margin-top:2rem;">
+        <a href="#/stories" class="btn btn-outline" style="min-width:200px;">Read the Latest Stories</a>
       </div>
     </div>
 
-    <div class="container" style="padding:3rem var(--site-gutter) 6rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
-        <div>
-          <img src="https://d2wd7685k000to.cloudfront.net/image/306683987547/image_uqsnibrott7rb1lto36m5sfr01/-S2048x4096-FJPG" style="width:100%;height:260px;object-fit:cover">
+    <div class="container" style="padding: 4rem var(--site-gutter) 6rem">
+      <h2 style="font-family:'Playfair Display', serif; font-size:2.2rem; text-align:center; margin-bottom:2.5rem;">There's More In-Store</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:4rem;">
+        <img src="https://d2wd7685k000to.cloudfront.net/image/306683987547/image_uqsnibrott7rb1lto36m5sfr01/-S2048x4096-FJPG" style="width:100%; height:340px; object-fit:cover;">
+        <div style="max-width:420px;">
+          <h3 style="font-family:'Playfair Display', serif; font-size:1.8rem; color:var(--brand-black); margin-bottom:1rem;">Made to Measure</h3>
+          <p style="font-size:0.9rem; color:var(--gray-600); line-height:1.6; margin-bottom:1.5rem;">Our made-to-measure service allows you to personalise your suit to your exact measurements and tastes from a range of world-class brands like TOM FORD, Brunello Cucinelli, Brioni and more.</p>
+          <a href="#/plan" style="font-size:0.8rem; text-decoration:underline; color:var(--brand-black);">Find Out More</a>
         </div>
-        <div>
-          <h3 style="font-size:1.6rem;font-family:'Poppins',sans-serif;margin-bottom:0.5rem">Made to Measure</h3>
-          <p style="color:var(--gray-600);line-height:1.7;margin-bottom:1rem">Our made to measure service allows you to personalise your suit to your exact measurements and tastes from a range of world-class brands. Book an appointment to experience true tailoring.</p>
-          <a href="#/plan" class="btn-cta">Plan Your Visit</a>
-        </div>
+      </div>
+      <div style="text-align:center; margin-top:3rem;">
+        <a href="#/plan" class="btn-cta" style="background:var(--black); padding:0.8rem 2.5rem; letter-spacing:0.05em; border-radius: 0;">Plan Your Visit</a>
       </div>
     </div>
   </div>`;
