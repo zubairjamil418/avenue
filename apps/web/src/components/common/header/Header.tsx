@@ -10,9 +10,10 @@ import { NavItem } from "@/constants/data";
 interface HeaderProps {
   initialMenus?: NavItem[];
   initialCategoryTree?: CategoryTreeNode[];
+  logoUrl?: string;
 }
 
-export default function Header({ initialMenus, initialCategoryTree }: HeaderProps) {
+export default function Header({ initialMenus, initialCategoryTree, logoUrl }: HeaderProps) {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -31,17 +32,17 @@ export default function Header({ initialMenus, initialCategoryTree }: HeaderProp
         <TopHeader />
         {/* header-top End */}
 
-        <MiddleHeader />
+        <MiddleHeader logoUrl={logoUrl} />
         <BottomHeader 
-          isSticky={isSticky} 
+          isSticky={false} 
           initialMenus={initialMenus} 
-          initialCategoryTree={initialCategoryTree} 
         />
 
         {/* Mobile Menu Start */}
         <ResponsiveHeaderMenu 
           initialMenus={initialMenus} 
           initialCategoryTree={initialCategoryTree} 
+          logoUrl={logoUrl}
         />
         {/* Mobile Menu End */}
       </header>

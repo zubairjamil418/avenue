@@ -168,7 +168,7 @@ export default function ForgotPasswordPage() {
         <div className="w-full bg-card rounded-[24px] shadow-2xl p-8 sm:p-12 md:px-14 flex flex-col items-center border border-border transition-all duration-500">
           
           <div className="w-full flex justify-center items-center mb-6">
-            <img src="/logo.png" alt="Sellzy Logo" className="h-[46px] w-auto object-contain" />
+            <img src="/admin/logo.png" alt="Sellzy Logo" className="h-[46px] w-auto object-contain" />
           </div>
 
           <div className="relative mb-6">

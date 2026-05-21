@@ -1,0 +1,11 @@
+--- /var/www/vhosts/avenueretail.co.uk/httpdocs/sellzy-ecommerce/apps/web/src/app/[locale]/layout.tsx
++++ /var/www/vhosts/avenueretail.co.uk/httpdocs/sellzy-ecommerce/apps/web/src/app/[locale]/layout.tsx
+@@ -23,7 +23,7 @@
+   let favicon = undefined;
+   try {
+     const iconRes = await api.get("/api/website-icons?category=favicon&isActive=true");
+-    const activeFavicon = iconRes.data?.data?.[0];
++    const activeFavicon = iconRes.data?.data?.[0] || iconRes.data?.[0];
+     if (activeFavicon?.url) {
+       favicon = activeFavicon.url;
+     }

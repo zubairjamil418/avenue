@@ -31,7 +31,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { useNotificationStore } from "@/store/useNotificationStore";
 import { LogoutDialog } from "@/components/user/LogoutDialog";
 
-const MiddleHeader = () => {
+const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
   const { onCartOpen, onAuthOpen } = useHeaderStore();
   const { user, isAuthenticated } = useAuthStore();
   const cartItems = useCartStore((state) => state.cartItems);
@@ -49,32 +49,47 @@ const MiddleHeader = () => {
       <div className="py-4 border border-gray-300 xl:border-0 hidden xl:block header-middle relative z-50">
         <Container>
           {/* For Desktop Screen Start */}
-          <div className="xl:flex items-center hidden">
-            <Logo />
-            <div className="flex items-center w-full justify-end gap-x-[54px]">
-              <SearchHeader />
+          <div className="xl:grid grid-cols-[1fr_auto_1fr] items-center hidden">
+            {/* Left spacer */}
+            <div />
+            {/* Center: Logo */}
+            <div className="flex justify-center">
+              <Logo imageUrl={logoUrl} />
+            </div>
+            {/* Right: Search + Icons */}
+            <div className="flex items-center justify-end gap-x-4">
+              <SearchHeader className="2xl:max-w-[400px] xl:max-w-[300px]" />
 
-              <div className="flex items-center gap-x-6 shrink-0">
-                <ul className="flex items-center gap-x-6">
-                  <li className="flex items-center gap-x-4 cursor-pointer relative group py-2">
-                    <div className="flex items-center gap-x-3">
-                      <div className="inline-flex items-center justify-center bg-warning w-12 h-12 rounded-xl text-primary group-hover:bg-primary group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/30 hoverEffect">
-                        <User className="size-6" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[12px] font-medium text-muted-foreground leading-tight">
-                          {isAuthenticated
-                            ? `Welcome, ${user?.name?.split(" ")[0] || "User"}`
-                            : "Account"}
+              <div className="flex items-center gap-x-1">
+                <ul className="flex items-center gap-x-1">
+                  {/* Wishlist */}
+                  <li>
+                    <Link
+                      href="/user/wishlist"
+                      className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted transition-colors"
+                    >
+                      <Heart className="size-5 text-foreground" />
+                    </Link>
+                  </li>
+                  {/* Cart */}
+                  <li>
+                    <button
+                      onClick={onCartOpen}
+                      className="cart-sidebar-btn relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted transition-colors cursor-pointer"
+                    >
+                      <ShoppingCart className="size-5 text-foreground" />
+                      {totalItems > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                          {totalItems}
                         </span>
-                        <div className="flex items-center gap-x-1">
-                          <span className="text-[15px] font-bold text-foreground leading-tight max-w-[100px] line-clamp-1">
-                            {isAuthenticated ? "My Account" : "Log in"}
-                          </span>
-                          <ChevronDown className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                        </div>
-                      </div>
-                    </div>
+                      )}
+                    </button>
+                  </li>
+                  {/* Account */}
+                  <li className="relative group py-2">
+                    <button className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted transition-colors cursor-pointer">
+                      <User className="size-5 text-foreground" />
+                    </button>
 
                     {/* Added pt-4 to act as a bridge for the cursor to travel downwards without losing hover state */}
                     <div className="absolute right-0 top-full pt-4 z-50 w-[250px] max-w-[250px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
@@ -217,27 +232,6 @@ const MiddleHeader = () => {
                         )}
                       </ul>
                     </div>
-                  </li>
-                  <li className="flex items-center">
-                    <button
-                      onClick={onCartOpen}
-                      className="flex items-center gap-x-3 cursor-pointer group cart-sidebar-btn py-2"
-                    >
-                      <div className="relative inline-flex items-center justify-center bg-warning w-12 h-12 rounded-xl text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/30">
-                        <ShoppingCart className="size-6" />
-                        <span className="absolute -top-1.5 -right-1.5 bg-warning text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white group-hover:bg-primary shadow-sm transition-transform duration-300 group-hover:scale-110">
-                          {totalItems}
-                        </span>
-                      </div>
-                      <div className="flex flex-col items-start leading-tight">
-                        <span className="text-[12px] font-medium text-muted-foreground">
-                          Cart
-                        </span>
-                        <span className="text-[15px] font-bold text-foreground">
-                          {totalItems} - {totalItems === 1 ? "Item" : "Items"}
-                        </span>
-                      </div>
-                    </button>
                   </li>
                 </ul>
               </div>

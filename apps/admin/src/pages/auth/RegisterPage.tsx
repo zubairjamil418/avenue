@@ -93,7 +93,7 @@ export default function RegisterPage() {
           {/* Header & Logos */}
           <div className="w-full flex justify-center items-center mb-8">
             <img
-              src="/logo.png"
+              src="/admin/logo.png"
               alt="Sellzy Logo"
               className="h-[46px] w-auto object-contain"
             />
@@ -103,7 +103,7 @@ export default function RegisterPage() {
             <div className="w-[100px] h-[100px] bg-primary-dark rounded-full flex items-center justify-center relative z-10">
               <div className="absolute inset-0 flex items-center justify-center">
                 <img
-                  src="/register-logo.png"
+                  src="/admin/register-logo.png"
                   alt="Register Icon"
                   className="w-[84px] h-[84px] object-contain drop-shadow-md z-20"
                 />

@@ -10,11 +10,12 @@ import { NavItem } from "@/constants/data";
 import { CategoryTreeNode } from "@/hooks/useCategoryTree";
 
 interface ResponsiveHeaderMenuProps {
+  logoUrl?: string;
   initialMenus?: NavItem[];
   initialCategoryTree?: CategoryTreeNode[];
 }
 
-const ResponsiveHeaderMenu = ({ initialMenus, initialCategoryTree }: ResponsiveHeaderMenuProps) => {
+const ResponsiveHeaderMenu = ({ initialMenus, initialCategoryTree, logoUrl }: ResponsiveHeaderMenuProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { onCartOpen } = useHeaderStore();
 
@@ -33,7 +34,7 @@ const ResponsiveHeaderMenu = ({ initialMenus, initialCategoryTree }: ResponsiveH
                   <Menu />
                 </button>
               </div>
-              <Logo className="w-24" />
+              <Logo className="w-24" imageUrl={logoUrl} />
               <div className="xl:hidden flex items-center gap-x-4">
                 <button
                   onClick={onCartOpen}

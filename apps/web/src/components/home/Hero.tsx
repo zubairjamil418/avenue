@@ -3,7 +3,6 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { MoveRight } from "lucide-react";
 import { usePathname } from "next/navigation";
-import Container from "../common/Container";
 import { Link } from "@/i18n/routing";
 import {
   Carousel,
@@ -64,10 +63,10 @@ const HeroContent = ({
 
   if (isLoading && initialSlides.length === 0) {
     return (
-      <section className="pt-6 pb-12 overflow-hidden">
-        <Container>
-          <div className="w-full h-[450px] md:h-[600px] rounded-3xl bg-gray-100 animate-pulse" />
-        </Container>
+      <section className="overflow-hidden">
+        <div className="w-full">
+          <div className="w-full h-[450px] md:h-[600px] bg-gray-100 animate-pulse" />
+        </div>
       </section>
     );
   }
@@ -78,9 +77,9 @@ const HeroContent = ({
 
   return (
     <section
-      className={`overflow-hidden ${compact ? "pt-0 pb-6" : "pt-6 pb-12"}`}
+      className={`overflow-hidden ${compact ? "pb-6" : "pb-0"}`}
     >
-      <Container className={compact ? "px-0 sm:px-0 lg:px-0" : ""}>
+      <div className="w-full">
         <Carousel
           setApi={setApi}
           plugins={[
@@ -94,7 +93,7 @@ const HeroContent = ({
             loop: true,
             duration: 30,
           }}
-          className="relative group w-full rounded-3xl overflow-hidden transition-colors duration-700"
+          className="relative group w-full overflow-hidden transition-colors duration-700"
           style={{ backgroundColor: slides[current]?.bgColor || "#05535c" }}
         >
           <CarouselContent className="ml-0">
@@ -211,7 +210,7 @@ const HeroContent = ({
             ))}
           </div>
         </Carousel>
-      </Container>
+      </div>
     </section>
   );
 };
@@ -231,13 +230,13 @@ const Hero = ({
     <Suspense
       fallback={
         <section
-          className={`overflow-hidden ${compact ? "pt-0 pb-6" : "pt-6 pb-12"}`}
+          className={`overflow-hidden ${compact ? "pb-6" : "pb-0"}`}
         >
-          <Container className={compact ? "px-0 sm:px-0 lg:px-0" : ""}>
+          <div className="w-full">
             <div
-              className={`w-full rounded-3xl bg-gray-100 animate-pulse ${compact ? "h-[300px] md:h-[360px]" : "h-[450px] md:h-[600px]"}`}
+              className={`w-full bg-gray-100 animate-pulse ${compact ? "h-[300px] md:h-[360px]" : "h-[450px] md:h-[600px]"}`}
             />
-          </Container>
+          </div>
         </section>
       }
     >

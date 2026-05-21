@@ -53,7 +53,7 @@ const footerSections = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({ logoUrl }: { logoUrl?: string }) {
   return (
     <div className="text-primary-foreground/80">
       {/* ========== Subscribe Section Start ========== */}
@@ -68,7 +68,7 @@ export default function Footer() {
             <div className="md:col-span-12 col-span-12 xl:col-span-3 flex flex-col gap-y-6 animate__animated animate__fadeInUp">
               <div>
                 <Link href="/">
-                  <img src="/images/footer-logo.svg" alt="logo" />
+                  <img src={logoUrl || "/images/footer-logo.svg"} alt="logo" />
                 </Link>
               </div>
               <p className="text-primary-lighter text-base">

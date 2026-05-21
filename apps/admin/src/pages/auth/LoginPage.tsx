@@ -101,7 +101,7 @@ export default function LoginPage() {
           {/* Header & Logos */}
           <div className="w-full flex justify-center items-center mb-8">
             <img
-              src="/logo.png"
+              src="/admin/logo.png"
               alt="Sellzy Logo"
               className="h-[46px] w-auto object-contain"
             />
@@ -111,7 +111,7 @@ export default function LoginPage() {
             {/* The circular dark green background */}
             <div className="w-[100px] h-[100px] bg-primary-dark rounded-full flex items-center justify-center relative z-10">
               <img
-                src="/login-logo.png"
+                src="/admin/login-logo.png"
                 alt="Login Icon"
                 className="w-24 h-24 object-contain drop-shadow-md"
               />

@@ -94,7 +94,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               className="flex items-center w-full"
             >
               <img
-                src="/logo.svg"
+                src="/admin/logo.svg"
                 alt="Sellzy"
                 className="h-8 w-auto brightness-0 invert"
               />
@@ -111,7 +111,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               title="Expand Sidebar"
             >
               <img
-                src="/logo-small.png"
+                src="/admin/logo-small.png"
                 alt="Sellzy"
                 className="h-8 w-8 object-contain"
               />

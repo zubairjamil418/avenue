@@ -1,3 +1,4 @@
+import { setRequestLocale } from "next-intl/server";
 import Hero from "@/components/home/Hero";
 import SupportInfo from "@/components/home/SupportInfo";
 import ShopByCategory from "@/components/home/ShopByCategory";

@@ -313,4 +313,5 @@ export const router = createBrowserRouter(
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Route>,
   ),
+  { basename: import.meta.env.BASE_URL }
 );

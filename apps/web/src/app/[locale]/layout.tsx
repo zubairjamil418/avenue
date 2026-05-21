@@ -33,8 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const iconRes = await api.get("/api/website-icons?category=favicon&isActive=true");
     const activeFavicon = iconRes.data?.data?.[0];
-    if (activeFavicon?.url) {
-      favicon = activeFavicon.url;
+    if (activeFavicon?.url || activeFavicon?.imageUrl) {
+      favicon = activeFavicon.url || activeFavicon.imageUrl;
     }
   } catch (error) {
     console.error("Failed to fetch favicon", error);
@@ -80,11 +80,14 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   // Pre-fetch Header Data (Menus, Category Tree, Currencies) for "Instant" Render
-  const [menusRes, categoriesRes, currenciesRes, messages] = await Promise.all([
+  const [menusRes, categoriesRes, currenciesRes, iconsRes, messages] = await Promise.all([
     api.get(MENU_ENDPOINTS.PUBLIC, { next: { revalidate: 600 } }),
     api.get(CATEGORY_ENDPOINTS.TREE, { next: { revalidate: 600 } }),
     api
       .get(CURRENCY_ENDPOINTS.BASE, { next: { revalidate: 600 } })
+      .catch(() => ({ data: { data: [] } })),
+    api
+      .get("/api/website-icons?isActive=true", { next: { revalidate: 600 } })
       .catch(() => ({ data: { data: [] } })),
     getMessages(),
   ]);
@@ -92,6 +95,11 @@ export default async function LocaleLayout({
   const initialMenus = menusRes.data || [];
   const initialCategoryTree = categoriesRes.data || [];
   const initialCurrencies = (currenciesRes.data as any)?.data || [];
+
+  const activeIcons = iconsRes.data?.data || iconsRes.data || [];
+  const headerLogo = activeIcons.find((icon: any) => icon.category === "header" || icon.key === "main_logo")?.imageUrl;
+  const footerLogo = activeIcons.find((icon: any) => icon.category === "footer" || icon.key === "footer_logo" || (icon.category === "logo" && icon.name === "footer_logo"))?.imageUrl;
+
 
   return (
     <html
@@ -106,9 +114,10 @@ export default async function LocaleLayout({
             <Header
               initialMenus={initialMenus}
               initialCategoryTree={initialCategoryTree}
+              logoUrl={headerLogo}
             />
             {children}
-            <Footer />
+            <Footer logoUrl={footerLogo} />
             <ComparePopup />
             <SourceCodeButton />
           </CurrencyProvider>
