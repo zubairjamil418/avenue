@@ -4,6 +4,14 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  base: "/admin/",
+  server: {
+    port: 4000,
+  },
+  preview: {
+    port: 4000,
+    allowedHosts: ["avenueretail.co.uk"],
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

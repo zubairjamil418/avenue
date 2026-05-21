@@ -55,7 +55,7 @@ const ApplicationForm = ({ careerId, onCancel }: ApplicationFormProps) => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = (typeof window === "undefined" ? "http://127.0.0.1:8000" : process.env.NEXT_PUBLIC_API_URL) || "http://localhost:8000";
       const response = await fetch(`${apiUrl}/api/applications/${careerId}`, {
         method: "POST",
         headers: {

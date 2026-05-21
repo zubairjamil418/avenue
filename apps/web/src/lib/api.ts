@@ -20,7 +20,7 @@ interface RequestOptions extends RequestInit {
   next?: NextFetchRequestConfig;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const BASE_URL = (typeof window === "undefined" ? "http://127.0.0.1:8000" : process.env.NEXT_PUBLIC_API_URL) || "http://localhost:8000";
 
 /**
  * Standardized API client using native fetch for Next.js Cache Support.

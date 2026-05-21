@@ -58,7 +58,7 @@ export default async function ContactPage({
   };
 
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const apiUrl = (typeof window === "undefined" ? "http://127.0.0.1:8000" : process.env.NEXT_PUBLIC_API_URL) || "http://localhost:8000";
     const res = await fetch(`${apiUrl}/api/contact-page`, {
       next: { revalidate: 60 },
     });

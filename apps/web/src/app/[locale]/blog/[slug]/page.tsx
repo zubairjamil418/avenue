@@ -52,7 +52,7 @@ const SingleBlogPage = async ({
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/blogs/${slug}`,
+      `${(typeof window === "undefined" ? "http://127.0.0.1:8000" : process.env.NEXT_PUBLIC_API_URL) || "http://localhost:8000"}/api/blogs/${slug}`,
       { next: { revalidate: 60 } },
     );
     if (res.ok) {
@@ -61,7 +61,7 @@ const SingleBlogPage = async ({
       // Fetch related blogs from the same category
       if (post?.category?._id) {
         const relatedRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/blogs?category=${post.category._id}&limit=4`,
+          `${(typeof window === "undefined" ? "http://127.0.0.1:8000" : process.env.NEXT_PUBLIC_API_URL) || "http://localhost:8000"}/api/blogs?category=${post.category._id}&limit=4`,
           { next: { revalidate: 60 } },
         );
         if (relatedRes.ok) {
