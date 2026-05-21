@@ -48,7 +48,7 @@
   
   --color-primary-lighter: #CAF8E4;
   --color-primary-light: #5ED9BA;
-  --color-primary-main: #088178;
+  --color-primary-main: #424242;
   --color-primary-dark: #056D6E;
   --color-primary-darker: #04535C;
 
@@ -225,7 +225,7 @@
     --card-foreground: #212529;
     --popover: #FFFFFF;
     --popover-foreground: #212529;
-    --primary: #088178;
+    --primary: #424242;
     --primary-foreground: #FFFFFF;
     --secondary: #3366FF;
     --secondary-foreground: #FFFFFF;
@@ -237,7 +237,7 @@
     --destructive-foreground: #FFFFFF;
     --border: #DFE3E8;
     --input: #DFE3E8;
-    --ring: #088178;
+    --ring: #424242;
     --chart-1: #826AF9;
     --chart-2: #2D99FF;
     --chart-3: #2CD9C5;
@@ -245,12 +245,12 @@
     --chart-5: #FF6C40;
     --sidebar: #FFFFFF;
     --sidebar-foreground: #212529;
-    --sidebar-primary: #088178;
+    --sidebar-primary: #424242;
     --sidebar-primary-foreground: #FFFFFF;
     --sidebar-accent: #F4F6F8;
     --sidebar-accent-foreground: #212529;
     --sidebar-border: #DFE3E8;
-    --sidebar-ring: #088178;
+    --sidebar-ring: #424242;
     --radius: 0.625rem;
   }
 
@@ -261,7 +261,7 @@
     --card-foreground: #FFFFFF;
     --popover: #212B36;
     --popover-foreground: #FFFFFF;
-    --primary: #088178;
+    --primary: #424242;
     --primary-foreground: #FFFFFF;
     --secondary: #3366FF;
     --secondary-foreground: #FFFFFF;
@@ -273,7 +273,7 @@
     --destructive-foreground: #FFFFFF;
     --border: #454F5B;
     --input: #454F5B;
-    --ring: #088178;
+    --ring: #424242;
     --chart-1: #F7D2FF;
     --chart-2: #CCFAFF;
     --chart-3: #C0F2DC;
@@ -281,12 +281,12 @@
     --chart-5: #FFF2D4;
     --sidebar: #161C24;
     --sidebar-foreground: #FFFFFF;
-    --sidebar-primary: #088178;
+    --sidebar-primary: #424242;
     --sidebar-primary-foreground: #FFFFFF;
     --sidebar-accent: #212B36;
     --sidebar-accent-foreground: #FFFFFF;
     --sidebar-border: #454F5B;
-    --sidebar-ring: #088178;
+    --sidebar-ring: #424242;
   }
 }
 
@@ -314,5 +314,11 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+@layer base {
+  button, .btn, [role="button"] { 
+    border-radius: 0px !important; 
   }
 }

@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
-import { Public_Sans, Urbanist } from "next/font/google";
+import { Poppins, Playfair_Display } from "next/font/google";
 import "../globals.css";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const publicSans = Public_Sans({
+const publicSans = Poppins({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-public-sans",
   display: "swap",
 });
 
-const urbanist = Urbanist({
+const urbanist = Playfair_Display({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   variable: "--font-urbanist",
   display: "swap",
 });
@@ -24,14 +26,35 @@ import { Toaster } from "@/components/ui/sonner";
 import ComparePopup from "@/components/common/ComparePopup";
 import UrlMessageHandler from "@/components/common/UrlMessageHandler";
 import SourceCodeButton from "@/components/common/SourceCodeButton";
+import api from "@/lib/api";
 
-export const metadata: Metadata = {
-  title: {
-    template: "Sellzy Ecommerce App | %s",
-    default: "Sellzy Ecommerce App",
-  },
-  description: "Sellzy - Multipurpose eCommerce",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  let favicon = undefined;
+  try {
+    const iconRes = await api.get("/api/website-icons?category=favicon&isActive=true");
+    const activeFavicon = iconRes.data?.data?.[0];
+    if (activeFavicon?.url) {
+      favicon = activeFavicon.url;
+    }
+  } catch (error) {
+    console.error("Failed to fetch favicon", error);
+  }
+
+  return {
+    title: {
+      template: "Sellzy Ecommerce App | %s",
+      default: "Sellzy Ecommerce App",
+    },
+    description: "Sellzy - Multipurpose eCommerce",
+    ...(favicon && {
+      icons: {
+        icon: favicon,
+        apple: favicon,
+        shortcut: favicon,
+      },
+    }),
+  };
+}
 
 export async function generateStaticParams() {
   return [
@@ -43,7 +66,6 @@ export async function generateStaticParams() {
   ];
 }
 
-import api from "@/lib/api";
 import { MENU_ENDPOINTS, CATEGORY_ENDPOINTS, CURRENCY_ENDPOINTS } from "@/constants/endpoints";
 import CurrencyProvider from "@/components/common/CurrencyProvider";
 

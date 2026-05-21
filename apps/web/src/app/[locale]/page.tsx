@@ -20,7 +20,6 @@ import {
   getAdsBanners,
 } from "@/lib/homeDataFetcher";
 import { Suspense } from "react";
-import { setRequestLocale } from "next-intl/server";
 import { SectionSkeleton } from "@/components/ui/SectionSkeleton";
 import { ProductType } from "@/hooks/useProductTypes";
 import type { AdsBanner } from "@/types/banner";
@@ -58,7 +57,6 @@ function isRowBanner(banner: AdsBanner): boolean {
   });
 }
 
-/** Fetches top-selling products then renders the section */
 const DeferredTopSelling = async ({
   locale,
   productTypes,
@@ -81,7 +79,6 @@ const DeferredTopSelling = async ({
   );
 };
 
-/** Fetches OurProducts + parent categories then renders the section */
 const DeferredOurProducts = async ({ locale }: { locale: string }) => {
   const [products, categories] = await Promise.all([
     getOurProducts(),
@@ -96,7 +93,6 @@ const DeferredOurProducts = async ({ locale }: { locale: string }) => {
   );
 };
 
-/** Fetches promo ads banners then renders HomePromoBanners + BottomPromoBanners */
 const DeferredPromoBanners = async () => {
   const adsBanners = await getAdsBanners();
   const healthcare = filterHealthcareBanners(adsBanners);
@@ -112,7 +108,6 @@ const DeferredPromoBanners = async () => {
   );
 };
 
-/** Fetches newly launched products then renders the section */
 const DeferredNewlyLaunched = async ({
   locale,
   productTypes,
@@ -135,7 +130,6 @@ const DeferredNewlyLaunched = async ({
   );
 };
 
-/** Fetches beauty products then renders the section */
 const DeferredBeauty = async ({
   locale,
   productTypes,
@@ -156,13 +150,10 @@ const DeferredBeauty = async ({
   );
 };
 
-/** Fetches latest blogs then renders the section */
 const DeferredLatestBlogs = async ({ locale }: { locale: string }) => {
   const blogs = await getLatestBlogs("healthcare");
   return <LatestBlogs locale={locale} productBase="healthcare" blogs={blogs} />;
 };
-
-// ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function Home({
   params,
@@ -174,15 +165,6 @@ export default async function Home({
 
   const homeVersion = "home-1";
 
-  /**
-   * ✅ CRITICAL PATH — only 3 fast parallel fetches block the initial render:
-   *    1. Hero banners  →  above-the-fold carousel (small payload)
-   *    2. Best-selling products  →  first visible section (10 items)
-   *    3. Product types  →  section labels / metadata (tiny lookup table)
-   *
-   * Everything else defers behind Suspense so Next.js streams the shell
-   * to the browser immediately, then fills sections as they resolve.
-   */
   const [heroSlides, productTypes, bestSellingProducts] = await Promise.all([
     getHeroBanners(homeVersion),
     getHomeProductTypes(homeVersion),
@@ -193,7 +175,6 @@ export default async function Home({
 
   return (
     <main>
-      {/* ── CRITICAL: renders on first byte ──────────────────── */}
       <Hero initialSlides={heroSlides} homeVersionSlug={homeVersion} />
       <SupportInfo />
 
@@ -217,7 +198,6 @@ export default async function Home({
       </Suspense>
 
       <Suspense fallback={null}>
-        {/* Promo banners are a visual bonus — no height placeholder needed */}
         <DeferredPromoBanners />
       </Suspense>
 
