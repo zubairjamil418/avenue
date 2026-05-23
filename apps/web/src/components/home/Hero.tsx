@@ -107,13 +107,7 @@ const HeroContent = ({
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000"
                   style={{ backgroundImage: `url(${slide.image})` }}
                 />
-                {/* Overlay for mobile readability */}
-                <div className="absolute inset-0 bg-black/20 md:bg-transparent" />
 
-                {/* Left Radial Glow (Figma requirement) */}
-                {homeVersion === "home-1" && (
-                  <div className="hidden md:block absolute left-[5%] top-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-success/30 blur-[100px] rounded-full pointer-events-none" />
-                )}
 
                 <div className="relative h-full z-10 xl:pl-[120px] lg:pl-[60px] md:pl-[40px] px-6 sm:px-8 flex flex-col justify-center w-full max-w-full md:max-w-[450px] lg:max-w-[550px] xl:max-w-[800px]">
                   <div
@@ -174,17 +168,6 @@ const HeroContent = ({
           {/* Navigation Arrows */}
           <CarouselPrevious className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 size-12 bg-white/10 hover:bg-primary-light text-primary-foreground hover:text-primary rounded-full items-center justify-center border border-white/20 border-none hoverEffect" />
           <CarouselNext className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 size-12 bg-white/10 hover:bg-primary-light text-primary-foreground hover:text-primary rounded-full items-center justify-center border border-white/20 border-none hoverEffect" />
-
-          {/* Dots Background Shape - Visible md and up */}
-          <div
-            className="hidden md:block absolute left-1/2 -translate-x-1/2 bottom-0 z-10 w-[160px] h-[60px] bg-white transition-all duration-500"
-            style={{
-              ["--shape-bg" as any]: slides[current]?.bgColor || "#05535c",
-            }}
-          >
-            <div className="absolute -left-[86px] top-0 z-10 w-[86px] h-full bg-[url('/images/banner-left-shape.png')] bg-no-repeat transition-colors duration-500"></div>
-            <div className="absolute -right-[86px] top-0 z-10 bg-[url('/images/banner-right-shape.png')] bg-no-repeat w-[86px] h-full transition-colors duration-500"></div>
-          </div>
 
           {/* Dot Navigation */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-x-4 items-center justify-center">
