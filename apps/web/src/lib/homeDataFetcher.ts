@@ -20,6 +20,7 @@ import {
   BLOG_ENDPOINTS,
   ADS_BANNER_ENDPOINTS,
   BANNER_ENDPOINTS,
+  WEBSITE_CONFIG_ENDPOINTS,
 } from "@/constants/endpoints";
 import { ApiProduct } from "@/hooks/useProducts";
 import { ProductType } from "@/hooks/useProductTypes";
@@ -141,6 +142,46 @@ export async function getAdsBanners(): Promise<AdsBanner[]> {
       { next: { revalidate: REVALIDATE } },
     );
     return res.data.adsBanners || [];
+  } catch {
+    return [];
+  }
+}
+
+// ─────────────────────────────────────────────
+// WEBSITE CONFIG
+// ─────────────────────────────────────────────
+export type WebsiteConfigSettings = {
+  customHtml?: string;
+  customCss?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  containerWidth?: string;
+  padding?: string;
+  [key: string]: unknown;
+};
+
+export type WebsiteConfig = {
+  _id: string;
+  pageType: string;
+  componentType: string;
+  title: string;
+  description?: string;
+  weight: number;
+  isActive: boolean;
+  settings: WebsiteConfigSettings;
+};
+
+export async function getWebsiteConfigs(pageType: string): Promise<WebsiteConfig[]> {
+  try {
+    // cache: 'no-store' — CMS content must reflect admin changes immediately
+    // includeAll=true fetches ALL configs (active + inactive) so page.tsx can
+    // correctly hide sections the admin has deactivated
+    const res = await api.get<{ success: boolean; count: number; data: WebsiteConfig[] }>(
+      `${WEBSITE_CONFIG_ENDPOINTS.BY_PAGE(pageType)}?includeAll=true`,
+      { cache: "no-store" },
+    );
+    const raw = res.data?.data;
+    return Array.isArray(raw) ? raw : [];
   } catch {
     return [];
   }

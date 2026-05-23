@@ -34,11 +34,12 @@ const getWebsiteConfigs = asyncHandler(async (req, res) => {
 // @access  Public
 const getConfigsByPageType = asyncHandler(async (req, res) => {
   const { pageType } = req.params;
+  const includeAll = req.query.includeAll === "true";
 
-  const configs = await WebsiteConfig.find({
-    pageType,
-    isActive: true,
-  })
+  const filter: Record<string, unknown> = { pageType };
+  if (!includeAll) filter.isActive = true;
+
+  const configs = await WebsiteConfig.find(filter)
     .populate("settings.bannerId", "image title link")
     .populate("settings.bannerIds", "image title link")
     .populate("settings.productFilter.category", "name slug")

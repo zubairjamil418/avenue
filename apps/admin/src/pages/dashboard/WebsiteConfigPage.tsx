@@ -125,8 +125,10 @@ function SortableItem({ config, onView, onEdit, onDelete }: SortableItemProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className={`group relative bg-white  border rounded-lg p-4 hover:shadow-md transition-all ${
-        !config.isActive ? "opacity-60" : ""
+      className={`group relative border rounded-lg p-4 hover:shadow-md transition-all ${
+        config.isActive
+          ? "bg-white"
+          : "bg-gray-50 border-dashed border-gray-300 opacity-70"
       }`}
     >
       <div className="flex items-center gap-4">
@@ -149,7 +151,7 @@ function SortableItem({ config, onView, onEdit, onDelete }: SortableItemProps) {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h4 className="font-semibold text-sm truncate">{config.title}</h4>
+            <h4 className={`font-semibold text-sm truncate ${!config.isActive ? "text-gray-400" : ""}`}>{config.title}</h4>
             <Badge
               className={`text-xs ${
                 COMPONENT_TYPE_COLORS[config.componentType] ||
@@ -158,6 +160,9 @@ function SortableItem({ config, onView, onEdit, onDelete }: SortableItemProps) {
             >
               {config.componentType}
             </Badge>
+            {!config.isActive && (
+              <Badge className="text-xs bg-gray-200 text-gray-500 border-0">Inactive</Badge>
+            )}
           </div>
           {config.description && (
             <p className="text-xs text-grey-500  truncate">
@@ -228,7 +233,7 @@ export default function WebsiteConfigPage() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_NEXT_PUBLIC_API_URL}/api/website-config/page/${pageType}`,
+        `${import.meta.env.VITE_NEXT_PUBLIC_API_URL}/api/website-config?pageType=${pageType}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

@@ -59,6 +59,11 @@ export const BRAND_ENDPOINTS = {
   BASE: "/api/brands",
 } as const;
 
+export const WEBSITE_CONFIG_ENDPOINTS = {
+  BASE: "/api/website-config",
+  BY_PAGE: (pageType: string) => `/api/website-config/page/${pageType}`,
+} as const;
+
 export const CART_ENDPOINTS = {
   BASE: "/api/cart",
   ABANDONED: "/api/cart/abandoned",

@@ -6,18 +6,18 @@ import OurProducts from "@/components/home/OurProducts";
 import HotDealsWeek from "@/components/home/HotDealsWeek";
 import BeautyProducts from "@/components/home/BeautyProducts";
 import BottomPromoBanners from "@/components/home/BottomPromoBanners";
-import LatestBlogs from "@/components/home/LatestBlogs";
 import HomePromoBanners from "@/components/home/HomePromoBanners";
 import NewlyLaunchedProducts from "@/components/home/NewlyLaunchedProducts";
 import BestSellingProducts from "@/components/home/BestSellingProducts";
 import TopSellingProducts from "@/components/home/TopSellingProducts";
+import WebsiteConfigSections from "@/components/home/WebsiteConfigSections";
 import {
   getHeroBanners,
   getHomeProductTypes,
   getProductsByTypeSlug,
   getOurProducts,
   getParentCategories,
-  getLatestBlogs,
+  getWebsiteConfigs,
   getAdsBanners,
 } from "@/lib/homeDataFetcher";
 import { Suspense } from "react";
@@ -152,8 +152,8 @@ const DeferredBeauty = async ({
 };
 
 const DeferredLatestBlogs = async ({ locale }: { locale: string }) => {
-  const blogs = await getLatestBlogs("healthcare");
-  return <LatestBlogs locale={locale} productBase="healthcare" blogs={blogs} />;
+  const configs = await getWebsiteConfigs("home");
+  return <WebsiteConfigSections configs={configs} locale={locale} />;
 };
 
 export default async function Home({
@@ -166,53 +166,75 @@ export default async function Home({
 
   const homeVersion = "home-1";
 
-  const [heroSlides, productTypes, bestSellingProducts] = await Promise.all([
+  const [heroSlides, productTypes, bestSellingProducts, websiteConfigs] = await Promise.all([
     getHeroBanners(homeVersion),
     getHomeProductTypes(homeVersion),
     getProductsByTypeSlug("best-selling", 10),
+    getWebsiteConfigs("home"),
   ]);
+
+  // show(type): only show if an active config entry exists for this type.
+  // No entry = hidden. The admin is the single source of truth.
+  const configMap = new Map(websiteConfigs.map((c) => [c.componentType, c.isActive]));
+  const show = (type: string) => configMap.get(type) === true;
 
   const findType = (slug: string) => productTypes.find((t) => t.slug === slug);
 
   return (
     <main>
-      <Hero initialSlides={heroSlides} homeVersionSlug={homeVersion} />
-      <SupportInfo />
+      {show("hero") && <Hero initialSlides={heroSlides} homeVersionSlug={homeVersion} />}
+      {show("support-info") && <SupportInfo />}
 
-      <BestSellingProducts
-        slug="best-selling"
-        productType={findType("best-selling")}
-        locale={locale}
-        products={bestSellingProducts}
-      />
+      {show("best-selling") && (
+        <BestSellingProducts
+          slug="best-selling"
+          productType={findType("best-selling")}
+          locale={locale}
+          products={bestSellingProducts}
+        />
+      )}
 
-      <Suspense fallback={<SectionSkeleton height="h-[300px]" />}>
-        <ShopByCategory />
-      </Suspense>
+      {show("shop-by-category") && (
+        <Suspense fallback={<SectionSkeleton height="h-[300px]" />}>
+          <ShopByCategory />
+        </Suspense>
+      )}
 
-      <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
-        <DeferredTopSelling locale={locale} productTypes={productTypes} />
-      </Suspense>
+      {show("top-selling") && (
+        <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
+          <DeferredTopSelling locale={locale} productTypes={productTypes} />
+        </Suspense>
+      )}
 
-      <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
-        <DeferredOurProducts locale={locale} />
-      </Suspense>
+      {show("our-products") && (
+        <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
+          <DeferredOurProducts locale={locale} />
+        </Suspense>
+      )}
 
-      <Suspense fallback={null}>
-        <DeferredPromoBanners />
-      </Suspense>
+      {show("promo-banners") && (
+        <Suspense fallback={null}>
+          <DeferredPromoBanners />
+        </Suspense>
+      )}
 
-      <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-        <DeferredNewlyLaunched locale={locale} productTypes={productTypes} />
-      </Suspense>
+      {show("newly-launched") && (
+        <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
+          <DeferredNewlyLaunched locale={locale} productTypes={productTypes} />
+        </Suspense>
+      )}
 
-      <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
-        <HotDealsWeek locale={locale} />
-      </Suspense>
+      {show("hot-deals") && (
+        <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
+          <HotDealsWeek locale={locale} />
+        </Suspense>
+      )}
 
-      <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-        <DeferredBeauty locale={locale} productTypes={productTypes} />
-      </Suspense>
+      {show("beauty") && (
+        <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
+          <DeferredBeauty locale={locale} productTypes={productTypes} />
+        </Suspense>
+      )}
 
       <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
         <DeferredLatestBlogs locale={locale} />
