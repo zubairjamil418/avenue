@@ -68,6 +68,7 @@ export async function generateStaticParams() {
 
 import { MENU_ENDPOINTS, CATEGORY_ENDPOINTS, CURRENCY_ENDPOINTS } from "@/constants/endpoints";
 import CurrencyProvider from "@/components/common/CurrencyProvider";
+import DevModal from "@/components/common/DevModal";
 
 export default async function LocaleLayout({
   children,
@@ -107,7 +108,7 @@ export default async function LocaleLayout({
       className={`${publicSans.variable} ${urbanist.variable}`}
     >
       <head></head>
-      <body className="w-full overflow-x-hidden">
+      <body className="public-site w-full overflow-x-hidden">
         <NextIntlClientProvider messages={messages} locale={locale}>
           <CurrencyProvider initialCurrencies={initialCurrencies}>
             <UrlMessageHandler />
@@ -123,6 +124,7 @@ export default async function LocaleLayout({
           </CurrencyProvider>
         </NextIntlClientProvider>
         <Toaster />
+        <DevModal />
       </body>
     </html>
   );

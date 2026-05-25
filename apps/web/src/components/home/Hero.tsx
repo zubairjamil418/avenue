@@ -152,12 +152,10 @@ const HeroContent = ({
                       className="inline-flex group items-center gap-x-4 bg-primary-light text-white font-bold py-3 pl-8 pr-3 rounded-full hover:bg-primary-dark transition-all duration-300 group/btn shadow-xl shadow-primary/20"
                     >
                       {slide.buttonTitle || "Shop Now"}
-                      <span className="size-10 bg-white text-primary-darker inline-flex items-center justify-center rounded-full transition-transform duration-300 shadow-inner">
-                        <MoveRight
-                          size={20}
-                          className="text-primary-light -rotate-45 group-hover:rotate-0 transition-all duration-500 ease-in-out hoverEffect"
-                        />
-                      </span>
+                      <MoveRight
+                        size={20}
+                        className="text-white transition-all duration-500 ease-in-out hoverEffect"
+                      />
                     </Link>
                   </div>
                 </div>

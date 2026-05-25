@@ -106,9 +106,11 @@ const CountdownTimer = () => {
 interface HotDealsWeekClientProps {
   products: ApiProduct[];
   slug: string;
+  title?: string;
+  description?: string;
 }
 
-const HotDealsWeekClient = ({ products, slug }: HotDealsWeekClientProps) => {
+const HotDealsWeekClient = ({ products, slug, title, description }: HotDealsWeekClientProps) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
@@ -166,10 +168,10 @@ const HotDealsWeekClient = ({ products, slug }: HotDealsWeekClientProps) => {
                   Limited Time Offer
                 </h4>
                 <h3 className="font-['Urbanist',sans-serif] text-[32px] md:text-[40px] lg:text-[48px] font-bold text-light-primary-text mb-4 leading-tight lg:leading-[1.1]">
-                  Hot Deals This Week
+                  {title || "Hot Deals This Week"}
                 </h3>
                 <p className="font-['DM_Sans',sans-serif] text-[16px] font-normal leading-[24px] text-light-primary-text mb-8">
-                  Weekly deals are back and better than ever, bringing fresh new offers. Shop your daily routine and elevate your beauty experience.
+                  {description || "Weekly deals are back and better than ever, bringing fresh new offers. Shop your daily routine and elevate your beauty experience."}
                 </p>
 
                 {/* Timer block without breaking constraints */}

@@ -7,11 +7,15 @@ import HotDealsWeekClient from "./HotDealsWeekClient";
 
 interface HotDealsWeekProps {
   slug?: string;
+  title?: string;
+  description?: string;
 }
 
 const HotDealsWeek = async ({
   slug = "limited-time-offer",
   locale,
+  title,
+  description,
 }: HotDealsWeekProps & { locale?: string }) => {
   if (locale) setRequestLocale(locale);
   let products: ApiProduct[] = [];
@@ -28,7 +32,7 @@ const HotDealsWeek = async ({
     return null;
   }
 
-  return <HotDealsWeekClient products={products} slug={slug} />;
+  return <HotDealsWeekClient products={products} slug={slug} title={title} description={description} />;
 };
 
 export default HotDealsWeek;

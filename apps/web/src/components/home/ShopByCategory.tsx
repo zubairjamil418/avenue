@@ -36,7 +36,7 @@ const itemVariants: Variants = {
   },
 };
 
-const ShopByCategory = () => {
+const ShopByCategory = ({ title, description }: { title?: string; description?: string }) => {
   const { categories, isLoading, error } = useCategories();
   const [api, setApi] = React.useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
@@ -98,11 +98,14 @@ const ShopByCategory = () => {
             className="flex flex-col gap-[8px] text-center sm:text-left items-center sm:items-start"
           >
             <h3 className="font-['Urbanist',sans-serif] text-2xl md:text-3xl lg:text-[40px] font-bold leading-tight lg:leading-[48px] text-light-primary-text mb-2">
-              Shop By Category
+              {title || "Shop By Category"}
             </h3>
-            <p className="font-dm-sans text-[14px] sm:text-[16px] font-normal text-light-secondary-text leading-[24px]">
-              Up to 69% discount for limited time 🔥
-            </p>
+            {description && (
+              <p className="text-gray-600 text-xs sm:text-[14px] font-normal leading-relaxed">
+                {description}
+              </p>
+            )}
+
           </motion.div>
 
           <motion.div
@@ -217,14 +220,12 @@ const ShopByCategory = () => {
           >
             <Link
               href={`/categories`}
-              className="bg-white hover:bg-white/90 inline-flex items-center gap-[6px] py-[8px] mt-8 pl-[20px] pr-[10px] rounded-[59px] group/btn shadow-[0_2px_10px_rgba(0,0,0,0.06)] hover:shadow-md hoverEffect group border border-primary/20"
+              className="bg-white hover:bg-white/90 inline-flex items-center gap-[6px] py-[8px] mt-8 pl-[20px] pr-[20px] rounded-[59px] group/btn shadow-[0_2px_10px_rgba(0,0,0,0.06)] hover:shadow-md hoverEffect group border border-primary/20"
             >
               <span className="font-semibold leading-[26px] text-primary text-[16px] whitespace-nowrap">
                 View All Categories
               </span>
-              <div className="bg-primary flex items-center justify-center rounded-full size-[32px] ml-1">
-                <ArrowUpRight className="size-4 text-white group-hover:rotate-45 hoverEffect" />
-              </div>
+              <ArrowUpRight className="size-4 text-primary group-hover:rotate-45 hoverEffect" />
             </Link>
           </motion.div>
         </div>

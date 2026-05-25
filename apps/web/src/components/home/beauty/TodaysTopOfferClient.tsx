@@ -133,10 +133,7 @@ const TodaysTopOfferClient = ({
               {/* Title Block */}
               <SectionHeader
                 title={productType?.title || "Today’s Top Offer"}
-                description={
-                  productType?.description ||
-                  "Up to 69% discount for limited time 🔥"
-                }
+                description={productType?.description}
                 align="left"
               />
 

@@ -1,0 +1,1 @@
+mongodb+srv://root:<4zi7Jr5vHCykgO>@avanue.sr0kgj.mongodb.net/?appName=avanue

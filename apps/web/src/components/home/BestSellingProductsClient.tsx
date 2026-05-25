@@ -40,12 +40,16 @@ interface BestSellingProductsClientProps {
   products: ApiProduct[];
   productType?: ProductType;
   slug: string;
+  title?: string;
+  description?: string;
 }
 
 const BestSellingProductsClient = ({
   products,
   productType,
   slug,
+  title,
+  description,
 }: BestSellingProductsClientProps) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
@@ -74,37 +78,20 @@ const BestSellingProductsClient = ({
     return null;
   }
 
-  const bgColor = productType?.bgColor || "#A7E973";
-
   return (
     <section className="py-10 md:py-14 lg:py-[70px]">
       <Container>
-        <div className="relative pt-0 pb-12 overflow-hidden min-h-[500px] rounded-[24px]">
-          {/* Background SVG from Figma */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <svg
-              viewBox="0 0 1728 830"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
-              preserveAspectRatio="xMidYMin slice"
-            >
-              <path
-                d="M1728 782C1728 808.51 1706.51 830 1680 830H48C21.4904 830 0 808.51 0 782V48C0 21.4904 21.4903 0 48 0H464.229C490.65 0 511.137 22.4607 523.036 46.0506C540.075 79.8315 575.081 120 615.5 120H1112.5C1152.92 120 1187.92 79.8315 1204.96 46.0506C1216.86 22.4607 1237.35 0 1263.77 0H1680C1706.51 0 1728 21.4903 1728 48V782Z"
-                fill={bgColor}
-              />
-            </svg>
-          </div>
+        <div className="relative pt-0 pb-12 min-h-[500px]">
 
           {/* Notch Content (Title and Description) */}
           <div className="flex justify-center mb-10 overflow-visible relative z-10">
             <div className="relative px-6 sm:px-20 pt-4 pb-16 text-center max-w-max w-full flex flex-col gap-[4px] items-center">
               <h4 className="font-['Urbanist',sans-serif] text-2xl md:text-3xl lg:text-[40px] font-bold leading-tight lg:leading-[48px] text-light-primary-text mb-2">
-                {productType?.title || "Best Selling Products"}
+                {title || productType?.title || "Best Selling Products"}
               </h4>
-              {productType?.description && (
+              {(description ?? productType?.description) && (
                 <p className="text-gray-600 text-xs sm:text-[14px] font-normal leading-relaxed max-w-[280px] sm:max-w-none mx-auto">
-                  {productType.description}
+                  {description ?? productType?.description}
                 </p>
               )}
             </div>

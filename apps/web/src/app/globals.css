@@ -142,7 +142,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0;
   --background: #ffffff;
   --foreground: #212b36;
   --card: #ffffff;
@@ -221,6 +221,31 @@
   button {
     @apply cursor-pointer;
   }
+
+  /* ── Public site: square all buttons ── */
+  .public-site button,
+  .public-site .btn,
+  .public-site [role="button"],
+  .public-site [data-slot="button"] {
+    border-radius: 0 !important;
+  }
+
+  /* ── Public site: square all form controls ── */
+  .public-site input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  .public-site textarea,
+  .public-site select,
+  .public-site [data-slot="input"],
+  .public-site [data-slot="textarea"],
+  .public-site [data-slot="select"] {
+    border-radius: 0 !important;
+  }
+
+  /* ── Public site: square all elements using rounded-full or arbitrary rounded values ── */
+  .public-site [class*="rounded-full"],
+  .public-site [class*="rounded-["] {
+    border-radius: 0 !important;
+  }
+
   .topHeaderNavBtn {
     @apply text-sm font-thin text-primary-foreground/90 relative px-6 border-r border-r-primary-foreground/50 hover:text-primary-foreground ease-in-out transition-all duration-300;
   }

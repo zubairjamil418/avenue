@@ -152,10 +152,7 @@ const MostLovedProductsClient = ({
             <div className="relative max-w-max w-full flex flex-col items-start gap-1 md:-mt-8">
               <SectionHeader
                 title={productType?.title || "Limited Time Deals"}
-                description={
-                  productType?.description ||
-                  "Up to 69% discount for limited time 🔥"
-                }
+                description={productType?.description}
                 align="left"
               />
             </div>

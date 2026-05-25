@@ -172,8 +172,8 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
           {/* ========== Footer Top Section End ========== */}
 
           {/* ========== Footer Bottom Section Start ========== */}
-          <div className="text-center text-white bg-[url('/images/bottom-border.png')] pt-[22px] bg-center pb-px bg-no-repeat animate__animated animate__fadeInUp">
-            2026 Copyright By Themeforest Powered By Createuiux
+          <div className="text-center text-white py-4 animate__animated animate__fadeInUp">
+            © 2026 avenueretail.co.uk
           </div>
           {/* ========== Footer Bottom Section End ========== */}
         </Container>

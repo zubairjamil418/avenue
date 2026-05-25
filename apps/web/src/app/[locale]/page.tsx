@@ -11,6 +11,7 @@ import NewlyLaunchedProducts from "@/components/home/NewlyLaunchedProducts";
 import BestSellingProducts from "@/components/home/BestSellingProducts";
 import TopSellingProducts from "@/components/home/TopSellingProducts";
 import WebsiteConfigSections from "@/components/home/WebsiteConfigSections";
+import NewInSection from "@/components/home/NewInSection";
 import {
   getHeroBanners,
   getHomeProductTypes,
@@ -61,9 +62,13 @@ function isRowBanner(banner: AdsBanner): boolean {
 const DeferredTopSelling = async ({
   locale,
   productTypes,
+  title,
+  description,
 }: {
   locale: string;
   productTypes: ProductType[];
+  title?: string;
+  description?: string;
 }) => {
   const products = await getProductsByTypeSlug("top-selling-products", 25);
   const productType = productTypes.find(
@@ -76,6 +81,8 @@ const DeferredTopSelling = async ({
       productType={productType}
       locale={locale}
       products={products}
+      title={title}
+      description={description}
     />
   );
 };
@@ -112,9 +119,13 @@ const DeferredPromoBanners = async () => {
 const DeferredNewlyLaunched = async ({
   locale,
   productTypes,
+  title,
+  description,
 }: {
   locale: string;
   productTypes: ProductType[];
+  title?: string;
+  description?: string;
 }) => {
   const products = await getProductsByTypeSlug("newly-lunch-products", 10);
   const productType = productTypes.find(
@@ -127,6 +138,8 @@ const DeferredNewlyLaunched = async ({
       productType={productType}
       locale={locale}
       products={products}
+      title={title}
+      description={description}
     />
   );
 };
@@ -134,9 +147,13 @@ const DeferredNewlyLaunched = async ({
 const DeferredBeauty = async ({
   locale,
   productTypes,
+  title,
+  description,
 }: {
   locale: string;
   productTypes: ProductType[];
+  title?: string;
+  description?: string;
 }) => {
   const products = await getProductsByTypeSlug("beauty-products", 8);
   const productType = productTypes.find((t) => t.slug === "beauty-products");
@@ -147,6 +164,8 @@ const DeferredBeauty = async ({
       productType={productType}
       locale={locale}
       products={products}
+      title={title}
+      description={description}
     />
   );
 };
@@ -175,14 +194,21 @@ export default async function Home({
 
   // show(type): only show if an active config entry exists for this type.
   // No entry = hidden. The admin is the single source of truth.
-  const configMap = new Map(websiteConfigs.map((c) => [c.componentType, c.isActive]));
-  const show = (type: string) => configMap.get(type) === true;
+  const configMap = new Map(websiteConfigs.map((c) => [c.componentType, c]));
+  const show = (type: string) => configMap.get(type)?.isActive === true;
+  const cfgTitle = (type: string) => configMap.get(type)?.title;
+  const cfgDesc = (type: string) => configMap.get(type)?.description;
 
   const findType = (slug: string) => productTypes.find((t) => t.slug === slug);
 
   return (
     <main>
       {show("hero") && <Hero initialSlides={heroSlides} homeVersionSlug={homeVersion} />}
+      {show("new-in") && configMap.get("new-in") && (
+        <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
+          <NewInSection config={configMap.get("new-in")!} />
+        </Suspense>
+      )}
       {show("support-info") && <SupportInfo />}
 
       {show("best-selling") && (
@@ -191,18 +217,28 @@ export default async function Home({
           productType={findType("best-selling")}
           locale={locale}
           products={bestSellingProducts}
+          title={cfgTitle("best-selling")}
+          description={cfgDesc("best-selling")}
         />
       )}
 
       {show("shop-by-category") && (
         <Suspense fallback={<SectionSkeleton height="h-[300px]" />}>
-          <ShopByCategory />
+          <ShopByCategory
+            title={cfgTitle("shop-by-category")}
+            description={cfgDesc("shop-by-category")}
+          />
         </Suspense>
       )}
 
       {show("top-selling") && (
         <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
-          <DeferredTopSelling locale={locale} productTypes={productTypes} />
+          <DeferredTopSelling
+            locale={locale}
+            productTypes={productTypes}
+            title={cfgTitle("top-selling")}
+            description={cfgDesc("top-selling")}
+          />
         </Suspense>
       )}
 
@@ -220,19 +256,33 @@ export default async function Home({
 
       {show("newly-launched") && (
         <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-          <DeferredNewlyLaunched locale={locale} productTypes={productTypes} />
+          <DeferredNewlyLaunched
+            locale={locale}
+            productTypes={productTypes}
+            title={cfgTitle("newly-launched")}
+            description={cfgDesc("newly-launched")}
+          />
         </Suspense>
       )}
 
       {show("hot-deals") && (
         <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
-          <HotDealsWeek locale={locale} />
+          <HotDealsWeek
+            locale={locale}
+            title={cfgTitle("hot-deals")}
+            description={cfgDesc("hot-deals")}
+          />
         </Suspense>
       )}
 
       {show("beauty") && (
         <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-          <DeferredBeauty locale={locale} productTypes={productTypes} />
+          <DeferredBeauty
+            locale={locale}
+            productTypes={productTypes}
+            title={cfgTitle("beauty")}
+            description={cfgDesc("beauty")}
+          />
         </Suspense>
       )}
 

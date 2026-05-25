@@ -122,9 +122,7 @@ export default function LatestBlogsClient({ blogs }: { blogs: Blog[] }) {
                     <span className="font-['DM_Sans',sans-serif] font-semibold text-[16px] text-white leading-[26px] pl-3">
                       Read More
                     </span>
-                    <div className="bg-white flex items-center justify-center rounded-full size-[32px] shrink-0">
-                      <ArrowUpRight className="size-4 text-primary group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
-                    </div>
+                    <ArrowUpRight className="size-4 text-white group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300 mr-2" />
                   </Link>
                 </div>
               </div>

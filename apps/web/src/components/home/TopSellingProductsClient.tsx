@@ -36,11 +36,15 @@ interface TopSellingProductsClientProps {
   products: ApiProduct[];
   productType?: ProductType;
   slug: string;
+  title?: string;
+  description?: string;
 }
 
 const TopSellingProductsClient = ({
   products,
   productType,
+  title,
+  description,
 }: TopSellingProductsClientProps) => {
   const [api1, setApi1] = useState<CarouselApi>();
   const [api2, setApi2] = useState<CarouselApi>();
@@ -130,11 +134,8 @@ const TopSellingProductsClient = ({
           <div className="flex justify-center mb-6 md:mb-10 overflow-visible relative z-10 w-full">
             <div className="relative px-6 sm:px-20 max-w-max w-full flex flex-col items-center">
               <SectionHeader
-                title={productType?.title || "Top Selling Products"}
-                description={
-                  productType?.description ||
-                  "Up to 69% discount for limited time 🔥"
-                }
+                title={title || productType?.title || "Top Selling Products"}
+                description={description ?? productType?.description}
                 align="center"
               />
             </div>

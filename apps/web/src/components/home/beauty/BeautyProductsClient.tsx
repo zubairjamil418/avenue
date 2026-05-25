@@ -104,10 +104,11 @@ const BeautyProductsClient = ({
               <h4 className="font-['Urbanist',sans-serif] text-2xl md:text-3xl lg:text-[40px] font-bold leading-tight lg:leading-[48px] text-light-primary-text mb-2">
                 {productType?.title || "Beauty Products"}
               </h4>
-              <p className="text-light-secondary-text text-xs sm:text-[16px] font-normal leading-relaxed max-w-[280px] sm:max-w-none mx-auto">
-                {productType?.description ||
-                  "Up to 69% discount for limited time 🔥"}
-              </p>
+              {productType?.description && (
+                <p className="text-light-secondary-text text-xs sm:text-[16px] font-normal leading-relaxed max-w-[280px] sm:max-w-none mx-auto">
+                  {productType.description}
+                </p>
+              )}
             </div>
           </div>
 

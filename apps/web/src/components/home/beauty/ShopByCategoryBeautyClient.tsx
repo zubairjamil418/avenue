@@ -81,12 +81,7 @@ const ShopByCategoryBeautyClient = ({
             >
               Shop By Category
             </h3>
-            <p
-              className="text-light-secondary-text text-[16px] leading-[24px] font-normal"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-            >
-              Up to 69% discount for limited time 🔥
-            </p>
+
           </motion.div>
 
           {/* Carousel nav arrows */}

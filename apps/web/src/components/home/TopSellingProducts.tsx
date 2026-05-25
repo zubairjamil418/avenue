@@ -8,6 +8,8 @@ interface TopSellingProductsProps {
   slug?: string;
   productType?: ProductType;
   locale?: string;
+  title?: string;
+  description?: string;
   /** Pre-fetched products passed from the page — avoids double-fetch waterfall */
   products?: ApiProduct[];
 }
@@ -16,6 +18,8 @@ const TopSellingProducts = async ({
   slug = "top-selling-products",
   productType,
   locale,
+  title,
+  description,
   products: prefetchedProducts,
 }: TopSellingProductsProps) => {
   if (locale) setRequestLocale(locale);
@@ -31,6 +35,8 @@ const TopSellingProducts = async ({
       products={products}
       productType={productType}
       slug={slug}
+      title={title}
+      description={description}
     />
   );
 };

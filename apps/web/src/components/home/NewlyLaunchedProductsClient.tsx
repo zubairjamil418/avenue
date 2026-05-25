@@ -42,12 +42,16 @@ interface NewlyLaunchedProductsClientProps {
   products: ApiProduct[];
   productType?: ProductType;
   slug: string;
+  title?: string;
+  description?: string;
 }
 
 const NewlyLaunchedProductsClient = ({
   products,
   productType,
   slug,
+  title,
+  description,
 }: NewlyLaunchedProductsClientProps) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
@@ -102,12 +106,13 @@ const NewlyLaunchedProductsClient = ({
           <div className="flex justify-center mb-10 overflow-visible relative z-10">
             <div className="relative px-6 sm:px-20 pt-4 pb-16 text-center max-w-max w-full flex flex-col gap-[4px] items-center">
               <h3 className="font-['Urbanist',sans-serif] text-2xl md:text-3xl lg:text-[40px] font-bold leading-tight lg:leading-[48px] text-light-primary-text mb-2">
-                {productType?.title || "Newly Lunch Products"}
+                {title || productType?.title || "Newly Lunch Products"}
               </h3>
-              <p className="text-gray-600 text-xs sm:text-[14px] font-normal leading-relaxed max-w-[280px] sm:max-w-none mx-auto">
-                {productType?.description ||
-                  "Up to 69% discount for limited time 🔥"}
-              </p>
+              {(description ?? productType?.description) && (
+                <p className="text-gray-600 text-xs sm:text-[14px] font-normal leading-relaxed max-w-[280px] sm:max-w-none mx-auto">
+                  {description ?? productType?.description}
+                </p>
+              )}
             </div>
           </div>
 
