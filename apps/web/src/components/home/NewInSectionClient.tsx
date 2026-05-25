@@ -32,7 +32,7 @@ export default function NewInSectionClient({
 
           {/* Left: text + CTA */}
           <motion.div
-            className="w-full lg:w-[300px] xl:w-[340px] shrink-0 flex flex-col gap-5"
+            className="w-full lg:w-[280px] xl:w-[320px] shrink-0 flex flex-col gap-4 lg:gap-5"
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -44,7 +44,7 @@ export default function NewInSectionClient({
               </span>
             )}
 
-            <h2 className="font-['Urbanist',sans-serif] text-[40px] md:text-[52px] font-bold leading-[1.1] text-light-primary-text">
+            <h2 className="font-['Urbanist',sans-serif] text-[28px] sm:text-[36px] md:text-[44px] lg:text-[48px] font-bold leading-[1.1] text-light-primary-text">
               {title}
             </h2>
 
@@ -64,17 +64,17 @@ export default function NewInSectionClient({
           </motion.div>
 
           {/* Right: 4 product images */}
-          <div className="flex-1 min-w-0 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+          <div className="flex-1 min-w-0 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {products.slice(0, 4).map((product, i) => (
               <motion.div
                 key={product._id}
-                className="flex flex-col gap-3"
+                className="flex flex-col gap-2 sm:gap-3"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
-                <Link href={`/products/${product.slug}` as "/products/[slug]"}>
+                <Link href={`/product/${product.slug}` as "/product/[slug]"}>
                   <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 w-full">
                     {product.image ? (
                       <Image
@@ -91,7 +91,7 @@ export default function NewInSectionClient({
                     )}
                   </div>
                 </Link>
-                <p className="font-['DM_Sans',sans-serif] text-[14px] font-semibold text-light-primary-text text-center">
+                <p className="font-['DM_Sans',sans-serif] text-[12px] sm:text-[13px] md:text-[14px] font-semibold text-light-primary-text text-center line-clamp-1">
                   {product.category?.name || product.name}
                 </p>
               </motion.div>

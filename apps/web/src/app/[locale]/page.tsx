@@ -12,6 +12,8 @@ import BestSellingProducts from "@/components/home/BestSellingProducts";
 import TopSellingProducts from "@/components/home/TopSellingProducts";
 import WebsiteConfigSections from "@/components/home/WebsiteConfigSections";
 import NewInSection from "@/components/home/NewInSection";
+import FeaturedDuoSection from "@/components/home/FeaturedDuoSection";
+import ShopFavoriteCategories from "@/components/home/ShopFavoriteCategories";
 import {
   getHeroBanners,
   getHomeProductTypes,
@@ -209,6 +211,10 @@ export default async function Home({
           <NewInSection config={configMap.get("new-in")!} />
         </Suspense>
       )}
+      {show("featured-duo") && configMap.get("featured-duo") && (
+        <FeaturedDuoSection config={configMap.get("featured-duo")!} />
+      )}
+      <ShopFavoriteCategories />
       {show("support-info") && <SupportInfo />}
 
       {show("best-selling") && (

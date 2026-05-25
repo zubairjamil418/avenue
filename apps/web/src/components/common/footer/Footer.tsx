@@ -3,7 +3,6 @@ import Container from "../Container";
 import SocialIcons from "../SocialIcons";
 import { ChevronRight, Globe, Phone, Mail, Printer } from "lucide-react";
 import FooterBottomNavbar from "./FooterBottomNavbar";
-import SubscriptionTab from "./SubscriptionTab";
 
 const footerSections = [
   {
@@ -56,12 +55,8 @@ const footerSections = [
 export default function Footer({ logoUrl }: { logoUrl?: string }) {
   return (
     <div className="text-primary-foreground/80">
-      {/* ========== Subscribe Section Start ========== */}
-      <SubscriptionTab />
-      {/* ========== Subscribe Section End ========== */}
-
       {/* ========== Footer Section Start ========== */}
-      <footer className="md:pb-15 pb-[100px] bg-primary-darker pt-40 xl:rounded-tr-[22px] xl:rounded-tl-[22px]">
+      <footer className="md:pb-15 pb-[100px] bg-primary-darker pt-10 md:pt-16">
         <Container className="">
           {/* ========== Footer Top Section Start ========== */}
           <div className="pb-9 grid grid-cols-12 gap-6">
@@ -109,11 +104,11 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
                     <Link
                       key={idx}
                       href={item.href}
-                      className="py-1.5 flex items-center gap-x-2 text-primary-lighter hover:text-white group transition-all duration-300"
+                      className="py-1.5 flex items-center gap-x-2 text-primary-lighter hover:text-light-primary-text group transition-all duration-300"
                     >
                       <ChevronRight
                         size={16}
-                        className="text-primary-lighter/70 group-hover:text-white group-hover:translate-x-1 transition-all duration-300"
+                        className="text-primary-lighter/70 group-hover:text-light-primary-text group-hover:translate-x-1 transition-all duration-300"
                       />
                       <span className="font-medium group-hover:translate-x-0.5 transition-transform duration-300">
                         {item.label}
@@ -172,7 +167,7 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
           {/* ========== Footer Top Section End ========== */}
 
           {/* ========== Footer Bottom Section Start ========== */}
-          <div className="text-center text-white py-4 animate__animated animate__fadeInUp">
+          <div className="text-center text-light-primary-text py-4 border-t border-[rgba(145,158,171,0.24)] animate__animated animate__fadeInUp">
             © 2026 avenueretail.co.uk
           </div>
           {/* ========== Footer Bottom Section End ========== */}
