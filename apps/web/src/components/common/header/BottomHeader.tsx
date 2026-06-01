@@ -3,7 +3,6 @@ import { Link } from "@/i18n/routing";
 import {
   ChevronDown,
   ChevronRight,
-  Phone,
 } from "lucide-react";
 import Container from "../Container";
 import { useMenus } from "@/hooks/useMenus";
@@ -28,9 +27,9 @@ const BottomHeader = ({
           : "relative"
       }`}
     >
-      <Container className="flex items-center justify-between w-full">
+      <Container className="flex items-center w-full">
           {/* Main Navigation */}
-          <nav className="main-menu">
+          <nav className="main-menu w-full">
             <ul className="flex items-center">
               {menusLoading ? (
                 // Simple skeleton or loading state
@@ -54,7 +53,7 @@ const BottomHeader = ({
                   >
                     <Link
                       href={item.href}
-                      className="text-black hover:text-primary transition-colors flex items-center gap-1"
+                      className="text-black hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap"
                     >
                       {item.title}
                       {((item.subItems && item.subItems.length > 0) ||
@@ -173,14 +172,7 @@ const BottomHeader = ({
             </ul>
           </nav>
 
-          {/* Phone Number */}
-          <a
-            href="tel:888-777-999"
-            className="flex items-center gap-x-2 text-sm font-semibold text-foreground hover:text-primary transition-colors shrink-0"
-          >
-            <Phone className="size-4" />
-            888-777-999
-          </a>
+
       </Container>
     </div>
   );

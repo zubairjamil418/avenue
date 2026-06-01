@@ -8,6 +8,18 @@ import Container from "@/components/common/Container";
 import { ApiProduct } from "@/hooks/useProducts";
 import { ArrowUpRight } from "lucide-react";
 
+function getCategorySlug(product: ApiProduct): string {
+  const cat = product.category as any;
+  if (!cat) return '';
+  return cat.slug ?? '';
+}
+
+function getCategoryName(product: ApiProduct): string {
+  const cat = product.category as any;
+  if (!cat) return product.name;
+  return cat.name ?? product.name;
+}
+
 interface NewInSectionClientProps {
   title: string;
   description?: string;
@@ -91,9 +103,18 @@ export default function NewInSectionClient({
                     )}
                   </div>
                 </Link>
-                <p className="font-['DM_Sans',sans-serif] text-[12px] sm:text-[13px] md:text-[14px] font-semibold text-light-primary-text text-center line-clamp-1">
-                  {product.category?.name || product.name}
-                </p>
+                {getCategorySlug(product) ? (
+                  <Link
+                    href={`/shop?category=${getCategorySlug(product)}` as any}
+                    className="font-['DM_Sans',sans-serif] text-[12px] sm:text-[13px] md:text-[14px] font-semibold text-light-primary-text text-center line-clamp-1 hover:text-primary transition-colors"
+                  >
+                    {getCategoryName(product)}
+                  </Link>
+                ) : (
+                  <p className="font-['DM_Sans',sans-serif] text-[12px] sm:text-[13px] md:text-[14px] font-semibold text-light-primary-text text-center line-clamp-1">
+                    {getCategoryName(product)}
+                  </p>
+                )}
               </motion.div>
             ))}
           </div>

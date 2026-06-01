@@ -61,10 +61,18 @@ async function importSeedData() {
       const rawData = fs.readFileSync(filePath, "utf-8");
       let data: any[] = JSON.parse(rawData);
 
-      // Cast string _id back to ObjectId so upsert filters match correctly.
+      // Cast string _id and known ObjectId reference fields back to ObjectId
+      // so upsert filters and downstream Mongoose queries match correctly.
+      const OID_RE = /^[0-9a-fA-F]{24}$/;
+      const OID_REF_FIELDS = ["category", "brand", "productType", "productBase"];
       data = data.map((doc: any) => {
         if (doc && doc._id && typeof doc._id === "string") {
           doc._id = new mongoose.Types.ObjectId(doc._id);
+        }
+        for (const field of OID_REF_FIELDS) {
+          if (doc && typeof doc[field] === "string" && OID_RE.test(doc[field])) {
+            doc[field] = new mongoose.Types.ObjectId(doc[field]);
+          }
         }
         return doc;
       });

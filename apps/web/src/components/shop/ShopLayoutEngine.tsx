@@ -61,15 +61,25 @@ export default function ShopLayoutEngine({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Always-current ref so Effect 1 can read searchParams without depending on it
+  const searchParamsRef = useRef(searchParams);
+  useEffect(() => {
+    searchParamsRef.current = searchParams;
+  });
+
   // Sync state cleanly to the URL
   const isInitialMount = useRef(true);
+
+  // Effect 1: filters → URL. Runs ONLY when filters state changes internally.
+  // searchParams is intentionally NOT in the dep array so external URL changes
+  // (nav clicks) don't trigger this and accidentally push the old filters back.
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParamsRef.current.toString());
     let hasChanges = false;
 
     const updateParam = (
@@ -96,9 +106,8 @@ export default function ShopLayoutEngine({
 
     updateParam("category", filters.category);
     updateParam("type", filters.productTypes);
-    updateParam("brand", filters.brands); // use singular 'brand' matching the backend!
+    updateParam("brand", filters.brands);
 
-    // Purge plural 'brands' if caught from legacy states
     if (params.has("brands")) {
       params.delete("brands");
       hasChanges = true;
@@ -127,7 +136,31 @@ export default function ShopLayoutEngine({
     if (hasChanges) {
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
     }
-  }, [filters, searchParams, pathname, router, searchQuery]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, pathname, router, searchQuery]);
+
+  // Effect 2: URL → filters. Runs when searchParams change (e.g. nav link clicked).
+  // Updates filters state to match the new URL so products re-fetch correctly.
+  useEffect(() => {
+    const getArr = (key: string) => {
+      const v = searchParams.get(key);
+      return v ? v.split(",") : undefined;
+    };
+
+    setFilters({
+      sortBy: searchParams.get("sortBy") ?? "default",
+      category: searchParams.get("category") ?? undefined,
+      brands: getArr("brand"),
+      productTypes: getArr("type"),
+      sizes: getArr("sizes"),
+      discount: getArr("discount"),
+      packSizes: getArr("packSizes"),
+      priceMin: searchParams.get("priceMin") ? Number(searchParams.get("priceMin")) : undefined,
+      priceMax: searchParams.get("priceMax") ? Number(searchParams.get("priceMax")) : undefined,
+      rating: searchParams.get("rating") ? Number(searchParams.get("rating")) : undefined,
+    });
+    setPage(1);
+  }, [searchParams]);
 
   // Parse layout strategy from slug
   const decodedSlug = decodeURIComponent(layoutSlug).toLowerCase();

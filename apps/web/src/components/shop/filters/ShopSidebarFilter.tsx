@@ -250,8 +250,8 @@ export default function ShopSidebarFilter({
 
         <div className="h-px w-full bg-light-divider shrink-0" />
 
-        {/* Product Type Section */}
-        <div className="flex flex-col gap-[16px] items-start shrink-0 w-full">
+        {/* Product Type Section — hidden */}
+        {/* <div className="flex flex-col gap-[16px] items-start shrink-0 w-full">
           <div className="flex gap-[10px] items-center justify-between shrink-0 w-full">
             <p className="font-Urbanist font-bold leading-[28px] text-light-primary-text text-[18px]">
               Product Type
@@ -305,7 +305,7 @@ export default function ShopSidebarFilter({
           </div>
         </div>
 
-        <div className="h-px w-full bg-light-divider shrink-0" />
+        <div className="h-px w-full bg-light-divider shrink-0" /> */}
 
         {/* Price Range Section */}
         <div className="flex flex-col gap-[24px] items-start shrink-0 w-full">
