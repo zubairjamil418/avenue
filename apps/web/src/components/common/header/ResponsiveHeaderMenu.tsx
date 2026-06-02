@@ -34,7 +34,7 @@ const ResponsiveHeaderMenu = ({ initialMenus, initialCategoryTree, logoUrl }: Re
                   <Menu />
                 </button>
               </div>
-              <Logo className="w-24" imageUrl={logoUrl} />
+              <Logo className="w-[140px]" imageUrl={logoUrl} />
               <div className="xl:hidden flex items-center gap-x-4">
                 <button
                   onClick={onCartOpen}
@@ -64,6 +64,7 @@ const ResponsiveHeaderMenu = ({ initialMenus, initialCategoryTree, logoUrl }: Re
         onClose={() => setIsSidebarOpen(false)}
         initialMenus={initialMenus}
         initialCategoryTree={initialCategoryTree}
+        logoUrl={logoUrl}
       />
     </>
   );

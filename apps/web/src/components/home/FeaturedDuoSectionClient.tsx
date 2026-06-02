@@ -57,7 +57,7 @@ export default function FeaturedDuoSectionClient({
                 {/* Image — links to product */}
                 <Link
                   href={`/product/${product.slug}` as "/product/[slug]"}
-                  className="block relative w-full aspect-[3/4] max-h-[60vh] overflow-hidden bg-gray-100 group"
+                  className="block relative w-full aspect-[2/3] overflow-hidden bg-gray-100 group"
                 >
                   {image && (
                     <Image
@@ -72,12 +72,12 @@ export default function FeaturedDuoSectionClient({
 
                 {/* Content */}
                 <div className="flex flex-col pt-2">
-                  <h3 className="[font-family:var(--font-urbanist)] text-[1.8rem] font-semibold leading-tight text-light-primary-text mb-4">
+                  <h3 className="[font-family:var(--font-urbanist)] text-[1.4rem] sm:text-[1.8rem] font-semibold leading-tight text-light-primary-text mb-3 sm:mb-4">
                     {product.name}
                   </h3>
 
                   {product.description && (
-                    <p className="text-[0.85rem] text-gray-600 max-w-full mb-8 leading-[1.7]">
+                    <p className="text-[0.82rem] sm:text-[0.85rem] text-gray-600 max-w-full mb-6 sm:mb-8 leading-[1.7]">
                       {plainText(product.description)}
                     </p>
                   )}
@@ -85,10 +85,10 @@ export default function FeaturedDuoSectionClient({
                   <div>
                     <Link
                       href={`/product/${product.slug}` as "/product/[slug]"}
-                      className="inline-flex items-center justify-center gap-2 min-w-[240px] px-5 py-3 border border-light-primary-text text-xs font-semibold tracking-[0.12em] uppercase text-light-primary-text hover:bg-light-primary-text hover:text-white transition-colors duration-200"
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-3 sm:min-w-[280px] px-6 sm:px-8 py-3 sm:py-4 border border-light-primary-text text-xs sm:text-sm font-semibold tracking-[0.12em] uppercase text-light-primary-text hover:bg-light-primary-text hover:text-white transition-colors duration-200"
                     >
                       {buttonLabel}
-                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      <ArrowUpRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>

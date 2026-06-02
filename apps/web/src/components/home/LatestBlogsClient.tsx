@@ -3,10 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { ArrowUpRight, Calendar, MessageSquare } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Container from "../common/Container";
 import { Blog } from "./LatestBlogs";
-import { chatIcon } from "@/images";
 
 export default function LatestBlogsClient({ blogs }: { blogs: Blog[] }) {
   if (!blogs || blogs.length === 0) return null;
@@ -33,14 +32,11 @@ export default function LatestBlogsClient({ blogs }: { blogs: Blog[] }) {
             {blogs.map((blog) => (
               <div
                 key={blog._id}
-                className="bg-white border border-light-divider rounded-[16px] overflow-hidden flex flex-col group hover:shadow-xl transition-shadow duration-300"
+                className="flex flex-col group"
               >
-                {/* Image */}
-                <Link
-                  href={`/blog/${blog.slug}`}
-                  className="px-6 pt-6 block cursor-pointer"
-                >
-                  <div className="relative h-[250px] w-full rounded-[16px] overflow-hidden">
+                {/* Image — full bleed, no padding, no border */}
+                <Link href={`/blog/${blog.slug}`} className="block">
+                  <div className="relative h-[260px] w-full rounded-[16px] overflow-hidden">
                     <Image
                       src={blog.previewImage || "/placeholder-blog.jpg"}
                       alt={blog.title}
@@ -52,77 +48,21 @@ export default function LatestBlogsClient({ blogs }: { blogs: Blog[] }) {
                 </Link>
 
                 {/* Content */}
-                <div className="p-6 flex flex-col items-start grow gap-4">
-                  {/* Category Pill */}
-                  <div className="bg-warning/16 px-2 py-px rounded-[100px] w-max">
-                    <span className="font-['DM_Sans',sans-serif] text-[12px] text-warning-dark leading-[18px]">
-                      {blog.category?.name || "Uncategorized"}
-                    </span>
-                  </div>
-
-                  {/* Meta Data */}
-                  <div className="flex items-center gap-4 w-full">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="size-4 text-light-secondary-text shrink-0" />
-                      <span className="font-['DM_Sans',sans-serif] text-[14px] text-light-secondary-text leading-[22px] truncate">
-                        {blog.publishedAt
-                          ? new Date(blog.publishedAt).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            )
-                          : new Date(blog.createdAt).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            )}
-                      </span>
-                    </div>
-
-                    <div className="h-4 w-px bg-light-disabled-text/24 shrink-0" />
-
-                    <div className="flex items-center gap-1">
-                      <Image src={chatIcon} className="w-5" alt="chatIcon" />
-                      <span className="font-['DM_Sans',sans-serif] text-[14px] text-light-secondary-text leading-[22px]">
-                        Comment
-                      </span>
-                      <span className="font-['DM_Sans',sans-serif] text-[14px] text-light-secondary-text leading-[22px]">
-                        ({blog.commentsCount || 0})
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Text */}
-                  <div className="flex flex-col gap-3 w-full">
-                    <Link
-                      href={`/blog/${blog.slug}`}
-                      className="cursor-pointer hover:text-primary transition-colors"
-                    >
-                      <h4 className="text-[18px] font-bold text-light-primary-text hover:text-primary transition-colors leading-[28px] line-clamp-2">
-                        {blog.title}
-                      </h4>
-                    </Link>
-                    <p className="text-base text-light-secondary-text leading-[24px] line-clamp-2 font-normal">
-                      {blog.excerpt ||
-                        "Read more about this topic in our blog..."}
-                    </p>
-                  </div>
+                <div className="pt-5 flex flex-col items-start grow gap-4">
+                  {/* Title */}
+                  <Link href={`/blog/${blog.slug}`} className="hover:text-primary transition-colors">
+                    <h4 className="font-['Urbanist',sans-serif] text-[22px] font-bold text-light-primary-text hover:text-primary transition-colors leading-[1.3] line-clamp-2">
+                      {blog.title}
+                    </h4>
+                  </Link>
 
                   {/* Button */}
                   <Link
                     href={`/blog/${blog.slug}`}
-                    className="mt-auto bg-primary-light hover:bg-primary transition-colors duration-300 inline-flex items-center justify-between px-3 py-2 rounded-[59px] w-[167px] group/btn"
+                    className="mt-auto inline-flex items-center gap-3 border border-light-primary-text text-light-primary-text font-['DM_Sans',sans-serif] font-semibold text-[13px] tracking-[0.12em] uppercase py-[12px] px-[22px] w-max hover:bg-light-primary-text hover:text-white transition-colors duration-300 group/btn"
                   >
-                    <span className="font-['DM_Sans',sans-serif] font-semibold text-[16px] text-white leading-[26px] pl-3">
-                      Read More
-                    </span>
-                    <ArrowUpRight className="size-4 text-white group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300 mr-2" />
+                    Read &amp; Shop
+                    <ArrowUpRight className="size-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
                   </Link>
                 </div>
               </div>

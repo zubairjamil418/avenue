@@ -85,7 +85,7 @@ const NewlyLaunchedProductsClient = ({
   return (
     <section className="py-10 md:py-14 lg:py-[70px]">
       <Container>
-        <div className="relative pt-0 pb-12 overflow-hidden min-h-[500px] rounded-[24px]">
+        <div className="relative pt-0 pb-12 overflow-hidden rounded-[24px]">
           {/* Background SVG from Figma */}
           <div className="absolute inset-0 z-0 pointer-events-none">
             <svg
@@ -135,7 +135,7 @@ const NewlyLaunchedProductsClient = ({
                   {products.map((product) => (
                     <CarouselItem
                       key={product._id}
-                      className="pl-4 sm:pl-5 basis-full sm:basis-1/2 lg:basis-1/4 xl:basis-1/6"
+                      className="pl-4 sm:pl-5 basis-1/2 sm:basis-1/2 lg:basis-1/4 xl:basis-1/5"
                     >
                       <motion.div
                         className="w-full flex h-full"
@@ -151,40 +151,40 @@ const NewlyLaunchedProductsClient = ({
           </div>
 
           {/* Navigation Arrows & View All Button */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-4 mt-8 md:mt-10 relative z-10 px-6 lg:px-10">
+          <div className="flex flex-row justify-between items-center gap-3 mt-8 md:mt-10 relative z-10 px-4 sm:px-6 lg:px-10">
             {/* Left side: Arrows */}
             <div className="flex gap-4">
               <button
                 onClick={() => api?.scrollPrev()}
                 disabled={!canScrollPrev}
-                className={`size-12 rounded-full flex items-center justify-center transition-colors shadow-sm ${
+                className={`size-14 rounded-full flex items-center justify-center transition-colors shadow-sm ${
                   canScrollPrev
                     ? "bg-white/50 text-[#04535C] hover:bg-white/70"
                     : "bg-white/30 text-[#04535C]/50 cursor-not-allowed"
                 }`}
               >
-                <ChevronLeft className="size-6" strokeWidth={2} />
+                <ChevronLeft className="size-7" strokeWidth={2} />
               </button>
               <button
                 onClick={() => api?.scrollNext()}
                 disabled={!canScrollNext}
-                className={`size-12 rounded-full flex items-center justify-center transition-colors shadow-sm ${
+                className={`size-14 rounded-full flex items-center justify-center transition-colors shadow-sm ${
                   canScrollNext
                     ? "bg-primary text-white hover:bg-primary/90"
                     : "bg-primary/50 text-white/50 cursor-not-allowed"
                 }`}
               >
-                <ChevronRight className="size-6" strokeWidth={2} />
+                <ChevronRight className="size-7" strokeWidth={2} />
               </button>
             </div>
 
             {/* Right side: View All Products */}
-            <Link href={`/shop?type=${productType?.slug || slug}`}>
-              <div className="bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-between pl-5 pr-2 py-2 h-[48px] min-w-[200px] transition-all hover:bg-white shadow-sm cursor-pointer group">
-                <span className="font-['DM_Sans',sans-serif] font-semibold text-[#04535C] text-[15px] sm:text-[16px] leading-[26px]">
+            <Link href={`/shop?type=${productType?.slug || slug}`} className="flex-1 sm:flex-none">
+              <div className="bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-between pl-4 sm:pl-6 pr-2 py-2 h-[52px] sm:h-[56px] w-full sm:min-w-[240px] transition-all hover:bg-white shadow-sm cursor-pointer group">
+                <span className="font-['DM_Sans',sans-serif] font-semibold text-[#04535C] text-[17px] leading-[26px]">
                   View All Products
                 </span>
-                <div className="size-[32px] rounded-full bg-primary shrink-0 flex items-center justify-center text-white transition-transform group-hover:scale-105 group-hover:rotate-12 duration-300 ml-2">
+                <div className="size-[38px] rounded-full bg-primary shrink-0 flex items-center justify-center text-white transition-transform group-hover:scale-105 group-hover:rotate-12 duration-300 ml-3">
                   <ArrowUpRight className="size-5" />
                 </div>
               </div>

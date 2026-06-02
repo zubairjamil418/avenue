@@ -52,7 +52,7 @@ export default function NewInSectionClient({
           >
             {totalCount !== undefined && (
               <span className="text-xs font-semibold tracking-[0.15em] uppercase text-light-secondary-text">
-                {totalCount.toLocaleString()} New Items
+                Newly added Featured Items
               </span>
             )}
 

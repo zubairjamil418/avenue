@@ -93,11 +93,13 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="flex items-center w-full"
             >
-              <img
-                src="/admin/logo.svg"
-                alt="Sellzy"
-                className="h-8 w-auto brightness-0 invert"
-              />
+              <div className="bg-white/95 rounded-lg px-3 py-1">
+                <img
+                  src="/admin/logo.png"
+                  alt="Sellzy"
+                  className="h-7 w-auto object-contain"
+                />
+              </div>
             </motion.div>
           ) : (
             <motion.div

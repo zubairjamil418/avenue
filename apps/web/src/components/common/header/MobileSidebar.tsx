@@ -91,13 +91,15 @@ interface MobileSidebarProps {
   onClose: () => void;
   initialMenus?: NavItem[];
   initialCategoryTree?: CategoryTreeNode[];
+  logoUrl?: string;
 }
 
 const MobileSidebar = ({ 
   isOpen, 
   onClose, 
   initialMenus, 
-  initialCategoryTree 
+  initialCategoryTree,
+  logoUrl,
 }: MobileSidebarProps) => {
   const { menus, isLoading } = useMenus(initialMenus);
   const { tree: categoryTree } = useCategoryTree(initialCategoryTree);
@@ -119,7 +121,7 @@ const MobileSidebar = ({
       >
         {/* Header */}
         <div className="p-6 flex items-center justify-between border-b border-gray-100">
-          <Logo className="w-24" />
+          <Logo className="w-[140px]" imageUrl={logoUrl} />
           <button
             onClick={onClose}
             className="p-2 rounded-full bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-primary transition-all duration-300 text-base"
@@ -132,100 +134,6 @@ const MobileSidebar = ({
         <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar">
           <nav>
             <ul className="flex flex-col">
-              <SubMenu title="Categories" onClose={onClose}>
-                <li>
-                  <Link
-                    href="#"
-                    onClick={onClose}
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Fresh & Organic
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    onClick={onClose}
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Baby Food
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Vegetables
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Meat & Fish
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Dairy & Eggs
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Bakery & Snacks
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Rice & Pulses
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Beverages
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    onClick={onClose}
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Frozen Foods
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Sauces & Pickels
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="block py-2 text-sm text-gray-600 hover:text-primary transition-colors"
-                  >
-                    Health & Wellness
-                  </Link>
-                </li>
-              </SubMenu>
-
               {/* Dynamic Menu Items */}
               {isLoading ? (
                 // Skeleton loading
