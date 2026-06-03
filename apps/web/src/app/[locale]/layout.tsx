@@ -8,14 +8,14 @@ export const revalidate = 0;
 const publicSans = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-public-sans",
+  variable: "--font-poppins",
   display: "swap",
 });
 
 const urbanist = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  variable: "--font-urbanist",
+  variable: "--font-playfair",
   display: "swap",
 });
 import { NextIntlClientProvider } from "next-intl";
@@ -25,7 +25,6 @@ import Footer from "@/components/common/footer/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import ComparePopup from "@/components/common/ComparePopup";
 import UrlMessageHandler from "@/components/common/UrlMessageHandler";
-import SourceCodeButton from "@/components/common/SourceCodeButton";
 import api from "@/lib/api";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -42,10 +41,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-      template: "Sellzy Ecommerce App | %s",
-      default: "Sellzy Ecommerce App",
+      template: "Avenue Retail | %s",
+      default: "Avenue Retail",
     },
-    description: "Sellzy - Multipurpose eCommerce",
+    description: "Avenue Retail",
     ...(favicon && {
       icons: {
         icon: favicon,
@@ -120,7 +119,6 @@ export default async function LocaleLayout({
             {children}
             <Footer logoUrl={footerLogo} />
             <ComparePopup />
-            <SourceCodeButton />
           </CurrencyProvider>
         </NextIntlClientProvider>
         <Toaster />

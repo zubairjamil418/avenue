@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { OAuthButton } from "@/components/auth/OAuthButton";
+import { useWebsiteIcons } from "@/hooks/useWebsiteIcons";
 
 type FormData = z.infer<typeof registerSchema>;
 
@@ -24,6 +25,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { mainLogo } = useWebsiteIcons();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { register } = useAuthStore();
@@ -93,8 +95,8 @@ export default function RegisterPage() {
           {/* Header & Logos */}
           <div className="w-full flex justify-center items-center mb-8">
             <img
-              src="/admin/logo.png"
-              alt="Sellzy Logo"
+              src={mainLogo || "/admin/logo.png"}
+              alt="Avenue Retail"
               className="h-[46px] w-auto object-contain"
             />
           </div>

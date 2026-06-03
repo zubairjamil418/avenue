@@ -5,7 +5,7 @@ import Container from "@/components/common/Container";
 import Breadcrumb from "@/components/product/Breadcrumb";
 
 export const metadata = {
-  title: "Wishlist | Sellzy eCommerce",
+  title: "Wishlist | Avenue Retail",
   description: "View and manage your saved products.",
 };
 

@@ -4,7 +4,7 @@ import { OrderTrackingClient } from "@/components/order-tracking/OrderTrackingCl
 import { getServerSession } from "@/lib/auth";
 
 export const metadata = {
-  title: "Order Tracking | Sellzy",
+  title: "Order Tracking | Avenue Retail",
   description:
     "Track your order in real-time. Enter your order ID to see the current status and detailed tracking information for your shipment.",
 };

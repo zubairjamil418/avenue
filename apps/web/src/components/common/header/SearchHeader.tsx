@@ -135,7 +135,7 @@ const SearchHeader = ({
     <div
       className={`relative search-input-container w-full ${className || "2xl:max-w-[800px] xl:max-w-[600px]"}`}
     >
-      <div className="relative flex items-center px-6 py-3 rounded-[100px] ring-1 ring-muted-foreground/32 focus-within:ring-foreground transition-shadow duration-200 bg-white shadow-sm z-50">
+      <div className="relative flex items-center px-3 py-2 z-50" style={{ background: "var(--gray-300)", borderRadius: "4px" }}>
         <div className="order-last ml-2">
           {searchTerm.length > 0 ? (
             <X
@@ -148,8 +148,9 @@ const SearchHeader = ({
         </div>
         <input
           type="text"
-          className="peer w-full bg-transparent text-base text-foreground placeholder-muted-foreground focus:placeholder-transparent outline-none"
-          placeholder="Search for items..."
+          className="w-full bg-transparent outline-none"
+          style={{ fontSize: "0.85rem", color: "var(--black)" }}
+          placeholder="Search..."
           id={id}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -157,12 +158,6 @@ const SearchHeader = ({
           onKeyDown={handleKeyDown}
           autoComplete="off"
         />
-        <label
-          htmlFor={id}
-          className="absolute left-[24px] top-1/2 -translate-y-1/2 text-xs leading-[18px] transition-all peer-placeholder-shown:text-muted-foreground peer-placeholder-shown:text-[16px] peer-placeholder-shown:top-1/2 peer-focus:text-[12px] peer-focus:top-0 peer-[:not(:placeholder-shown)]:text-[12px] peer-[:not(:placeholder-shown)]:top-0 bg-white peer-focus:px-1 peer-[:not(:placeholder-shown)]:px-1 z-10"
-        >
-          Search for items...
-        </label>
       </div>
 
       <div

@@ -46,19 +46,22 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
 
   return (
     <>
-      <div className="py-4 border border-gray-300 xl:border-0 hidden xl:block header-middle relative z-50">
-        <Container>
-          {/* For Desktop Screen Start */}
-          <div className="xl:grid grid-cols-[1fr_auto_1fr] items-center hidden">
-            {/* Left spacer */}
+      <div
+        className="hidden xl:flex items-center header-middle relative z-50"
+        style={{ height: "64px", background: "var(--gray-200)" }}
+      >
+        <Container className="w-full">
+          {/* 3-column grid: hamburger | logo | search+icons */}
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center w-full h-full">
+            {/* Left: hamburger placeholder */}
             <div />
             {/* Center: Logo */}
             <div className="flex justify-center">
               <Logo imageUrl={logoUrl} />
             </div>
             {/* Right: Search + Icons */}
-            <div className="flex items-center justify-end gap-x-4">
-              <SearchHeader className="2xl:max-w-[400px] xl:max-w-[300px]" />
+            <div className="flex items-center justify-end gap-x-3">
+              <SearchHeader className="max-w-[220px]" />
 
               <div className="flex items-center gap-x-1">
                 <ul className="flex items-center gap-x-1">
@@ -66,7 +69,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
                   <li>
                     <Link
                       href="/user/wishlist"
-                      className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted transition-colors"
+                      className="flex items-center justify-center w-9 h-9 hover:bg-[var(--gray-300)] transition-colors"
                     >
                       <Heart className="size-5 text-foreground" />
                     </Link>
@@ -75,7 +78,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
                   <li>
                     <button
                       onClick={onCartOpen}
-                      className="cart-sidebar-btn relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted transition-colors cursor-pointer"
+                      className="cart-sidebar-btn relative flex items-center justify-center w-9 h-9 hover:bg-[var(--gray-300)] transition-colors cursor-pointer"
                     >
                       <ShoppingCart className="size-5 text-foreground" />
                       {totalItems > 0 && (
@@ -87,7 +90,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
                   </li>
                   {/* Account */}
                   <li className="relative group py-2">
-                    <button className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted transition-colors cursor-pointer">
+                    <button className="flex items-center justify-center w-9 h-9 hover:bg-[var(--gray-300)] transition-colors cursor-pointer">
                       <User className="size-5 text-foreground" />
                     </button>
 
@@ -237,7 +240,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
               </div>
             </div>
           </div>
-          {/* FOr Desktop Screen End */}
+          {/* Desktop header row end */}
         </Container>
       </div>
 

@@ -1,8 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
 import BottomHeader from "./BottomHeader";
-import TopHeader from "./TopHeader";
 import MiddleHeader from "./MiddleHeader";
+import TopHeader from "./TopHeader";
 import ResponsiveHeaderMenu from "./ResponsiveHeaderMenu";
 import { CategoryTreeNode } from "@/hooks/useCategoryTree";
 import { NavItem } from "@/constants/data";
@@ -14,39 +13,28 @@ interface HeaderProps {
 }
 
 export default function Header({ initialMenus, initialCategoryTree, logoUrl }: HeaderProps) {
-  const [isSticky, setIsSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 200);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <>
-      {/* ========== HEADER Section Start ========== */}
-      <header>
-        {/* header-top start */}
+      <header
+        style={{
+          background: "var(--gray-200)",
+          color: "var(--black)",
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+        }}
+      >
         <TopHeader />
-        {/* header-top End */}
-
         <MiddleHeader logoUrl={logoUrl} />
-        <BottomHeader 
-          isSticky={false} 
-          initialMenus={initialMenus} 
-        />
+        <BottomHeader initialMenus={initialMenus} />
 
-        {/* Mobile Menu Start */}
-        <ResponsiveHeaderMenu 
-          initialMenus={initialMenus} 
-          initialCategoryTree={initialCategoryTree} 
+        {/* Mobile Menu */}
+        <ResponsiveHeaderMenu
+          initialMenus={initialMenus}
+          initialCategoryTree={initialCategoryTree}
           logoUrl={logoUrl}
         />
-        {/* Mobile Menu End */}
       </header>
-      {/* ========== HEADER Section End ========== */}
     </>
   );
 }

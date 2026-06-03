@@ -91,19 +91,39 @@ import VendorComingSoon from "@/pages/vendor/ComingSoon";
 function RootLayout() {
   const location = useLocation();
 
+  // Inject favicon from website-icons API
+  useEffect(() => {
+    import("@/hooks/useWebsiteIcons").then(({ useWebsiteIcons: _ }) => {
+      import("@/lib/api").then(({ default: api }) => {
+        api.get("/website-icons?isActive=true")
+          .then((res) => {
+            const icons = res.data?.data ?? res.data ?? [];
+            const favicon = icons.find((i: any) => i.key === "favicon" || i.category === "favicon");
+            if (favicon?.imageUrl) {
+              const link: HTMLLinkElement = document.querySelector("link[rel~='icon']") || document.createElement("link");
+              link.rel = "icon";
+              link.href = favicon.imageUrl;
+              document.head.appendChild(link);
+            }
+          })
+          .catch(() => {});
+      });
+    });
+  }, []);
+
   useEffect(() => {
     const path = location.pathname;
 
     if (path === "/login") {
-      document.title = "Sellzy Admin | Login";
+      document.title = "Avenue Retail Admin | Login";
       return;
     }
     if (path === "/register") {
-      document.title = "Sellzy Admin | Register";
+      document.title = "Avenue Retail Admin | Register";
       return;
     }
     if (path === "/forgot-password") {
-      document.title = "Sellzy Admin | Forgot Password";
+      document.title = "Avenue Retail Admin | Forgot Password";
       return;
     }
 
@@ -112,14 +132,14 @@ function RootLayout() {
       parts.length === 0 ||
       (parts.length === 1 && parts[0] === "dashboard")
     ) {
-      document.title = "Sellzy Admin | Dashboard";
+      document.title = "Avenue Retail Admin | Dashboard";
       return;
     }
 
     const lastPart = parts[parts.length - 1];
 
     if (lastPart.toLowerCase() === "qc") {
-      document.title = "Sellzy Admin | QC";
+      document.title = "Avenue Retail Admin | QC";
       return;
     }
 
@@ -128,7 +148,7 @@ function RootLayout() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
-    document.title = `Sellzy Admin | ${title}`;
+    document.title = `Avenue Retail Admin | ${title}`;
   }, [location.pathname]);
 
   return (

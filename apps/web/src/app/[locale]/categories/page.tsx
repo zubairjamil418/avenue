@@ -4,7 +4,7 @@ import AllCategoriesClient from "@/components/categories/AllCategoriesClient";
 import Breadcrumb from "@/components/product/Breadcrumb";
 
 export const metadata: Metadata = {
-  title: "All Categories | Sellzy Ecommerce",
+  title: "All Categories | Avenue Retail",
   description:
     "Browse our complete collection of diverse product categories, securely curated for all your needs.",
 };

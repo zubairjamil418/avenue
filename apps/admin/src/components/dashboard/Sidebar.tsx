@@ -40,6 +40,7 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useWebsiteIcons } from "@/hooks/useWebsiteIcons";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -62,6 +63,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { logout, user } = useAuthStore();
   const [isMobile, setIsMobile] = useState(false);
   const [logoutAlertOpen, setLogoutAlertOpen] = useState(false);
+  const { mainLogo } = useWebsiteIcons();
 
   useEffect(() => {
     const handleResize = () => {
@@ -95,8 +97,8 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             >
               <div className="bg-white/95 rounded-lg px-3 py-1">
                 <img
-                  src="/admin/logo.png"
-                  alt="Sellzy"
+                  src={mainLogo || "/admin/logo.png"}
+                  alt="Avenue Retail"
                   className="h-7 w-auto object-contain"
                 />
               </div>
@@ -113,8 +115,8 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               title="Expand Sidebar"
             >
               <img
-                src="/admin/logo-small.png"
-                alt="Sellzy"
+                src={mainLogo || "/admin/logo-small.png"}
+                alt="Avenue Retail"
                 className="h-8 w-8 object-contain"
               />
             </motion.div>

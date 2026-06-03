@@ -9,28 +9,21 @@ import { useMenus } from "@/hooks/useMenus";
 import { NavItem } from "@/constants/data";
 
 interface BottomHeaderProps {
-  isSticky?: boolean;
   initialMenus?: NavItem[];
 }
 
-const BottomHeader = ({
-  isSticky = false,
-  initialMenus,
-}: BottomHeaderProps) => {
+const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
   const { menus, isLoading: menusLoading } = useMenus(initialMenus);
 
   return (
     <div
-      className={`border-b border-border hidden xl:flex header-bottom bg-background z-40 transition-all duration-300 ${
-        isSticky
-          ? "fixed top-0 left-0 w-full shadow-md animate-fadeInDown"
-          : "relative"
-      }`}
+      className="hidden xl:flex header-bottom z-40"
+      style={{ background: "var(--gray-200)", paddingBottom: "0.5rem" }}
     >
       <Container className="flex items-center w-full">
           {/* Main Navigation */}
           <nav className="main-menu w-full">
-            <ul className="flex items-center">
+            <ul className="flex items-center justify-center w-full">
               {menusLoading ? (
                 // Simple skeleton or loading state
                 <div className="flex gap-4">
@@ -53,7 +46,7 @@ const BottomHeader = ({
                   >
                     <Link
                       href={item.href}
-                      className="text-black hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap"
+                      className="flex items-center gap-1 whitespace-nowrap"
                     >
                       {item.title}
                       {((item.subItems && item.subItems.length > 0) ||

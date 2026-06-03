@@ -2,7 +2,7 @@ import React from "react";
 import { WishlistClient } from "@/components/wishlist/WishlistClient";
 
 export const metadata = {
-  title: "Wishlist | Sellzy eCommerce",
+  title: "Wishlist | Avenue Retail",
 };
 
 export default function WishlistV2() {

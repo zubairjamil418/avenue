@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Key, Mail, ShieldCheck } from "lucide-react";
 import api from "@/lib/api";
+import { useWebsiteIcons } from "@/hooks/useWebsiteIcons";
 
 type ResetStep = "email" | "otp" | "reset";
 
 export default function ForgotPasswordPage() {
   const [step, setStep] = useState<ResetStep>("email");
+  const { mainLogo } = useWebsiteIcons();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
@@ -168,7 +170,7 @@ export default function ForgotPasswordPage() {
         <div className="w-full bg-card rounded-[24px] shadow-2xl p-8 sm:p-12 md:px-14 flex flex-col items-center border border-border transition-all duration-500">
           
           <div className="w-full flex justify-center items-center mb-6">
-            <img src="/admin/logo.png" alt="Sellzy Logo" className="h-[46px] w-auto object-contain" />
+            <img src={mainLogo || "/admin/logo.png"} alt="Avenue Retail" className="h-[46px] w-auto object-contain" />
           </div>
 
           <div className="relative mb-6">

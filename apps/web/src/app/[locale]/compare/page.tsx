@@ -4,7 +4,7 @@ import Container from "@/components/common/Container";
 import ComparePageClient from "./ComparePageClient";
 
 export const metadata = {
-  title: "Compare Products - Sellzy",
+  title: "Compare Products - Avenue Retail",
   description: "Compare your selected products side by side.",
 };
 

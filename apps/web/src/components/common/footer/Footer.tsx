@@ -1,181 +1,208 @@
 import { Link } from "@/i18n/routing";
-import Container from "../Container";
-import SocialIcons from "../SocialIcons";
-import { ChevronRight, Globe, Phone, Mail, Printer } from "lucide-react";
+import Image from "next/image";
+import { logo as defaultLogo } from "@/images";
 import FooterBottomNavbar from "./FooterBottomNavbar";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 
-const footerSections = [
+const footerColumns = [
   {
-    title: "About",
-    children: [
-      {
-        label: "About Us",
-        href: "/about",
-      },
-      { label: "Terms & Conditions", href: "/terms-and-conditions" },
-      { label: "Careers", href: "/careers" },
-      { label: "Latest News", href: "/blogs" },
+    title: "The Store",
+    links: [
+      { label: "Plan Your Visit", href: "/contact" },
+      { label: "Restaurants", href: "/about" },
+      { label: "Store Guide", href: "/shop" },
+      { label: "News & Events", href: "/blogs" },
+    ],
+  },
+  {
+    title: "Shopping Online",
+    links: [
+      { label: "New Arrivals", href: "/shop" },
+      { label: "Track Your Order", href: "/order-tracking" },
+      { label: "Returns", href: "/faq" },
+      { label: "FAQs", href: "/faq" },
+      { label: "Compare Products", href: "/compare" },
+    ],
+  },
+  {
+    title: "Customer Service",
+    links: [
       { label: "Contact Us", href: "/contact" },
+      { label: "Avenue Rewards", href: "/user/dashboard" },
+      { label: "Wishlist", href: "/user/wishlist" },
       { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms & Conditions", href: "/terms-and-conditions" },
     ],
   },
   {
-    title: "My Account",
-    children: [
-      { label: "Your Account", href: "/user/dashboard" },
-      {
-        label: "Return Policies",
-        href: "/coming-soon?title=Return Policies&desc=Our return guidelines will be published here soon.",
-      },
+    title: "About Us",
+    links: [
+      { label: "About Avenue", href: "/about" },
+      { label: "Careers", href: "/careers" },
       { label: "Become a Vendor", href: "/vendor-registration" },
-      { label: "Wishlist", href: "/wishlist-style-v1" },
-      {
-        label: "Affiliate Program",
-        href: "/coming-soon?title=Affiliate Program&desc=Our affiliate program details will be available soon.",
-      },
-      {
-        label: "FAQs",
-        href: "/faq",
-      },
-    ],
-  },
-  {
-    title: "Categories",
-    children: [
-      { label: "Healthcare", href: "/shop?category=healthcare" },
-      { label: "Fashion", href: "/shop?category=fashion" },
-      { label: "Organic", href: "/shop?category=organic" },
-      { label: "Beauty", href: "/home-2" },
-      { label: "Groceries", href: "/shop?category=groceries" },
-      { label: "Others", href: "/shop?category=others" },
+      { label: "Latest Stories", href: "/blogs" },
+      { label: "Accessibility", href: "/about" },
     ],
   },
 ];
 
+const socialLinks = [
+  { Icon: Facebook, href: "https://www.facebook.com/", label: "Facebook" },
+  { Icon: Instagram, href: "https://www.instagram.com/", label: "Instagram" },
+  { Icon: Linkedin, href: "https://www.linkedin.com/", label: "LinkedIn" },
+];
+
 export default function Footer({ logoUrl }: { logoUrl?: string }) {
   return (
-    <div className="text-primary-foreground/80">
-      {/* ========== Footer Section Start ========== */}
-      <footer className="md:pb-15 pb-[100px] bg-primary-darker pt-10 md:pt-16">
-        <Container className="">
-          {/* ========== Footer Top Section Start ========== */}
-          <div className="pb-9 grid grid-cols-12 gap-6">
-            <div className="md:col-span-12 col-span-12 xl:col-span-3 flex flex-col gap-y-6 animate__animated animate__fadeInUp">
-              <div>
-                <Link href="/">
-                  <img src={logoUrl || "/images/footer-logo.svg"} alt="logo" />
-                </Link>
-              </div>
-              <p className="text-primary-lighter text-base">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <SocialIcons />
-              <div className="flex flex-col gap-y-[15px]">
-                <p className="text-base font-semibold text-primary-lighter">
-                  Download Our App:
-                </p>
-                <div className="flex gap-x-2.5">
-                  <Link href="/">
-                    <img
-                      src="/images/google-play.png"
-                      alt="google-play"
-                    />
-                  </Link>
-                  <Link href="/">
-                    <img
-                      src="/images/apple-store.png"
-                      alt="apple-store"
-                    />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            {footerSections.map((section, index) => (
-              <div
-                key={index}
-                className="md:col-span-6 col-span-12 xl:col-span-2 animate__animated animate__fadeInUp"
-              >
-                <h5 className="text-primary-lighter pb-6 border-b border-[rgba(145,158,171,0.24)]">
-                  {section.title}
-                </h5>
-                <div className="flex flex-col gap-y-2 pt-4">
-                  {section.children.map((item, idx) => (
-                    <Link
-                      key={idx}
-                      href={item.href}
-                      className="py-1.5 flex items-center gap-x-2 text-primary-lighter hover:text-light-primary-text group transition-all duration-300"
-                    >
-                      <ChevronRight
-                        size={16}
-                        className="text-primary-lighter/70 group-hover:text-light-primary-text group-hover:translate-x-1 transition-all duration-300"
-                      />
-                      <span className="font-medium group-hover:translate-x-0.5 transition-transform duration-300">
-                        {item.label}
-                      </span>
-                    </Link>
+    <>
+      {/* Full-width footer background */}
+      <footer
+        style={{
+          width: "100%",
+          background: "var(--footer-bg)",
+          color: "var(--footer-text)",
+        }}
+      >
+        {/* Inner content with side margins */}
+        <div
+          style={{
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "4rem var(--site-gutter) 0",
+          }}
+        >
+          {/* Centered logo */}
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <Link href="/">
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt="Avenue Retail"
+                  style={{ width: "200px", height: "auto", display: "inline-block" }}
+                />
+              ) : (
+                <Image
+                  src={defaultLogo}
+                  alt="Avenue Retail"
+                  width={200}
+                  height={60}
+                  style={{ width: "200px", height: "auto", display: "inline-block" }}
+                />
+              )}
+            </Link>
+          </div>
+
+          {/* 4-column link grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "3rem",
+              paddingBottom: "3rem",
+              borderBottom: "1px solid rgba(0,0,0,0.08)",
+            }}
+          >
+            {footerColumns.map((col) => (
+              <div key={col.title}>
+                <h4
+                  style={{
+                    fontSize: "0.75rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.12em",
+                    fontWeight: 600,
+                    color: "rgba(34,34,34,0.9)",
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  {col.title}
+                </h4>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  {col.links.map((link) => (
+                    <li key={link.label} style={{ marginBottom: "0.75rem" }}>
+                      <Link href={link.href} className="footer-col-link">
+                        {link.label}
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ))}
-            <div className="md:col-span-6 col-span-12 xl:col-span-3 animate__animated animate__fadeInUp">
-              <h5 className="text-primary-lighter pb-6 border-b border-[rgba(145,158,171,0.24)]">
-                Contact Information
-              </h5>
-              <div className="flex flex-col gap-y-1.5 py-4">
-                <div className="flex items-center gap-x-3">
-                  <span className="size-10 inline-flex items-center justify-center rounded-full bg-[rgba(145,158,171,0.16)]">
-                    <Globe className="w-6 h-6 text-primary-lighter" />
-                  </span>
-                  <p className="text-primary-lighter font-semibold">
-                    2715 Ash Dr. San Jose, South Dakota 83475
-                  </p>
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <span className="size-10 inline-flex items-center justify-center rounded-full bg-[rgba(145,158,171,0.16)]">
-                    <Phone className="w-6 h-6 text-primary-lighter" />
-                  </span>
-                  <p className="text-primary-lighter font-semibold">
-                    Call Us: (239) 555-0108
-                  </p>
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <span className="size-10 inline-flex items-center justify-center rounded-full bg-[rgba(145,158,171,0.16)]">
-                    <Mail className="w-6 h-6 text-primary-lighter" />
-                  </span>
-                  <p className="text-primary-lighter font-semibold">
-                    sara.cruz@example.com
-                  </p>
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <span className="size-10 inline-flex items-center justify-center rounded-full bg-[rgba(145,158,171,0.16)]">
-                    <Printer className="w-6 h-6 text-primary-lighter" />
-                  </span>
-                  <p className="text-primary-lighter font-semibold">
-                    sara.cruz@example.com
-                  </p>
-                </div>
-              </div>
-              <div>
-                <img
-                  src="/images/payment-methods.png"
-                  alt="payment-methods"
-                />
-              </div>
+          </div>
+
+          {/* Bottom row 1: Follow us (left) | Payment methods image (right) */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "1.5rem 0 1rem",
+            }}
+          >
+            {/* Payment methods image */}
+            <img
+              src="/images/payment-methods.png"
+              alt="Payment methods"
+              style={{ height: "28px", width: "auto", display: "block" }}
+            />
+
+            {/* Follow Us + social icons */}
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  fontWeight: 600,
+                  color: "rgba(34,34,34,0.9)",
+                }}
+              >
+                Follow Us
+              </span>
+              {socialLinks.map(({ Icon, href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  style={{ color: "rgba(34,34,34,0.7)", display: "flex", alignItems: "center" }}
+                >
+                  <Icon size={20} />
+                </Link>
+              ))}
             </div>
           </div>
-          {/* ========== Footer Top Section End ========== */}
 
-          {/* ========== Footer Bottom Section Start ========== */}
-          <div className="text-center text-light-primary-text py-4 border-t border-[rgba(145,158,171,0.24)] animate__animated animate__fadeInUp">
-            © 2026 avenueretail.co.uk
+          {/* Bottom row 2: Legal links (left) | Copyright (right) */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0.75rem 0 2rem",
+
+              fontSize: "0.8rem",
+              color: "rgba(34,34,34,0.6)",
+            }}
+          >
+            <div style={{ display: "flex", gap: "1.5rem" }}>
+              <Link href="/about" className="footer-col-link" style={{ fontSize: "0.8rem" }}>
+                Accessibility
+              </Link>
+              <Link href="/terms-and-conditions" className="footer-col-link" style={{ fontSize: "0.8rem" }}>
+                Terms & Conditions
+              </Link>
+              <Link href="/privacy-policy" className="footer-col-link" style={{ fontSize: "0.8rem" }}>
+                Security & Privacy Policy
+              </Link>
+            </div>
+
+            <p style={{ margin: 0 }}>© 2026 Avenue Retail. All rights reserved.</p>
           </div>
-          {/* ========== Footer Bottom Section End ========== */}
-        </Container>
+        </div>
       </footer>
-      {/* ========== Footer Section End ========== */}
 
       <FooterBottomNavbar />
-    </div>
+    </>
   );
 }

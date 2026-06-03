@@ -1,17 +1,15 @@
 "use client";
 
 import React from "react";
-import { motion } from "motion/react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import Container from "@/components/common/Container";
 import { ApiProduct } from "@/hooks/useProducts";
-import { ArrowUpRight } from "lucide-react";
 
 function getCategorySlug(product: ApiProduct): string {
   const cat = product.category as any;
-  if (!cat) return '';
-  return cat.slug ?? '';
+  if (!cat) return "";
+  return cat.slug ?? "";
 }
 
 function getCategoryName(product: ApiProduct): string {
@@ -38,87 +36,157 @@ export default function NewInSectionClient({
   totalCount,
 }: NewInSectionClientProps) {
   return (
-    <section className="py-10 md:py-14 lg:py-[70px]">
+    <section style={{ padding: "4rem var(--site-gutter)" }}>
       <Container>
-        <div className="flex flex-col lg:flex-row gap-10 xl:gap-16 items-start">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "320px repeat(4, 1fr)",
+            alignItems: "center",
+            gap: "1.5rem",
+          }}
+        >
+          {/* Left col */}
+          <div style={{ maxWidth: "480px" }}>
+            <p
+              style={{
+                fontSize: "0.7rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                color: "var(--gray-500)",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Newly Featured Items
+            </p>
 
-          {/* Left: text + CTA */}
-          <motion.div
-            className="w-full lg:w-[280px] xl:w-[320px] shrink-0 flex flex-col gap-4 lg:gap-5"
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            {totalCount !== undefined && (
-              <span className="text-xs font-semibold tracking-[0.15em] uppercase text-light-secondary-text">
-                Newly added Featured Items
-              </span>
-            )}
-
-            <h2 className="font-['Urbanist',sans-serif] text-[28px] sm:text-[36px] md:text-[44px] lg:text-[48px] font-bold leading-[1.1] text-light-primary-text">
+            <h2
+              style={{
+                fontFamily: "'Poppins', var(--font-poppins), sans-serif",
+                fontSize: "3rem",
+                fontWeight: 400,
+                lineHeight: 1.08,
+                marginBottom: "1rem",
+                color: "var(--black)",
+              }}
+            >
               {title}
             </h2>
 
             {description && (
-              <p className="text-light-secondary-text text-[16px] leading-[26px] font-normal">
+              <p
+                style={{
+                  color: "var(--gray-600)",
+                  lineHeight: 1.7,
+                  marginBottom: "1.5rem",
+                  fontSize: "0.95rem",
+                }}
+              >
                 {description}
               </p>
             )}
 
             <Link
               href={buttonHref as "/shop"}
-              className="inline-flex items-center gap-3 border border-light-primary-text text-light-primary-text font-['DM_Sans',sans-serif] font-semibold text-[13px] tracking-[0.12em] uppercase py-[14px] px-[24px] w-max hover:bg-light-primary-text hover:text-white transition-colors duration-300 mt-2 group"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "1rem 2.5rem",
+                fontSize: "0.8rem",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                fontWeight: 400,
+                background: "transparent",
+                color: "var(--black)",
+                border: "1px solid var(--black)",
+                borderRadius: "2px",
+                transition: "all 0.3s",
+                cursor: "pointer",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "var(--black)";
+                (e.currentTarget as HTMLElement).style.color = "#fff";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.color = "var(--black)";
+              }}
             >
               {buttonLabel}
-              <ArrowUpRight className="size-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
             </Link>
-          </motion.div>
+          </div>
 
-          {/* Right: 4 product images */}
-          <div className="flex-1 min-w-0 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-            {products.slice(0, 4).map((product, i) => (
-              <motion.div
-                key={product._id}
-                className="flex flex-col gap-2 sm:gap-3"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-              >
+          {/* Right col — 4 products, each rendered as a direct grid child */}
+          {products.slice(0, 4).map((product) => (
+              <div key={product._id} style={{ textAlign: "center" }}>
                 <Link href={`/product/${product.slug}` as "/product/[slug]"}>
-                  <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 w-full">
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "260px",
+                      position: "relative",
+                      overflow: "hidden",
+                      background: "var(--gray-100)",
+                    }}
+                  >
                     {product.image ? (
                       <Image
                         src={product.image}
                         alt={product.name}
                         fill
-                        sizes="(max-width: 640px) 50vw, 25vw"
-                        className="object-cover hover:scale-105 transition-transform duration-500"
+                        sizes="200px"
+                        style={{ objectFit: "cover" }}
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-sm">
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "var(--gray-400)",
+                          fontSize: "0.8rem",
+                        }}
+                      >
                         No image
                       </div>
                     )}
                   </div>
                 </Link>
+
                 {getCategorySlug(product) ? (
                   <Link
                     href={`/shop?category=${getCategorySlug(product)}` as any}
-                    className="font-['DM_Sans',sans-serif] text-[12px] sm:text-[13px] md:text-[14px] font-semibold text-light-primary-text text-center line-clamp-1 hover:text-primary transition-colors"
+                    style={{
+                      display: "block",
+                      marginTop: "0.6rem",
+                      fontWeight: 700,
+                      fontSize: "0.85rem",
+                      color: "var(--black)",
+                      textAlign: "center",
+                      textDecoration: "none",
+                    }}
                   >
                     {getCategoryName(product)}
                   </Link>
                 ) : (
-                  <p className="font-['DM_Sans',sans-serif] text-[12px] sm:text-[13px] md:text-[14px] font-semibold text-light-primary-text text-center line-clamp-1">
+                  <p
+                    style={{
+                      marginTop: "0.6rem",
+                      fontWeight: 700,
+                      fontSize: "0.85rem",
+                      color: "var(--black)",
+                      textAlign: "center",
+                    }}
+                  >
                     {getCategoryName(product)}
                   </p>
                 )}
-              </motion.div>
+              </div>
             ))}
-          </div>
-
         </div>
       </Container>
     </section>

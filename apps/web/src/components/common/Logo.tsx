@@ -14,7 +14,7 @@ const Logo = ({ href = "/", className, imageUrl }: Props) => {
         height={250}
         src={imageUrl || defaultLogo}
         alt="Logo"
-        className={`w-[140px] h-auto object-contain ${className}`}
+        className={`w-[195px] h-auto object-contain ${className}`}
         loading="eager"
       />
     </Link>
