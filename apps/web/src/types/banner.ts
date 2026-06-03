@@ -29,6 +29,7 @@ export interface HeroBanner {
   buttonHref?: string;
   startFrom: number;
   image?: string;
+  videoUrl?: string;
   bannerType: "hero-banner";
   bannerPage: string;
   bgColor?: string;

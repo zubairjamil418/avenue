@@ -1,15 +1,12 @@
 "use client";
 
 import React, { useEffect, useState, Suspense } from "react";
-import { MoveRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
@@ -100,62 +97,107 @@ const HeroContent = ({
             {slides.map((slide: any) => (
               <CarouselItem
                 key={slide._id}
-                className={`pl-0 relative w-full ${compact ? "h-[300px] md:h-[470px]" : "h-[450px] md:h-[600px]"}`}
+                className={`pl-0 relative w-full ${compact ? "h-[300px] md:h-[470px]" : "h-[70vh]"}`}
+                style={{ background: slide.videoUrl ? "#000" : undefined, overflow: "hidden" }}
               >
-                {/* Background Image */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000"
-                  style={{ backgroundImage: `url(${slide.image})` }}
-                />
-
-
-                <div className="relative h-full z-10 xl:pl-[120px] lg:pl-[60px] md:pl-[40px] px-6 sm:px-8 flex flex-col justify-center w-full max-w-full md:max-w-[450px] lg:max-w-[550px] xl:max-w-[800px]">
-                  <div
-                    className={
-                      "flex items-center gap-x-2 md:gap-x-3 mb-3 md:mb-4 animate-fadeInUp delay-300"
-                    }
-                  >
-                    <h6
-                      className="font-semibold tracking-wide text-xs sm:text-sm md:text-base"
-                      style={{ color: slide.textColor || "#ffffff" }}
-                    >
-                      {slide.name}
-                    </h6>
-                    {slide.discount && (
-                      <span className="bg-warning text-white text-[10px] md:text-xs font-bold px-2 py-0.5 md:px-2.5 md:py-1 rounded-full uppercase tracking-wider shadow-lg animate-pulse">
-                        {slide.discount}
-                      </span>
-                    )}
-                  </div>
-
-                  <h2
-                    className={`${compact ? "text-2xl md:text-3xl xl:text-4xl" : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[54px]"} font-bold leading-[1.2] md:leading-[1.3] mb-4 md:mb-6 animate-fadeInUp delay-500`}
-                    style={{ color: slide.textColor || "#ffffff" }}
-                  >
-                    {slide.title}
-                  </h2>
-
-                  <p
-                    className={`text-[13px] sm:text-sm md:text-base font-normal ${compact ? "mb-6" : "mb-8 md:mb-10"} w-full max-w-full sm:max-w-[500px] leading-relaxed animate-fadeInUp delay-700`}
+                {/* Video background */}
+                {slide.videoUrl ? (
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    poster={slide.image}
                     style={{
-                      color: slide.textColor
-                        ? `${slide.textColor}E6`
-                        : "#ffffffe6",
-                    }} // Apply 90% opacity (E6 in hex)
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      zIndex: 0,
+                    }}
                   >
-                    {slide.description}
-                  </p>
+                    <source src={slide.videoUrl} type="video/mp4" />
+                  </video>
+                ) : (
+                  /* Fallback: image background */
+                  <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(${slide.image})` }}
+                  />
+                )}
 
-                  <div className="animate-fadeInUp delay-900">
+
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    left: "var(--site-gutter)",
+                    right: "var(--site-gutter)",
+                    color: "white",
+                    maxWidth: "540px",
+                    zIndex: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {slide.name && (
+                    <p style={{
+                      fontSize: "0.85rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.28em",
+                      color: "rgba(255,255,255,0.85)",
+                      marginBottom: "0.5rem",
+                    }}>
+                      {slide.name}
+                    </p>
+                  )}
+
+                  <h1 style={{
+                    fontFamily: "'Poppins', var(--font-poppins), sans-serif",
+                    fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                    fontWeight: 400,
+                    color: "#ffffff",
+                    lineHeight: 1.1,
+                    marginBottom: "1.5rem",
+                  }}>
+                    {slide.title}
+                  </h1>
+
+                  {slide.description && (
+                    <p style={{
+                      fontSize: "1rem",
+                      color: "rgba(255,255,255,0.85)",
+                      lineHeight: 1.7,
+                      marginBottom: "1.25rem",
+                      maxWidth: "420px",
+                    }}>
+                      {slide.description}
+                    </p>
+                  )}
+
+                  <div style={{ marginTop: "1.25rem" }}>
                     <Link
                       href={slide.buttonHref || "#"}
-                      className="inline-flex group items-center gap-x-4 bg-primary-light text-white font-bold py-3 pl-8 pr-3 rounded-full hover:bg-primary-dark transition-all duration-300 group/btn shadow-xl shadow-primary/20"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "1rem 2.5rem",
+                        fontSize: "0.8rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        fontWeight: 400,
+                        background: "#000000",
+                        color: "#ffffff",
+                        borderRadius: "2px",
+                        textDecoration: "none",
+                        transition: "background 0.3s",
+                      }}
                     >
                       {slide.buttonTitle || "Shop Now"}
-                      <MoveRight
-                        size={20}
-                        className="text-white transition-all duration-500 ease-in-out hoverEffect"
-                      />
                     </Link>
                   </div>
                 </div>
@@ -163,33 +205,6 @@ const HeroContent = ({
             ))}
           </CarouselContent>
 
-          {/* Navigation Arrows */}
-          <CarouselPrevious className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 size-12 bg-white/10 hover:bg-primary-light text-primary-foreground hover:text-primary rounded-full items-center justify-center border border-white/20 border-none hoverEffect" />
-          <CarouselNext className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 size-12 bg-white/10 hover:bg-primary-light text-primary-foreground hover:text-primary rounded-full items-center justify-center border border-white/20 border-none hoverEffect" />
-
-          {/* Dot Navigation */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-x-4 items-center justify-center">
-            {slides.map((s: any, index: number) => (
-              <button
-                key={s._id}
-                onClick={() => api?.scrollTo(index)}
-                className="group relative flex items-center justify-center p-1"
-                aria-label={`Go to slide ${index + 1}`}
-              >
-                <div
-                  className={`transition-all duration-500 ease-in-out rounded-full ${
-                    current === index
-                      ? "w-[78px] h-3.5"
-                      : "w-3.5 h-3.5 bg-gray-300 hover:bg-gray-400"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      current === index ? s.bgColor || "#0A1F2D" : undefined,
-                  }}
-                />
-              </button>
-            ))}
-          </div>
         </Carousel>
       </div>
     </section>

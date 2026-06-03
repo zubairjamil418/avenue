@@ -56,7 +56,7 @@ class UploadService {
     return `${finalFolder}/${filename}`;
   }
 
-  // Upload to ImageKit
+  // Upload to ImageKit (public for direct use e.g. video uploads)
   async uploadToImageKit(
     imageData: string | Buffer,
     options: IUploadOptions = {},
@@ -186,7 +186,7 @@ class UploadService {
         let imageBuffer: Buffer;
         if (typeof imageData === "string" && imageData.startsWith("data:")) {
           // Base64 data URL
-          const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
+          const base64Data = imageData.replace(/^data:[^;]+;base64,/, "");
           imageBuffer = Buffer.from(base64Data, "base64");
 
           // Extract content type

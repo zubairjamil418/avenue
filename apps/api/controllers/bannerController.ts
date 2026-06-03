@@ -93,6 +93,7 @@ const createBanner = asyncHandler(async (req, res) => {
     buttonHref,
     startFrom,
     image,
+    videoUrl,
     bannerType,
     bannerPage,
     discount,
@@ -100,12 +101,6 @@ const createBanner = asyncHandler(async (req, res) => {
     textColor,
     weight,
   } = req.body;
-
-  // const bannerExists = await User.findOne({ name });
-  // if (bannerExists) {
-  //   res.status(400);
-  //   throw new Error("Same banner already exists");
-  // }
 
   let imageUrl = "";
   if (image) {
@@ -130,6 +125,7 @@ const createBanner = asyncHandler(async (req, res) => {
     buttonHref,
     startFrom,
     image: imageUrl || undefined,
+    videoUrl: videoUrl || undefined,
     bannerType,
     bannerPage,
     discount,
@@ -159,6 +155,7 @@ const updateBanner = asyncHandler(async (req, res) => {
     buttonHref,
     startFrom,
     image,
+    videoUrl,
     bannerType,
     discount,
     bgColor,
@@ -171,6 +168,7 @@ const updateBanner = asyncHandler(async (req, res) => {
   if (banner) {
     banner.name = name || banner.name;
     banner.title = title || banner.title;
+    banner.videoUrl = videoUrl !== undefined ? videoUrl : banner.videoUrl;
     banner.description =
       description !== undefined ? description : banner.description;
     banner.buttonTitle =

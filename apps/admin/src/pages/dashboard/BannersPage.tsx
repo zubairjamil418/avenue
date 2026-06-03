@@ -85,6 +85,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { VideoUpload } from "@/components/ui/video-upload";
 import { Checkbox } from "@/components/ui/checkbox";
 
 // Define the Banner type based on the Banner model
@@ -96,6 +97,7 @@ type Banner = {
   buttonTitle?: string;
   buttonHref?: string;
   image: string;
+  videoUrl?: string;
   startFrom: number;
   bannerType: string;
   discount?: string;
@@ -129,6 +131,7 @@ const bannerSchema = z.object({
   buttonTitle: z.string().optional(),
   buttonHref: z.string().optional(),
   image: z.string().min(1, "Image is required"),
+  videoUrl: z.string().optional(),
   startFrom: z.number().min(0, "Start from must be a positive number"),
   // Allow any string now as it comes from dynamic types
   bannerType: z.string().min(1, "Banner type is required"),
@@ -208,6 +211,7 @@ export default function BannersPage() {
       buttonTitle: "",
       buttonHref: "",
       image: "",
+      videoUrl: "",
       startFrom: 0,
       bannerType: "hero",
       discount: "",
@@ -227,6 +231,7 @@ export default function BannersPage() {
       buttonTitle: "",
       buttonHref: "",
       image: "",
+      videoUrl: "",
       startFrom: 0,
       bannerType: "hero",
       discount: "",
@@ -356,6 +361,7 @@ export default function BannersPage() {
       buttonTitle: banner.buttonTitle,
       buttonHref: banner.buttonHref,
       image: banner.image,
+      videoUrl: banner.videoUrl || "",
       startFrom: banner.startFrom,
       bannerType: banner.bannerType,
       discount: banner.discount || "",
@@ -373,6 +379,7 @@ export default function BannersPage() {
       buttonTitle: banner.buttonTitle,
       buttonHref: banner.buttonHref,
       image: banner.image,
+      videoUrl: banner.videoUrl || "",
       startFrom: banner.startFrom,
       bannerType: banner.bannerType,
       discount: banner.discount || "",
@@ -1526,6 +1533,23 @@ export default function BannersPage() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={formAdd.control}
+                name="videoUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hero Video <span className="text-muted-foreground font-normal">(optional — overrides image in Hero)</span></FormLabel>
+                    <FormControl>
+                      <VideoUpload
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        disabled={formLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <SheetFooter className="gap-2 sm:gap-0">
                 <Button
                   type="button"
@@ -1852,6 +1876,23 @@ export default function BannersPage() {
                     <FormControl>
                       <ImageUpload
                         value={field.value}
+                        onChange={field.onChange}
+                        disabled={formLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formEdit.control}
+                name="videoUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hero Video <span className="text-muted-foreground font-normal">(optional — overrides image in Hero)</span></FormLabel>
+                    <FormControl>
+                      <VideoUpload
+                        value={field.value || ""}
                         onChange={field.onChange}
                         disabled={formLoading}
                       />

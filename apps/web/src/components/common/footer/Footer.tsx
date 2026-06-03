@@ -3,14 +3,15 @@ import Image from "next/image";
 import { logo as defaultLogo } from "@/images";
 import FooterBottomNavbar from "./FooterBottomNavbar";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
+import Container from "@/components/common/Container";
 
 const footerColumns = [
   {
     title: "The Store",
     links: [
-      { label: "Plan Your Visit", href: "/contact" },
-      { label: "Restaurants", href: "/about" },
-      { label: "Store Guide", href: "/shop" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "About Avenue", href: "/about" },
+      { label: "Shop All", href: "/shop" },
       { label: "News & Events", href: "/blogs" },
     ],
   },
@@ -19,17 +20,17 @@ const footerColumns = [
     links: [
       { label: "New Arrivals", href: "/shop" },
       { label: "Track Your Order", href: "/order-tracking" },
-      { label: "Returns", href: "/faq" },
       { label: "FAQs", href: "/faq" },
       { label: "Compare Products", href: "/compare" },
+      { label: "Search", href: "/search" },
     ],
   },
   {
     title: "Customer Service",
     links: [
       { label: "Contact Us", href: "/contact" },
-      { label: "Avenue Rewards", href: "/user/dashboard" },
-      { label: "Wishlist", href: "/user/wishlist" },
+      { label: "My Account", href: "/user/dashboard" },
+      { label: "My Wishlist", href: "/user/wishlist" },
       { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Terms & Conditions", href: "/terms-and-conditions" },
     ],
@@ -41,7 +42,7 @@ const footerColumns = [
       { label: "Careers", href: "/careers" },
       { label: "Become a Vendor", href: "/vendor-registration" },
       { label: "Latest Stories", href: "/blogs" },
-      { label: "Accessibility", href: "/about" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
     ],
   },
 ];
@@ -61,16 +62,10 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
           width: "100%",
           background: "var(--footer-bg)",
           color: "var(--footer-text)",
+          padding: "4rem 0 0",
         }}
       >
-        {/* Inner content with side margins */}
-        <div
-          style={{
-            maxWidth: "1280px",
-            margin: "0 auto",
-            padding: "4rem var(--site-gutter) 0",
-          }}
-        >
+        <Container className="!px-[var(--site-gutter)]">
           {/* Centered logo */}
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
             <Link href="/">
@@ -187,7 +182,7 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
           >
             <div style={{ display: "flex", gap: "1.5rem" }}>
               <Link href="/about" className="footer-col-link" style={{ fontSize: "0.8rem" }}>
-                Accessibility
+                About Us
               </Link>
               <Link href="/terms-and-conditions" className="footer-col-link" style={{ fontSize: "0.8rem" }}>
                 Terms & Conditions
@@ -199,7 +194,7 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
 
             <p style={{ margin: 0 }}>© 2026 Avenue Retail. All rights reserved.</p>
           </div>
-        </div>
+        </Container>
       </footer>
 
       <FooterBottomNavbar />

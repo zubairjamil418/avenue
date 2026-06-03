@@ -7,6 +7,7 @@ import {
   bulkDeleteImages,
 } from "../controllers/imageCleanupController.js";
 import upload from "../middleware/uploadMiddleware.js";
+import videoUpload from "../middleware/videoUploadMiddleware.js";
 
 const router = express.Router();
 
@@ -143,7 +144,49 @@ const generatePresignedUrl = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Upload video to ImageKit
+// @route   POST /api/upload/video
+// @access  Private
+const uploadVideo = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    res.status(400);
+    throw new Error("Video file is required");
+  }
+
+  try {
+    // Pass raw buffer directly to ImageKit — avoids S3 fallback issues with video MIME types
+    const result = await uploadService.uploadToImageKit(req.file.buffer, {
+      folder: "videos",
+      originalName: req.file.originalname,
+      enableFallback: false,
+    });
+
+    res.json({
+      success: true,
+      url: result.url,
+      publicId: result.publicId,
+      provider: result.provider,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(
+      `Video upload failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+});
+
+// Helper: wrap multer middleware so errors are caught and returned as JSON
+const runVideoUpload = (req: any, res: any, next: any) => {
+  videoUpload.single("video")(req, res, (err: any) => {
+    if (err) {
+      return res.status(400).json({ message: err.message || "Video upload error" });
+    }
+    next();
+  });
+};
+
 // Routes
+router.post("/video", protect, runVideoUpload, uploadVideo);
 router.post("/", protect, upload.single("image"), uploadImage);
 router.post("/test", protect, admin, testUpload);
 router.get("/stats", protect, admin, getUploadStats);

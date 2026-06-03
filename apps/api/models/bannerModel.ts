@@ -9,6 +9,7 @@ export interface IBannerDocument extends Document {
   buttonHref?: string;
   startFrom: number;
   image?: string;
+  videoUrl?: string;
   bannerType: string;
   bannerPage: string;
   bgColor?: string;
@@ -49,6 +50,10 @@ const bannerSchema = new mongoose.Schema<IBannerDocument>(
       required: true,
     },
     image: {
+      type: String,
+      required: false,
+    },
+    videoUrl: {
       type: String,
       required: false,
     },
