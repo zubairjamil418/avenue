@@ -72,6 +72,8 @@ export default function AddConfigSidebar({
   const [uploading, setUploading] = useState(false);
   const [componentTypes, setComponentTypes] = useState<ComponentType[]>([]);
   const [loadingTypes, setLoadingTypes] = useState(false);
+  const [adsBanners, setAdsBanners] = useState<{ _id: string; name: string }[]>([]);
+  const [loadingBanners, setLoadingBanners] = useState(false);
   const [formData, setFormData] = useState<WebsiteConfig>({
     pageType: defaultPageType,
     componentType: "",
@@ -109,6 +111,19 @@ export default function AddConfigSidebar({
       fetchComponentTypes();
     }
   }, [open, token]);
+
+  // Fetch ads banners when component type is promo-banners
+  useEffect(() => {
+    if (!open || formData.componentType !== "promo-banners") return;
+    setLoadingBanners(true);
+    axios
+      .get(`${import.meta.env.VITE_NEXT_PUBLIC_API_URL}/api/ads-banners?limit=100`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setAdsBanners(res.data?.adsBanners || []))
+      .catch(() => {})
+      .finally(() => setLoadingBanners(false));
+  }, [open, formData.componentType, token]);
 
   useEffect(() => {
     if (editingConfig) {
@@ -397,6 +412,49 @@ export default function AddConfigSidebar({
               />
             </div>
 
+            {/* Banner Assignment — only for promo-banners */}
+            {formData.componentType === "promo-banners" && (
+              <div className="space-y-2">
+                <Label>
+                  Assign Banners
+                  <span className="text-xs text-grey-500 ml-2">Select which ads banners to show in this section</span>
+                </Label>
+                {loadingBanners ? (
+                  <div className="flex items-center gap-2 text-sm text-grey-500">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Loading banners…
+                  </div>
+                ) : adsBanners.length === 0 ? (
+                  <p className="text-sm text-grey-500">No ads banners found. Create some first.</p>
+                ) : (
+                  <div className="space-y-2 border rounded-lg p-3 max-h-48 overflow-y-auto">
+                    {adsBanners.map((banner) => {
+                      const selected: string[] = (formData.settings.bannerIds as string[]) || [];
+                      const isChecked = selected.includes(banner._id);
+                      return (
+                        <label key={banner._id} className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 px-2 py-1 rounded">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => {
+                              const next = isChecked
+                                ? selected.filter((id) => id !== banner._id)
+                                : [...selected, banner._id];
+                              setFormData((prev) => ({
+                                ...prev,
+                                settings: { ...prev.settings, bannerIds: next },
+                              }));
+                            }}
+                            className="accent-primary"
+                          />
+                          <span className="text-sm">{banner.name}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Images Upload */}
             <div className="space-y-2">
               <Label htmlFor="images">
@@ -453,15 +511,53 @@ export default function AddConfigSidebar({
               </div>
             </div>
 
-            {/* Component-specific settings info */}
-            <div className="bg-info-lighter  border border-info-lighter  rounded-lg p-4">
-              <p className="text-sm text-info-darker ">
-                <strong>Note:</strong> Advanced component settings (banners,
-                product filters, carousel options, etc.) can be configured after
-                creating this component. Click on the edit icon to access
-                detailed settings.
-              </p>
-            </div>
+            {/* Dynamic structure fields from the selected component type */}
+            {(() => {
+              const selectedType = componentTypes.find(
+                (t) => t.name === formData.componentType
+              );
+              if (!selectedType?.structure || Object.keys(selectedType.structure).length === 0) return null;
+              const fields = Object.entries(selectedType.structure as Record<string, { label?: string; type?: string; required?: boolean; defaultValue?: string }>);
+              return (
+                <div className="space-y-4 border rounded-lg p-4 bg-muted/30">
+                  <h4 className="text-sm font-semibold text-foreground">Component Settings</h4>
+                  {fields.map(([key, meta]) => {
+                    const currentVal = (formData.settings[key] as string) || meta.defaultValue || "";
+                    const label = meta.label || key;
+                    const type = meta.type || "text";
+                    const updateSetting = (val: string) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        settings: { ...prev.settings, [key]: val },
+                      }));
+                    if (type === "textarea") {
+                      return (
+                        <div key={key} className="space-y-1">
+                          <Label className="text-xs capitalize">{label}{meta.required && <span className="text-destructive ml-1">*</span>}</Label>
+                          <textarea
+                            className="w-full border rounded px-3 py-2 text-sm resize-none h-20 bg-background"
+                            value={currentVal}
+                            placeholder={label}
+                            onChange={(e) => updateSetting(e.target.value)}
+                          />
+                        </div>
+                      );
+                    }
+                    return (
+                      <div key={key} className="space-y-1">
+                        <Label className="text-xs capitalize">{label}{meta.required && <span className="text-destructive ml-1">*</span>}</Label>
+                        <Input
+                          type={type === "url" || type === "email" ? type : "text"}
+                          value={currentVal}
+                          placeholder={label}
+                          onChange={(e) => updateSetting(e.target.value)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-4 border-t">

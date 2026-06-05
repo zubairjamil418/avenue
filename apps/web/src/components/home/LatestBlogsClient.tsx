@@ -1,73 +1,133 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { ArrowUpRight } from "lucide-react";
 import Container from "../common/Container";
 import { Blog } from "./LatestBlogs";
 
-export default function LatestBlogsClient({ blogs }: { blogs: Blog[] }) {
+export default function LatestBlogsClient({ blogs, title = "Avenue Stories" }: { blogs: Blog[]; title?: string }) {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
   if (!blogs || blogs.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-14 lg:py-[70px]">
-      <Container>
-        <div className="flex flex-col gap-10">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <h2 className="font-['Urbanist',sans-serif] text-[32px] font-bold text-light-primary-text leading-[48px]">
-              Latest Blogs
-            </h2>
-            <Link
-              href="/blogs"
-              className="font-['Urbanist',sans-serif] text-[24px] font-bold text-light-primary-text leading-[36px] hover:text-primary transition-colors"
-            >
-              View All
-            </Link>
-          </div>
+    <section style={{ padding: "4rem var(--site-gutter)" }}>
+      <Container className="!px-0">
+        {/* Heading */}
+        <h2 style={{
+          fontFamily: "'Playfair Display', var(--font-playfair), serif",
+          fontSize: "2.2rem",
+          fontWeight: 400,
+          textAlign: "center",
+          marginBottom: "2.5rem",
+          color: "var(--black)",
+        }}>
+          {title}
+        </h2>
 
-          {/* Blogs Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Horizontal scroll carousel */}
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <div
+            ref={carouselRef}
+            style={{
+              display: "flex",
+              gap: "1.5rem",
+              overflowX: "auto",
+              paddingBottom: "1.5rem",
+              scrollBehavior: "smooth",
+              msOverflowStyle: "none",
+              scrollbarWidth: "none",
+              cursor: "grab",
+            }}
+            onMouseDown={(e) => {
+              const el = carouselRef.current;
+              if (!el) return;
+              el.style.cursor = "grabbing";
+              const startX = e.pageX - el.offsetLeft;
+              const scrollLeft = el.scrollLeft;
+              const onMove = (ev: MouseEvent) => {
+                const x = ev.pageX - el.offsetLeft;
+                el.scrollLeft = scrollLeft - (x - startX);
+              };
+              const onUp = () => {
+                el.style.cursor = "grab";
+                window.removeEventListener("mousemove", onMove);
+                window.removeEventListener("mouseup", onUp);
+              };
+              window.addEventListener("mousemove", onMove);
+              window.addEventListener("mouseup", onUp);
+            }}
+          >
             {blogs.map((blog) => (
               <div
                 key={blog._id}
-                className="flex flex-col group"
+                style={{ minWidth: "240px", flexShrink: 0 }}
               >
-                {/* Image — full bleed, no padding, no border */}
-                <Link href={`/blog/${blog.slug}`} className="block">
-                  <div className="relative h-[260px] w-full rounded-[16px] overflow-hidden">
+                <Link href={`/blog/${blog.slug}`} style={{ display: "block", textDecoration: "none" }}>
+                  <div style={{ width: "100%", height: "320px", position: "relative", overflow: "hidden", marginBottom: "1rem" }}>
                     <Image
                       src={blog.previewImage || "/placeholder-blog.jpg"}
                       alt={blog.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      sizes="240px"
+                      style={{ objectFit: "cover" }}
                     />
                   </div>
                 </Link>
 
-                {/* Content */}
-                <div className="pt-5 flex flex-col items-start grow gap-4">
-                  {/* Title */}
-                  <Link href={`/blog/${blog.slug}`} className="hover:text-primary transition-colors">
-                    <h4 className="font-['Urbanist',sans-serif] text-[22px] font-bold text-light-primary-text hover:text-primary transition-colors leading-[1.3] line-clamp-2">
-                      {blog.title}
-                    </h4>
-                  </Link>
+                <h4 style={{
+                  fontFamily: "'Playfair Display', var(--font-playfair), serif",
+                  fontSize: "1.3rem",
+                  fontWeight: 400,
+                  lineHeight: 1.3,
+                  marginBottom: "0.75rem",
+                  color: "var(--black)",
+                }}>
+                  {blog.title}
+                </h4>
 
-                  {/* Button */}
-                  <Link
-                    href={`/blog/${blog.slug}`}
-                    className="mt-auto inline-flex items-center gap-3 border border-light-primary-text text-light-primary-text font-['DM_Sans',sans-serif] font-semibold text-[13px] tracking-[0.12em] uppercase py-[12px] px-[22px] w-max hover:bg-light-primary-text hover:text-white transition-colors duration-300 group/btn"
-                  >
-                    Read &amp; Shop
-                    <ArrowUpRight className="size-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
-                  </Link>
-                </div>
+                <Link
+                  href={`/blog/${blog.slug}`}
+                  style={{
+                    fontSize: "0.75rem",
+                    color: "var(--gray-600)",
+                    textDecoration: "underline",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  Read &amp; Shop
+                </Link>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{ textAlign: "center", marginTop: "2rem" }}>
+          <Link
+            href="/blogs"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              minWidth: "200px",
+              padding: "0.75rem 1.75rem",
+              fontSize: "0.72rem",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              fontWeight: 400,
+              background: "transparent",
+              color: "var(--black)",
+              border: "1px solid var(--black)",
+              borderRadius: "2px",
+              textDecoration: "none",
+              transition: "all 0.3s",
+            }}
+          >
+            Read the Latest Stories
+          </Link>
         </div>
       </Container>
     </section>

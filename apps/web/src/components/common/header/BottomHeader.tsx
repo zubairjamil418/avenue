@@ -17,7 +17,7 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
 
   return (
     <div
-      className="hidden xl:flex header-bottom z-40"
+      className="hidden xl:flex header-bottom z-50"
       style={{ background: "var(--gray-200)", paddingBottom: "0.5rem" }}
     >
       <Container className="flex items-center w-full">

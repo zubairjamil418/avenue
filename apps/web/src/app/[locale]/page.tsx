@@ -10,7 +10,9 @@ import HomePromoBanners from "@/components/home/HomePromoBanners";
 import NewlyLaunchedProducts from "@/components/home/NewlyLaunchedProducts";
 import BestSellingProducts from "@/components/home/BestSellingProducts";
 import TopSellingProducts from "@/components/home/TopSellingProducts";
-import WebsiteConfigSections from "@/components/home/WebsiteConfigSections";
+import LatestBlogs from "@/components/home/LatestBlogs";
+import NewsletterForm from "@/components/home/NewsletterForm";
+import InStoreSection from "@/components/home/InStoreSection";
 import NewInSection from "@/components/home/NewInSection";
 import FeaturedDuoSection from "@/components/home/FeaturedDuoSection";
 import ShopFavoriteCategories from "@/components/home/ShopFavoriteCategories";
@@ -22,6 +24,7 @@ import {
   getParentCategories,
   getWebsiteConfigs,
   getAdsBanners,
+  getLatestBlogs,
 } from "@/lib/homeDataFetcher";
 import { Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui/SectionSkeleton";
@@ -29,20 +32,6 @@ import { ProductType } from "@/hooks/useProductTypes";
 import type { AdsBanner } from "@/types/banner";
 
 // ─── Ads banner helpers ───
-function filterHealthcareBanners(adsBanners: AdsBanner[]): AdsBanner[] {
-  return adsBanners.filter((banner) => {
-    if (!banner.productBases || !Array.isArray(banner.productBases))
-      return false;
-    return banner.productBases.some((pb) => {
-      if (typeof pb === "string") return pb.toLowerCase() === "healthcare";
-      if (pb.slug) return pb.slug === "healthcare";
-      if (pb.name) return pb.name.toLowerCase() === "healthcare";
-      if (pb.title) return pb.title.toLowerCase() === "healthcare";
-      return false;
-    });
-  });
-}
-
 function isRowBanner(banner: AdsBanner): boolean {
   if (!banner.productTypes || !Array.isArray(banner.productTypes)) return false;
   return banner.productTypes.some((pt) => {
@@ -103,13 +92,14 @@ const DeferredOurProducts = async ({ locale }: { locale: string }) => {
   );
 };
 
-const DeferredPromoBanners = async () => {
-  const adsBanners = await getAdsBanners();
-  const healthcare = filterHealthcareBanners(adsBanners);
-  const bottom = healthcare.filter(isRowBanner);
-  const home = healthcare.filter(
-    (banner) => !bottom.find((bb) => bb._id === banner._id),
-  );
+const DeferredPromoBanners = async ({ cfg }: { cfg: any }) => {
+  const all = await getAdsBanners();
+  // If specific banners are assigned in the config, use only those; otherwise use all
+  const bannerIds: string[] = cfg?.settings?.bannerIds || [];
+  if (!bannerIds.length) return null;
+  const pool = all.filter((b) => bannerIds.includes(b._id));
+  const bottom = pool.filter(isRowBanner);
+  const home = pool.filter((b) => !bottom.find((bb) => bb._id === b._id));
   return (
     <>
       {home.length > 0 && <HomePromoBanners banners={home.slice(0, 2)} />}
@@ -172,9 +162,10 @@ const DeferredBeauty = async ({
   );
 };
 
-const DeferredLatestBlogs = async ({ locale }: { locale: string }) => {
-  const configs = await getWebsiteConfigs("home");
-  return <WebsiteConfigSections configs={configs} locale={locale} />;
+const DeferredBlogs = async ({ locale, cfg }: { locale: string; cfg: any }) => {
+  const blogs = await getLatestBlogs();
+  if (!blogs.length) return null;
+  return <LatestBlogs locale={locale} blogs={blogs} title={cfg?.title} />;
 };
 
 export default async function Home({
@@ -196,105 +187,135 @@ export default async function Home({
 
   // show(type): only show if an active config entry exists for this type.
   // No entry = hidden. The admin is the single source of truth.
+  // Sort configs by weight so admin controls the order
+  const orderedConfigs = [...websiteConfigs].sort((a, b) => a.weight - b.weight);
   const configMap = new Map(websiteConfigs.map((c) => [c.componentType, c]));
-  const show = (type: string) => configMap.get(type)?.isActive === true;
-  const cfgTitle = (type: string) => configMap.get(type)?.title;
-  const cfgDesc = (type: string) => configMap.get(type)?.description;
-
   const findType = (slug: string) => productTypes.find((t) => t.slug === slug);
+
+  const renderSection = (cfg: (typeof orderedConfigs)[0]) => {
+    if (!cfg.isActive) return null;
+    const { _id, componentType: type, title, description } = cfg;
+
+    switch (type) {
+      case "hero":
+        return <Hero key={_id} initialSlides={heroSlides} homeVersionSlug={homeVersion} />;
+
+      case "new-in":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[400px]" />}>
+            <NewInSection config={cfg} />
+          </Suspense>
+        );
+
+      case "featured-duo":
+        return <FeaturedDuoSection key={_id} config={cfg} />;
+
+      case "shop-favorite-categories":
+        return <ShopFavoriteCategories key={_id} title={title || "What's Trending"} />;
+
+      case "support-info":
+        return <SupportInfo key={_id} />;
+
+      case "best-selling":
+        return (
+          <BestSellingProducts
+            key={_id}
+            slug="best-selling"
+            productType={findType("best-selling")}
+            locale={locale}
+            products={bestSellingProducts}
+            title={title}
+            description={description}
+          />
+        );
+
+      case "shop-by-category":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[300px]" />}>
+            <ShopByCategory title={title} description={description} />
+          </Suspense>
+        );
+
+      case "top-selling":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[520px]" />}>
+            <DeferredTopSelling locale={locale} productTypes={productTypes} title={title} description={description} />
+          </Suspense>
+        );
+
+      case "our-products":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[520px]" />}>
+            <DeferredOurProducts locale={locale} />
+          </Suspense>
+        );
+
+      case "promo-banners":
+        return (
+          <Suspense key={_id} fallback={null}>
+            <DeferredPromoBanners cfg={cfg} />
+          </Suspense>
+        );
+
+      case "newly-launched":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[500px]" />}>
+            <DeferredNewlyLaunched locale={locale} productTypes={productTypes} title={title} description={description} />
+          </Suspense>
+        );
+
+      case "hot-deals":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[400px]" />}>
+            <HotDealsWeek locale={locale} title={title} description={description} />
+          </Suspense>
+        );
+
+      case "beauty":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[500px]" />}>
+            <DeferredBeauty locale={locale} productTypes={productTypes} title={title} description={description} />
+          </Suspense>
+        );
+
+      case "blogs":
+        return (
+          <Suspense key={_id} fallback={<SectionSkeleton height="h-[400px]" />}>
+            <DeferredBlogs locale={locale} cfg={cfg} />
+          </Suspense>
+        );
+
+      case "newsletter":
+        return (
+          <section key={_id} style={{ backgroundColor: cfg.settings?.backgroundColor || "#05535c", color: cfg.settings?.textColor || "#fff" }}>
+            <div className="container mx-auto px-4 py-14 text-center">
+              <h2 className="text-2xl font-bold mb-2">{title}</h2>
+              {description && <p className="mb-6 opacity-80">{description}</p>}
+              <NewsletterForm accentColor={cfg.settings?.backgroundColor || "#05535c"} />
+            </div>
+          </section>
+        );
+
+      case "in-store":
+        return <InStoreSection key={_id} config={cfg} />;
+
+      case "custom-html":
+        if (!cfg.settings?.customHtml) return null;
+        return (
+          <div key={_id}>
+            {cfg.settings.customCss && <style dangerouslySetInnerHTML={{ __html: cfg.settings.customCss }} />}
+            <div dangerouslySetInnerHTML={{ __html: cfg.settings.customHtml }} />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <main>
-      {show("hero") && <Hero initialSlides={heroSlides} homeVersionSlug={homeVersion} />}
-      {show("new-in") && configMap.get("new-in") && (
-        <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
-          <NewInSection config={configMap.get("new-in")!} />
-        </Suspense>
-      )}
-      {show("featured-duo") && configMap.get("featured-duo") && (
-        <FeaturedDuoSection config={configMap.get("featured-duo")!} />
-      )}
-      <ShopFavoriteCategories />
-      {show("support-info") && <SupportInfo />}
-
-      {show("best-selling") && (
-        <BestSellingProducts
-          slug="best-selling"
-          productType={findType("best-selling")}
-          locale={locale}
-          products={bestSellingProducts}
-          title={cfgTitle("best-selling")}
-          description={cfgDesc("best-selling")}
-        />
-      )}
-
-      {show("shop-by-category") && (
-        <Suspense fallback={<SectionSkeleton height="h-[300px]" />}>
-          <ShopByCategory
-            title={cfgTitle("shop-by-category")}
-            description={cfgDesc("shop-by-category")}
-          />
-        </Suspense>
-      )}
-
-      {show("top-selling") && (
-        <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
-          <DeferredTopSelling
-            locale={locale}
-            productTypes={productTypes}
-            title={cfgTitle("top-selling")}
-            description={cfgDesc("top-selling")}
-          />
-        </Suspense>
-      )}
-
-      {show("our-products") && (
-        <Suspense fallback={<SectionSkeleton height="h-[520px]" />}>
-          <DeferredOurProducts locale={locale} />
-        </Suspense>
-      )}
-
-      {show("promo-banners") && (
-        <Suspense fallback={null}>
-          <DeferredPromoBanners />
-        </Suspense>
-      )}
-
-      {show("newly-launched") && (
-        <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-          <DeferredNewlyLaunched
-            locale={locale}
-            productTypes={productTypes}
-            title={cfgTitle("newly-launched")}
-            description={cfgDesc("newly-launched")}
-          />
-        </Suspense>
-      )}
-
-      {show("hot-deals") && (
-        <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
-          <HotDealsWeek
-            locale={locale}
-            title={cfgTitle("hot-deals")}
-            description={cfgDesc("hot-deals")}
-          />
-        </Suspense>
-      )}
-
-      {show("beauty") && (
-        <Suspense fallback={<SectionSkeleton height="h-[500px]" />}>
-          <DeferredBeauty
-            locale={locale}
-            productTypes={productTypes}
-            title={cfgTitle("beauty")}
-            description={cfgDesc("beauty")}
-          />
-        </Suspense>
-      )}
-
-      <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
-        <DeferredLatestBlogs locale={locale} />
-      </Suspense>
+      {orderedConfigs.map(renderSection)}
     </main>
   );
 }

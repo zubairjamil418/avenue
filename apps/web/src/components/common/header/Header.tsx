@@ -17,6 +17,7 @@ export default function Header({ initialMenus, initialCategoryTree, logoUrl }: H
     <>
       <header
         style={{
+          position: "relative",
           background: "var(--gray-200)",
           color: "var(--black)",
           display: "flex",

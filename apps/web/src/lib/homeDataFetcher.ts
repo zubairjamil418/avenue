@@ -106,7 +106,7 @@ export async function getParentCategories(): Promise<Category[]> {
 // ─────────────────────────────────────────────
 export async function getLatestBlogs(productBase?: string): Promise<Blog[]> {
   try {
-    let url = `${BLOG_ENDPOINTS.BASE}?limit=4`;
+    let url = `${BLOG_ENDPOINTS.BASE}?limit=7`;
     if (productBase) url += `&productBase=${productBase}`;
     const res = await api.get<{ blogs: Blog[] }>(url, {
       next: { revalidate: REVALIDATE },

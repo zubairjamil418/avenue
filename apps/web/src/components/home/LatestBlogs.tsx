@@ -24,12 +24,13 @@ export type Blog = {
 
 export default async function LatestBlogs({
   locale,
-  /** Pre-fetched blogs passed from the page — avoids double-fetch waterfall */
   blogs: prefetchedBlogs,
+  title,
 }: {
   locale: string;
   productBase?: string;
   blogs?: Blog[];
+  title?: string;
 }) {
   setRequestLocale(locale);
 
@@ -37,5 +38,5 @@ export default async function LatestBlogs({
 
   if (!blogs || blogs.length === 0) return null;
 
-  return <LatestBlogsClient blogs={blogs} />;
+  return <LatestBlogsClient blogs={blogs} title={title} />;
 }
