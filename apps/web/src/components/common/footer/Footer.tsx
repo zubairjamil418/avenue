@@ -87,16 +87,8 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
             </Link>
           </div>
 
-          {/* 4-column link grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "3rem",
-              paddingBottom: "3rem",
-              borderBottom: "1px solid rgba(0,0,0,0.08)",
-            }}
-          >
+          {/* 4-column link grid — 2 cols on mobile, 4 on desktop */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 pb-12 border-b border-black/8">
             {footerColumns.map((col) => (
               <div key={col.title}>
                 <h4
@@ -124,15 +116,8 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
             ))}
           </div>
 
-          {/* Bottom row 1: Follow us (left) | Payment methods image (right) */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "1.5rem 0 1rem",
-            }}
-          >
+          {/* Bottom row 1: Payment (left) | Follow us (right) */}
+          <div className="flex flex-wrap items-center justify-between gap-4" style={{ padding: "1.5rem 0 1rem" }}>
             {/* Payment methods image */}
             <img
               src="/images/payment-methods.png"
@@ -169,18 +154,8 @@ export default function Footer({ logoUrl }: { logoUrl?: string }) {
           </div>
 
           {/* Bottom row 2: Legal links (left) | Copyright (right) */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "0.75rem 0 2rem",
-
-              fontSize: "0.8rem",
-              color: "rgba(34,34,34,0.6)",
-            }}
-          >
-            <div style={{ display: "flex", gap: "1.5rem" }}>
+          <div className="flex flex-wrap items-center justify-between gap-3" style={{ padding: "0.75rem 0 2rem", fontSize: "0.8rem", color: "rgba(34,34,34,0.6)" }}>
+            <div className="flex flex-wrap gap-4">
               <Link href="/about" className="footer-col-link" style={{ fontSize: "0.8rem" }}>
                 About Us
               </Link>

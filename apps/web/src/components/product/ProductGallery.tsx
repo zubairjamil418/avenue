@@ -49,75 +49,53 @@ const ProductGallery = ({ images }: ProductGalleryProps) => {
   );
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 h-full min-h-[500px]">
-      {/* Thumbnails - Sidebar on XL, Bottom on Mobile/LG */}
-      <div className="xl:w-[114px] w-full order-2 xl:order-1 shrink-0">
-        <div className="overflow-hidden xl:h-full" ref={thumbViewportRef}>
-          <div className="flex xl:flex-col flex-row gap-4">
+    <div className="flex flex-col gap-4">
+      {/* Main image */}
+      <div className="relative overflow-hidden bg-[var(--gray-50)] group" style={{ aspectRatio: "3/4" }}>
+        <div className="overflow-hidden h-full" ref={mainViewportRef}>
+          <div className="flex h-full">
             {images.map((src, index) => (
-              <button
-                key={index}
-                onClick={() => onThumbClick(index)}
-                className={cn(
-                  "relative flex-none xl:h-[114px] xl:w-[114px] h-20 w-20 overflow-hidden border-[1.5px] transition-all shrink-0 rounded-[12px]",
-                  selectedIndex === index
-                    ? "border-primary shadow-sm"
-                    : "border-transparent opacity-60 hover:opacity-100",
-                )}
-              >
-                <div className="relative aspect-square w-full h-full bg-light-bg rounded-[6px] overflow-hidden">
-                  <Image
-                    src={src}
-                    alt={`Product thumb ${index + 1}`}
-                    fill
-                    className="object-contain p-2"
-                  />
-                </div>
-              </button>
+              <div key={index} className="flex-[0_0_100%] min-w-0 relative h-full">
+                <Image
+                  src={src}
+                  alt={`Product image ${index + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  priority={index === 0}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             ))}
           </div>
         </div>
+        {/* Prev/Next */}
+        <button onClick={scrollPrev} aria-label="Previous"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <ChevronLeft className="size-4" />
+        </button>
+        <button onClick={scrollNext} aria-label="Next"
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <ChevronRight className="size-4" />
+        </button>
       </div>
 
-      {/* Main Slider */}
-      <div className="xl:flex-1 order-1 xl:order-2 min-w-0">
-        <div className="relative rounded-2xl border border-border overflow-hidden bg-light-bg group aspect-square xl:aspect-auto xl:h-full">
-          <div className="overflow-hidden h-full" ref={mainViewportRef}>
-            <div className="flex h-full">
-              {images.map((src, index) => (
-                <div
-                  key={index}
-                  className="flex-[0_0_100%] min-w-0 relative h-full flex items-center justify-center"
-                >
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={src}
-                      alt={`Product image ${index + 1}`}
-                      fill
-                      className="object-cover drop-shadow-sm mix-blend-multiply transition-transform duration-700 ease-in-out group-hover:scale-[1.03]"
-                      priority={index === 0}
-                      sizes="(max-width: 1280px) 100vw, 800px"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={scrollPrev}
-            className="absolute left-6 top-1/2 -translate-y-1/2 size-[48px] flex items-center justify-center rounded-full bg-white/80 backdrop-blur shadow-[0px_4px_10px_0px_rgba(0,0,0,0.1)] text-light-primary-text hover:bg-white hover:text-primary transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0 z-10"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="size-6" />
-          </button>
-          <button
-            onClick={scrollNext}
-            className="absolute right-6 top-1/2 -translate-y-1/2 size-[48px] flex items-center justify-center rounded-full bg-white/80 backdrop-blur shadow-[0px_4px_10px_0px_rgba(0,0,0,0.1)] text-light-primary-text hover:bg-white hover:text-primary transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0 z-10"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="size-6" />
-          </button>
+      {/* Thumbnails row */}
+      <div className="overflow-hidden" ref={thumbViewportRef}>
+        <div className="flex gap-3">
+          {images.map((src, index) => (
+            <button
+              key={index}
+              onClick={() => onThumbClick(index)}
+              className={cn(
+                "relative shrink-0 w-20 h-24 overflow-hidden bg-[var(--gray-50)] transition-all",
+                selectedIndex === index
+                  ? "border-2 border-black"
+                  : "border-2 border-transparent opacity-60 hover:opacity-100",
+              )}
+            >
+              <Image src={src} alt={`Thumb ${index + 1}`} fill className="object-cover" />
+            </button>
+          ))}
         </div>
       </div>
     </div>

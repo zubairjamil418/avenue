@@ -374,116 +374,134 @@ const ProductCard = ({
     );
   }
 
-  // Default Variant
+  // Default Variant — Avenue Retail design
+  const brandName = typeof product.brand === "object"
+    ? product.brand?.name
+    : product.brand;
+
+  const isNew = (product as any).new === true || (product as any).isNew === true;
+
   return (
-    <div className="border border-gray-300 rounded-2xl p-4 group hover:shadow-lg transition-shadow duration-300 bg-card h-full w-full flex flex-col justify-between">
-      <div className="relative">
-        <div
-          className="rounded-xl mb-4 overflow-hidden relative aspect-square flex items-center justify-center"
-          style={{ backgroundColor: pBg }}
-        >
-          <Link
-            href={`/product/${pSlug}`}
-            className="w-full h-full relative block"
-          >
-            <Image
-              src={pImage}
-              alt={pTitle}
-              fill
-              sizes="(max-width: 768px) 100vw, 300px"
-              className="group-hover:scale-110 object-cover hoverEffect"
-            />
-          </Link>
-        </div>
+    <div className="group relative bg-white w-full cursor-pointer">
+      {/* Image container */}
+      <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
+        <Link href={`/product/${pSlug}`} className="block w-full h-full">
+          <Image
+            src={pImage}
+            alt={pTitle}
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          />
+        </Link>
+
+        {/* SALE badge — top left */}
         {discountPercentage > 0 && (
-          <Badge className="absolute top-2 left-2 z-10 bg-[#FF5555] hover:bg-[#FF5555]/90 text-white border-none text-[12px] font-dm-sans px-2 py-0.5 pointer-events-none shadow-sm rounded-full">
-            {discountBadgeContent}% off
-          </Badge>
+          <div style={{
+            position: "absolute", top: "0.75rem", left: "0.75rem",
+            border: "1px solid var(--black)", background: "transparent",
+            fontSize: "0.6rem", letterSpacing: "0.08em", textTransform: "uppercase",
+            padding: "0.2rem 0.5rem", color: "var(--black)", zIndex: 2,
+          }}>
+            Sale
+          </div>
         )}
-        <div className="absolute bottom-0 right-0 left-0 flex justify-center z-10 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100 group-hover:bottom-3">
-          <ul className="flex items-center gap-x-px">
-            <li>
-              <button
-                onClick={handleWishlistToggle}
-                aria-label="Add to Wishlist"
-                className={cn(
-                  "relative size-11 inline-flex items-center justify-center rounded-tl-sm rounded-bl-sm transition-colors group/wishlist",
-                  isWishlisted
-                    ? "bg-error text-white"
-                    : "bg-card text-gray-600 hover:bg-error hover:text-white",
-                )}
-              >
-                <Heart
-                  className={cn(
-                    "size-5 transition-colors",
-                    isWishlisted
-                      ? "fill-white"
-                      : "group-hover/wishlist:fill-white",
-                  )}
-                />
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={handleCompareMessage}
-                aria-label="Compare"
-                className={cn(
-                  "relative size-11 inline-flex items-center justify-center transition-colors group/compare",
-                  isCompared
-                    ? "bg-primary text-white"
-                    : "bg-card text-gray-600 hover:bg-primary hover:text-white",
-                )}
-              >
-                <RefreshCw
-                  className={cn(
-                    "size-5 transition-colors",
-                    isCompared
-                      ? "text-white"
-                      : "group-hover/compare:text-white",
-                  )}
-                />
-              </button>
-            </li>
-            <li>
+
+        {/* NEW badge — top right */}
+        {isNew && (
+          <div style={{
+            position: "absolute", top: "0.75rem", right: "0.75rem",
+            border: "1px solid var(--gray-300)", background: "white",
+            fontSize: "0.6rem", letterSpacing: "0.08em", textTransform: "uppercase",
+            padding: "0.2rem 0.5rem", color: "var(--black)", zIndex: 2,
+          }}>
+            New
+          </div>
+        )}
+
+        {/* Action icons — slide in from right on hover */}
+        <div style={{
+          position: "absolute", right: "0.75rem", top: "50%",
+          transform: "translateY(-50%)",
+          display: "flex", flexDirection: "column", gap: "0.5rem",
+          zIndex: 3,
+          opacity: 0, transition: "opacity 0.3s",
+        }}
+          className="group-hover:!opacity-100"
+        >
+          {[
+            { label: "Wishlist", icon: <Heart className={cn("size-4", isWishlisted ? "fill-black" : "")} />, onClick: handleWishlistToggle },
+            { label: "Compare", icon: <RefreshCw className="size-4" />, onClick: handleCompareMessage },
+            { label: "View", icon: <Eye className="size-4" />, onClick: undefined, href: `/product/${pSlug}` },
+          ].map(({ label, icon, onClick, href }) => (
+            href ? (
               <Link
-                aria-label="Quick view"
-                className="relative size-11 bg-card inline-flex items-center justify-center rounded-tr-sm rounded-br-sm hover:bg-gray-100 transition-colors"
-                href={`/product/${pSlug}`}
+                key={label}
+                href={href}
+                aria-label={label}
+                style={{
+                  width: 36, height: 36, borderRadius: "50%",
+                  background: "white", display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)", color: "var(--black)",
+                  textDecoration: "none",
+                }}
               >
-                <Eye className="size-5 text-gray-600" />
+                {icon}
               </Link>
-            </li>
-          </ul>
+            ) : (
+              <button
+                key={label}
+                onClick={onClick}
+                aria-label={label}
+                style={{
+                  width: 36, height: 36, borderRadius: "50%",
+                  background: "white", border: "none", display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)", color: "var(--black)", cursor: "pointer",
+                }}
+              >
+                {icon}
+              </button>
+            )
+          ))}
         </div>
       </div>
 
-      <div className="pt-2">
-        <h5 className="text-base leading-6 font-semibold font-dm-sans mb-4 line-clamp-2 min-h-12">
-          <Link
-            href={`/product/${pSlug}`}
-            className="hover:text-primary hoverEffect font-medium"
-          >
+      {/* Card body */}
+      <div style={{ paddingTop: "0.75rem", textAlign: "center" }}>
+        {brandName && (
+          <p style={{ fontSize: "0.75rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--black)", marginBottom: "0.2rem" }}>
+            {brandName}
+          </p>
+        )}
+        <Link href={`/product/${pSlug}`} style={{ textDecoration: "none" }}>
+          <p style={{ fontSize: "0.85rem", fontWeight: 400, color: "var(--gray-700)", lineHeight: 1.4, marginBottom: "0.35rem" }} className="line-clamp-2">
             {pTitle}
-          </Link>
-        </h5>
-        <Ratings className="mb-4" rating={pStars} totalReviews={pRating} />
-        <div className="flex items-center gap-x-3 mb-2">
-          <span className="text-base font-semibold text-primary">
+          </p>
+        </Link>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+          <span style={{ fontSize: "0.85rem", fontWeight: 400, color: "var(--black)" }}>
             <PriceFormatter amount={discountedPrice} />
           </span>
-          <span className="text-sm leading-5.5 font-normal text-muted-foreground line-through">
-            <PriceFormatter amount={originalPrice} />
-          </span>
-          {discountPercentage > 0 && (
-            <span className="text-xs leading-5.5 font-semibold text-error uppercase">
-              {discountPercentage}% Off
+          {originalPrice > discountedPrice && (
+            <span style={{ fontSize: "0.8rem", color: "var(--gray-400)", textDecoration: "line-through" }}>
+              <PriceFormatter amount={originalPrice} />
             </span>
           )}
         </div>
-        <div className="flex items-center justify-between gap-4">
-          <WishlistBtn product={product} />
-          <AddToCartBtn product={product} />
-        </div>
+        {/* Tags — hollow minimal */}
+        {(product as any).tags?.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.3rem", marginTop: "0.5rem" }}>
+            {(product as any).tags.slice(0, 3).map((tag: string) => (
+              <span key={tag} style={{
+                fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.06em",
+                border: "1px solid var(--gray-300)", padding: "0.1rem 0.4rem",
+                color: "var(--gray-500)", background: "transparent",
+              }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

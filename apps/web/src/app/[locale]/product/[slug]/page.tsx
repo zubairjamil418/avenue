@@ -62,21 +62,14 @@ const SingleProudctPage = async ({
       <Breadcrumb />
 
       <Container>
-        <section className="pb-20">
-          <div>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-              <div className="lg:col-span-7">
-                <ProductGallery images={imagesToMap} />
-              </div>
-
-              <div className="lg:col-span-5">
-                <ProductInfo product={product} />
-              </div>
-            </div>
+        {/* Product grid */}
+        <section className="py-10 md:py-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+            <ProductGallery images={imagesToMap} />
+            <ProductInfo product={product} />
           </div>
         </section>
 
-        <SupportInfo />
         <ProductTabs product={product} />
         <ProductReviews product={product} />
         <RelatedProducts

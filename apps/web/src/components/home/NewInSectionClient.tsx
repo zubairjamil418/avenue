@@ -38,16 +38,10 @@ export default function NewInSectionClient({
   return (
     <section style={{ padding: "4rem var(--site-gutter)" }}>
       <Container>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "320px repeat(4, 1fr)",
-            alignItems: "center",
-            gap: "1.5rem",
-          }}
-        >
-          {/* Left col */}
-          <div style={{ maxWidth: "480px" }}>
+        {/* Mobile: stacked, Desktop: 5-col grid (text + 4 images) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-[320px_repeat(4,1fr)] gap-6 items-center">
+          {/* Left col — full width on mobile */}
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1" style={{ maxWidth: "480px" }}>
             <p
               style={{
                 fontSize: "0.7rem",
@@ -125,7 +119,7 @@ export default function NewInSectionClient({
                   <div
                     style={{
                       width: "100%",
-                      height: "260px",
+                      aspectRatio: "3/4",
                       position: "relative",
                       overflow: "hidden",
                       background: "var(--gray-100)",

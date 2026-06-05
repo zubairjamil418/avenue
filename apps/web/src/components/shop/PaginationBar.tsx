@@ -51,39 +51,37 @@ export default function PaginationBar({
 
   if (totalPages <= 1) return null;
 
+  const btnBase: React.CSSProperties = {
+    width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+    border: "1px solid var(--gray-300)", background: "none", fontSize: "0.8rem",
+    cursor: "pointer", color: "var(--black)",
+  };
+
   return (
-    <div className="flex items-center gap-2">
+    <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginTop: "3rem" }}>
       <button
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-600 border border-transparent hover:border-gray-200"
+        style={{ ...btnBase, opacity: currentPage === 1 ? 0.4 : 1, cursor: currentPage === 1 ? "not-allowed" : "pointer" }}
       >
-        <ChevronLeft className="w-5 h-5" />
+        <ChevronLeft className="w-4 h-4" />
       </button>
 
       {getPageNumbers().map((page, index) => {
         if (page === "...") {
-          return (
-            <span
-              key={`ellipsis-${index}`}
-              className="w-10 h-10 flex items-center justify-center text-gray-400"
-            >
-              ...
-            </span>
-          );
+          return <span key={`e-${index}`} style={{ ...btnBase, border: "none" }}>…</span>;
         }
-
         const isCurrent = page === currentPage;
         return (
           <button
-            key={`page-${page}`}
+            key={`p-${page}`}
             onClick={() => onPageChange(page as number)}
-            className={`w-10 h-10 flex items-center justify-center rounded-full transition-all font-medium text-sm border
-              ${
-                isCurrent
-                  ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border-gray-200 hover:border-gray-300"
-              }`}
+            style={{
+              ...btnBase,
+              background: isCurrent ? "var(--black)" : "none",
+              color: isCurrent ? "#fff" : "var(--black)",
+              borderColor: isCurrent ? "var(--black)" : "var(--gray-300)",
+            }}
           >
             {page}
           </button>
@@ -93,9 +91,9 @@ export default function PaginationBar({
       <button
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-600 border border-transparent hover:border-gray-200"
+        style={{ ...btnBase, opacity: currentPage === totalPages ? 0.4 : 1, cursor: currentPage === totalPages ? "not-allowed" : "pointer" }}
       >
-        <ChevronRight className="w-5 h-5" />
+        <ChevronRight className="w-4 h-4" />
       </button>
     </div>
   );

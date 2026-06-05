@@ -15,6 +15,8 @@ interface ShopSortToolbarProps {
   onLimitChange?: (limit: number) => void;
   onOpenMobileFilters?: () => void;
   hasLeftFilter?: boolean;
+  isSidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 import {
@@ -87,96 +89,38 @@ export default function ShopSortToolbar({
   onLimitChange,
   onOpenMobileFilters,
   hasLeftFilter = false,
+  isSidebarOpen,
+  onToggleSidebar,
 }: ShopSortToolbarProps) {
   return (
-    <div className="bg-light-bg rounded-[16px] flex flex-col xl:flex-row xl:items-center justify-between p-[10px_24px] w-full min-h-[60px] gap-4">
-      {/* Left side: View toggles & Results count & Mobile Filter Toggle */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-[16px] sm:gap-[24px]">
-        {/* View toggles */}
-        <div className="hidden sm:flex items-center gap-[4px] md:gap-[8px] bg-white p-1 rounded-lg border border-light-border/50">
-           {(["list", "grid-2", "grid-3", "grid-4", "grid-5"] as ViewModeType[]).map((mode) => {
-             const isGrid = mode.startsWith("grid");
-             const cols = isGrid ? parseInt(mode.split("-")[1]) : 0;
-             const isSelected = viewMode === mode;
-             
-             // Hide higher column options on smaller screens
-             let displayClass = "flex items-center justify-center size-[32px] md:size-[36px] rounded-[6px] transition-colors";
-             if (mode === "grid-3") displayClass += " hidden md:flex";
-             if (mode === "grid-4") displayClass += " hidden lg:flex";
-             if (mode === "grid-5") displayClass += " hidden xl:flex";
-
-             return (
-               <button
-                 key={mode}
-                 onClick={() => onViewModeChange(mode)}
-                 className={`${displayClass} ${
-                   isSelected
-                     ? "bg-primary/10 text-primary shadow-sm"
-                     : "text-muted-foreground hover:bg-card hover:text-primary"
-                 }`}
-                 title={isGrid ? `${cols} Columns` : "List View"}
-               >
-                 {mode === "list" ? <List className="size-[18px]" /> : <ColumnIcon cols={cols} />}
-               </button>
-             );
-           })}
-        </div>
-
-        {/* Mobile Filter Toggle (Main) */}
-        <div className="flex items-center gap-4">
-          {hasLeftFilter && (
-            <button
-              onClick={onOpenMobileFilters}
-              className="xl:hidden flex items-center justify-center h-[36px] px-3 gap-2 bg-white rounded-[6px] border border-light-border/50 text-muted-foreground hover:text-primary font-dm-sans text-[14px] sm:text-sm font-medium shadow-sm transition-colors"
-              title="Open Filters"
-            >
-              <SlidersHorizontal className="size-4" /> Filters
-            </button>
-          )}
-
-          {/* Results text */}
-          <p className="font-dm-sans text-[14px] md:text-[16px] leading-[26px] text-light-secondary-text">
-            Showing <span className="font-semibold text-light-primary-text">1–{currentResultCount}</span> of <span className="font-semibold text-light-primary-text">{totalResults}</span> results
-          </p>
-        </div>
+    <div className="flex flex-wrap items-center justify-between gap-3" style={{ marginBottom: "1.5rem" }}>
+      {/* Left: sidebar toggle + result count */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        {hasLeftFilter && onToggleSidebar && (
+          <button
+            onClick={onToggleSidebar}
+            style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", background: "none", border: "none", cursor: "pointer", color: "var(--black)", fontWeight: 500 }}
+          >
+            <SlidersHorizontal size={14} />
+            {isSidebarOpen ? "Hide Filters" : "Show Filters"}
+          </button>
+        )}
+        <span style={{ fontSize: "0.85rem", color: "var(--gray-500)" }}>
+          Showing {currentResultCount} of {totalResults} products
+        </span>
       </div>
 
-      {/* Right side: Limit and Sort Dropdowns */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-[12px] md:gap-[20px]">
-        {/* Output Limit */}
-        <div className="flex items-center gap-[8px] md:gap-[12px]">
-          <span className="font-dm-sans text-[14px] md:text-[16px] leading-[26px] text-light-secondary-text whitespace-nowrap">
-            Show:
-          </span>
-          <Select value={limit.toString()} onValueChange={(val) => onLimitChange?.(Number(val))}>
-             <SelectTrigger className="w-[100px] h-[40px] bg-card border-light-border font-dm-sans font-medium text-[14px] md:text-[16px]">
-                <SelectValue placeholder="25" />
-             </SelectTrigger>
-             <SelectContent className="font-dm-sans">
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="25">25</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-             </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center gap-[8px] md:gap-[12px]">
-          <span className="font-dm-sans text-[14px] md:text-[16px] leading-[26px] text-light-secondary-text whitespace-nowrap">
-            Sort by:
-          </span>
-          <Select value={sortBy} onValueChange={(val) => onSortChange?.(val)}>
-            <SelectTrigger className="w-[160px] md:w-[200px] h-[40px] bg-card border-light-border font-dm-sans font-medium text-[14px] md:text-[16px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent className="font-dm-sans">
-              <SelectItem value="default">Latest</SelectItem>
-              <SelectItem value="price-low">Price: Low to High</SelectItem>
-              <SelectItem value="price-high">Price: High to Low</SelectItem>
-              <SelectItem value="rating">Top Rated</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      {/* Right: sort select */}
+      <select
+        value={sortBy}
+        onChange={(e) => onSortChange?.(e.target.value)}
+        style={{ padding: "0.5rem 1rem", border: "1px solid var(--gray-300)", background: "none", fontSize: "0.8rem", color: "var(--black)", cursor: "pointer", outline: "none" }}
+      >
+        <option value="default">Newest</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="name">Name: A to Z</option>
+      </select>
     </div>
   );
 }

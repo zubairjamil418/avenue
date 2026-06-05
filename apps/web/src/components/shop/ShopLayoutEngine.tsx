@@ -9,6 +9,7 @@ import { Product } from "@/components/common/products/ProductCard";
 import { ApiProduct } from "@/hooks/useProducts";
 import Container from "@/components/common/Container";
 import ShopSidebarFilter from "./filters/ShopSidebarFilter";
+import ShopBreadcrumb from "./ShopBreadcrumb";
 import ShopHorizontalFilter from "./filters/ShopHorizontalFilter";
 import ShopTopHero from "./banners/ShopTopHero";
 import ShopSortToolbar from "./filters/ShopSortToolbar";
@@ -55,7 +56,10 @@ export default function ShopLayoutEngine({
     ...initialFilters,
   });
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [limit, setLimit] = useState(initialLimit || 25);
+  const [pageTitle, setPageTitle] = useState<string>("");
+  const [pageDescription, setPageDescription] = useState<string>("");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -161,6 +165,28 @@ export default function ShopLayoutEngine({
     });
     setPage(1);
   }, [searchParams]);
+
+  // Fetch category name for page title
+  useEffect(() => {
+    if (filters.category) {
+      api.get(`/api/categories/tree`)
+        .then((res) => {
+          const all: any[] = Array.isArray(res.data) ? res.data : res.data?.categories || [];
+          const match = all.find((c: any) => c.slug === filters.category || c._id === filters.category);
+          if (match?.name) {
+            setPageTitle(match.name.toUpperCase());
+            setPageDescription(match.description && !match.description.toLowerCase().includes("delete") ? match.description : "");
+          } else {
+            setPageTitle(filters.category!.replace(/-/g, " ").toUpperCase());
+            setPageDescription("");
+          }
+        })
+        .catch(() => {});
+    } else {
+      setPageTitle("ALL PRODUCTS");
+      setPageDescription("");
+    }
+  }, [filters.category]);
 
   // Parse layout strategy from slug
   const decodedSlug = decodeURIComponent(layoutSlug).toLowerCase();
@@ -583,12 +609,24 @@ export default function ShopLayoutEngine({
   const activeResultCount = products.length;
 
   return (
-    <div className="py-6 sm:py-8 md:py-10 bg-white">
+    <div className="bg-white" style={{ padding: "2rem var(--site-gutter)" }}>
       {hasTopBanner && <ShopTopHero layoutType={decodedSlug} />}
 
-      <Container
-        className={isFullWidth ? "max-w-full px-3 sm:px-4 md:px-6 lg:px-8" : ""}
-      >
+      <Container className="!px-0">
+        {/* Page title */}
+        {pageTitle && (
+          <div style={{ textAlign: "center", padding: "1.5rem 0 2rem", borderBottom: "1px solid var(--gray-200)", marginBottom: "2rem" }}>
+            <h1 className="text-xl sm:text-2xl md:text-3xl" style={{ fontFamily: "'Poppins', var(--font-poppins), sans-serif", fontWeight: 600, letterSpacing: "0.05em", color: "var(--black)", marginBottom: pageDescription ? "0.5rem" : 0 }}>
+              {pageTitle}
+            </h1>
+            {pageDescription && (
+              <p style={{ fontSize: "0.85rem", color: "var(--gray-600)", maxWidth: 600, margin: "0 auto" }}>
+                {pageDescription}
+              </p>
+            )}
+          </div>
+        )}
+
         {(hasHorizontalFilter || hasBannerWithFilter) && (
           <ShopHorizontalFilter />
         )}
@@ -596,8 +634,10 @@ export default function ShopLayoutEngine({
         <div
           className={`flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-6 md:mt-8`}
         >
-          {hasLeftFilter && (
-            <div className="hidden xl:block w-64 lg:w-72 xl:w-75 shrink-0">
+          {/* Desktop sidebar — left column */}
+          {hasLeftFilter && isSidebarOpen && (
+            <div className="hidden xl:flex xl:flex-col w-60 shrink-0 gap-4">
+              <ShopBreadcrumb category={filters.category} />
               <ShopSidebarFilter
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -620,13 +660,25 @@ export default function ShopLayoutEngine({
               limit={limit}
               onLimitChange={(newLimit) => {
                 setLimit(newLimit);
-                setPage(1); // Reset to page 1 on limit change
+                setPage(1);
               }}
               sortBy={filters.sortBy}
               onSortChange={(sort) => handleFilterChange({ sortBy: sort })}
               onOpenMobileFilters={() => setIsMobileFiltersOpen(true)}
               hasLeftFilter={hasLeftFilter}
+              isSidebarOpen={isSidebarOpen}
+              onToggleSidebar={() => setIsSidebarOpen((v) => !v)}
             />
+
+            {/* Mobile inline filter panel (hidden on xl+) */}
+            {hasLeftFilter && isSidebarOpen && (
+              <div className="xl:hidden border-t border-b border-gray-200 py-4 mb-2">
+                <ShopSidebarFilter
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                />
+              </div>
+            )}
 
             {renderActiveFilters()}
 
@@ -645,26 +697,6 @@ export default function ShopLayoutEngine({
           </div>
         </div>
 
-        {/* Mobile Filters Sheet */}
-        {hasLeftFilter && (
-          <Sheet
-            open={isMobileFiltersOpen}
-            onOpenChange={setIsMobileFiltersOpen}
-          >
-            <SheetContent
-              side="left"
-              className="w-70 xs:w-[300px] sm:w-[320px] p-0 border-none overflow-y-auto hidden-scrollbar"
-            >
-              <SheetTitle className="sr-only">Filters</SheetTitle>
-              <div className="p-3 xs:p-4 bg-white min-h-full">
-                <ShopSidebarFilter
-                  filters={filters}
-                  onFilterChange={handleFilterChange}
-                />
-              </div>
-            </SheetContent>
-          </Sheet>
-        )}
       </Container>
     </div>
   );
