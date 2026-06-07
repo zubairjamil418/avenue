@@ -2,7 +2,6 @@
 
 import React from "react";
 import BlogCard from "./BlogCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type BlogSummary = {
   _id: string;
@@ -25,22 +24,12 @@ const RelatedArticles = ({
   if (!relatedPosts || relatedPosts.length === 0) return null;
 
   return (
-    <section className="py-16">
-      <div className="flex items-center justify-between mb-8">
-        <h3 className="text-2xl font-bold text-foreground relative pl-4 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1.5 before:h-6 before:bg-primary before:rounded-full">
-          Related Articles
-        </h3>
-        <div className="flex items-center gap-2">
-          <button className="size-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors disabled:opacity-50 group">
-            <ChevronLeft className="size-5 text-muted-foreground group-hover:text-white" />
-          </button>
-          <button className="size-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors group">
-            <ChevronRight className="size-5 text-muted-foreground group-hover:text-white" />
-          </button>
-        </div>
-      </div>
+    <section style={{ paddingTop: "2rem", borderTop: "1px solid var(--gray-200)" }}>
+      <h3 style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1.8rem", fontWeight: 400, textAlign: "center", marginBottom: "2.5rem", color: "#000" }}>
+        Related Articles
+      </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: "2rem 1.5rem" }}>
         {relatedPosts.map((post) => (
           <BlogCard
             key={`related-${post._id}`}

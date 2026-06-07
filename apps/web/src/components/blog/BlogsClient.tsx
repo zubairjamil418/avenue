@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Grid3x3, List } from "lucide-react";
+import { Grid3x3, List, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import BlogCard from "@/components/blog/BlogCard";
 
@@ -24,173 +24,132 @@ interface BlogsClientProps {
   initialBlogs: RealBlog[];
 }
 
+const POSTS_PER_PAGE = 9;
+
 const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
   const [view, setView] = useState<"grid" | "list">("grid");
-  const [blogs, setBlogs] = useState<RealBlog[]>(initialBlogs);
+  const [blogs] = useState<RealBlog[]>(initialBlogs);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("latest");
+
+  const filtered = blogs
+    .filter((b) => b.title.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      if (sort === "latest") return new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime();
+      if (sort === "oldest") return new Date(a.publishedAt || a.createdAt).getTime() - new Date(b.publishedAt || b.createdAt).getTime();
+      return 0;
+    });
+
+  const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
+  const paginated = filtered.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE);
 
   return (
-    <div className="pt-8">
-      {/* Header / Toolbar matching Figma 24164:310857 */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 bg-white p-4 rounded-2xl border border-border/60 shadow-sm">
-        <div className="flex items-center gap-x-4">
-          <div className="flex items-center gap-x-2 bg-gray-100/50 p-1 rounded-full border border-border/40">
-            <button
-              onClick={() => setView("list")}
-              className={cn(
-                "size-[34px] rounded-full flex items-center justify-center transition-all",
-                view === "list"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              <List className="size-4" />
-            </button>
-            <button
-              onClick={() => setView("grid")}
-              className={cn(
-                "size-[34px] rounded-full flex items-center justify-center transition-all",
-                view === "grid"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              <Grid3x3 className="size-4" />
-            </button>
-          </div>
-          <span className="text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:block">
-            Showing 1–{Math.min(blogs.length, 12)} of {blogs.length} results
+    <div style={{ paddingTop: "2.5rem" }}>
+      {/* Toolbar */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--gray-200)", paddingBottom: "1rem", marginBottom: "3rem", gap: "1rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <button onClick={() => setView("grid")} style={{ color: view === "grid" ? "#000" : "var(--gray-400)", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}>
+            <Grid3x3 size={18} />
+          </button>
+          <button onClick={() => setView("list")} style={{ color: view === "list" ? "#000" : "var(--gray-400)", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}>
+            <List size={18} />
+          </button>
+          <span style={{ fontSize: "0.8rem", color: "var(--gray-500)" }}>
+            Showing {Math.min((page - 1) * POSTS_PER_PAGE + 1, filtered.length)}–{Math.min(page * POSTS_PER_PAGE, filtered.length)} of {filtered.length} results
           </span>
         </div>
-
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-[260px]">
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-              <svg
-                className="size-4 text-muted-foreground"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <input
-              type="text"
-              placeholder="Search Blog"
-              className="w-full h-11 pl-10 pr-4 rounded-full border border-border bg-white text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all font-medium text-foreground placeholder:text-muted-foreground/70"
-            />
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <input
+            type="text"
+            placeholder="Search articles"
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            style={{ border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.5rem 1rem", fontSize: "0.85rem", outline: "none", width: "200px" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
           <select
-            className="border border-border rounded-full px-5 h-11 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 bg-white text-sm font-medium text-foreground cursor-pointer transition-all hover:bg-gray-50 min-w-[110px] appearance-none"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E\")",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 1rem center",
-              backgroundSize: "1rem",
-            }}
+            value={sort}
+            onChange={(e) => { setSort(e.target.value); setPage(1); }}
+            style={{ border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.5rem 1rem", fontSize: "0.85rem", outline: "none", background: "#fff", cursor: "pointer" }}
           >
-            <option>Short</option>
-            <option>Latest</option>
-            <option>Popular</option>
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
           </select>
         </div>
       </div>
 
-      {blogs.length > 0 ? (
-        <div
-          className={cn(
-            "grid gap-[30px] mb-14",
-            view === "grid"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-              : "grid-cols-1 lg:grid-cols-2",
-          )}
-        >
-          {blogs.map((post) => (
-            <BlogCard
-              key={post._id}
-              view={view}
-              post={{
-                id: post._id,
-                title: post.title,
-                slug: post.slug,
-                category: post.category?.name || "Uncategorized",
-                date: new Date(post.publishedAt || post.createdAt).toLocaleDateString(),
-                commentsCount: 0,
-                excerpt: post.excerpt || "...",
-                content: "",
-                image: post.previewImage,
-                author: {
-                  name: post.author?.name || "Anonymous",
-                  avatar: post.author?.image || "",
-                },
-              }}
-            />
-          ))}
-        </div>
+      {/* Grid / List */}
+      {paginated.length > 0 ? (
+        view === "grid" ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: "3rem 2rem", marginBottom: "4rem" }}>
+            {paginated.map((post) => (
+              <BlogCard
+                key={post._id}
+                view="grid"
+                post={{
+                  id: post._id,
+                  title: post.title,
+                  slug: post.slug,
+                  category: post.category?.name || "Uncategorized",
+                  date: new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
+                  excerpt: post.excerpt || "",
+                  image: post.previewImage,
+                  author: { name: post.author?.name || "", avatar: post.author?.image || "" },
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div style={{ marginBottom: "4rem" }}>
+            {paginated.map((post) => (
+              <BlogCard
+                key={post._id}
+                view="list"
+                post={{
+                  id: post._id,
+                  title: post.title,
+                  slug: post.slug,
+                  category: post.category?.name || "Uncategorized",
+                  date: new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
+                  excerpt: post.excerpt || "",
+                  image: post.previewImage,
+                  author: { name: post.author?.name || "", avatar: post.author?.image || "" },
+                }}
+              />
+            ))}
+          </div>
+        )
       ) : (
-        <div className="flex justify-center p-20 bg-white rounded-2xl border border-border shadow-sm">
-          <span className="text-muted-foreground font-medium text-lg">
-            No blogs found.
-          </span>
-        </div>
+        <p style={{ textAlign: "center", color: "var(--gray-500)", padding: "5rem 0", fontSize: "0.9rem" }}>No articles found.</p>
       )}
 
       {/* Pagination */}
-      {blogs.length > 0 && (
-        <div className="flex items-center justify-center gap-x-2">
-          <button className="size-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors disabled:opacity-50 text-muted-foreground bg-white shadow-sm">
-            <svg
-              className="size-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+      {totalPages > 1 && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            style={{ width: "36px", height: "36px", border: "1px solid var(--gray-300)", background: "#fff", cursor: page === 1 ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: page === 1 ? 0.4 : 1 }}
+          >
+            <ChevronLeft size={16} />
           </button>
-          <div className="flex items-center gap-x-1">
-            {[1, 2, 3, 4, 5].map((page) => (
-              <button
-                key={page}
-                className={cn(
-                  "size-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all border outline-none bg-white",
-                  page === 1
-                    ? "border-primary text-primary shadow-sm"
-                    : "border-transparent text-muted-foreground hover:bg-gray-50 focus:bg-gray-50",
-                )}
-              >
-                {page}
-              </button>
-            ))}
-            <span className="px-1 text-muted-foreground flex items-center justify-center size-10">
-              ...
-            </span>
-          </div>
-          <button className="size-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors disabled:opacity-50 text-muted-foreground bg-white shadow-sm">
-            <svg
-              className="size-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              style={{ width: "36px", height: "36px", border: `1px solid ${p === page ? "#000" : "var(--gray-300)"}`, background: p === page ? "#000" : "#fff", color: p === page ? "#fff" : "var(--gray-700)", fontSize: "0.85rem", cursor: "pointer", fontWeight: p === page ? 500 : 400 }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            style={{ width: "36px", height: "36px", border: "1px solid var(--gray-300)", background: "#fff", cursor: page === totalPages ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: page === totalPages ? 0.4 : 1 }}
+          >
+            <ChevronRight size={16} />
           </button>
         </div>
       )}

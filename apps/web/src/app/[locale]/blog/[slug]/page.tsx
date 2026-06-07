@@ -95,107 +95,108 @@ const SingleBlogPage = async ({
     <main>
       <Breadcrumb />
 
-      <section className="pb-[70px]">
+      <section style={{ paddingBottom: "5rem" }}>
         <Container>
-          {/* Main Article Content */}
-          <div className="w-full min-w-0">
-            <div className="relative w-full aspect-21/12 rounded-2xl overflow-hidden group">
-              <Image
-                src={post.bannerImage || post.previewImage}
-                alt={post.title}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
+          {/* Hero image — full width, no border-radius */}
+          <div style={{ position: "relative", width: "100%", aspectRatio: "21/9", overflow: "hidden" }}>
+            <Image
+              src={post.bannerImage || post.previewImage}
+              alt={post.title}
+              fill
+              className="object-cover"
+            />
+          </div>
 
-            {/* Header Info Banner overlapping Hero */}
-            <div className="relative -mt-16 sm:-mt-24 z-10 mx-4 sm:mx-12 bg-warning-light rounded-[24px] p-6 sm:p-10 text-center shadow-lg">
-              <div className="mb-4">
-                <span className="text-primary-light font-bold text-sm tracking-wide">
-                  {post.category?.name || "Uncategorized"}
-                </span>
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl md:text-[32px] leading-tight font-bold text-light-primary-text mb-6 max-w-2xl mx-auto">
-                {post.title}
-              </h1>
-
-              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-                <div className="flex items-center gap-x-2 text-light-secondary-text font-medium text-[13px] sm:text-sm">
-                  <Calendar className="size-4" />
-                  <span>
-                    {new Date(
-                      post.publishedAt || post.createdAt,
-                    ).toLocaleDateString()}
-                  </span>
-                </div>
-                <CommentSidebarTrigger />
-                <div className="flex items-center gap-x-2 text-light-secondary-text font-medium text-[13px] sm:text-sm">
-                  <Eye className="size-4" />
-                  <span>{post.views || 0} views</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="max-w-5xl mx-auto">
-              {/* Rich Text Content */}
-              <div className="max-w-full w-full break-words overflow-hidden text-light-secondary-text mt-12 bg-white font-public-sans leading-relaxed text-base [&_p]:mb-6 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:text-light-primary-text [&_h1]:mt-10 [&_h1]:mb-6 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-light-primary-text [&_h2]:mt-10 [&_h2]:mb-6 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-light-primary-text [&_h3]:mt-8 [&_h3]:mb-4 [&_img]:rounded-2xl [&_img]:w-full [&_img]:object-cover [&_img]:my-10 [&_blockquote]:bg-warning-light [&_blockquote]:rounded-[24px] [&_blockquote]:p-8 [&_blockquote]:md:p-10 [&_blockquote]:my-10 [&_blockquote]:text-center [&_blockquote]:text-xl [&_blockquote]:md:text-2xl [&_blockquote]:font-semibold [&_blockquote]:text-light-primary-text [&_blockquote]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_a]:text-primary-light [&_a]:hover:underline [&_pre]:bg-light-bg [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_code]:bg-light-bg [&_code]:px-1 [&_code]:rounded">
-                {/* Dynamically inserted content from the backend payload */}
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-              </div>
-
-              {/* Tags & Social Share */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-b border-light-border mt-10">
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <span className="font-bold text-light-primary-text text-sm">
-                    Tags:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags && post.tags.length > 0 ? (
-                      post.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 bg-light-bg text-xs font-semibold rounded-full text-light-primary-text hover:bg-primary-light hover:text-white transition-colors cursor-pointer"
-                        >
-                          {tag}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-light-secondary-text text-sm">
-                        No tags
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
-                  <span className="font-bold text-light-primary-text text-sm">
-                    Share:
-                  </span>
-                  <div className="flex items-center gap-2">
-                    {[
-                      { name: "facebook", Icon: Facebook },
-                      { name: "twitter", Icon: Twitter },
-                      { name: "instagram", Icon: Instagram },
-                      { name: "linkedin", Icon: Linkedin },
-                    ].map(({ name, Icon }) => (
-                      <button
-                        key={name}
-                        className="size-8 rounded-full border border-light-border flex items-center justify-center hover:bg-primary-light hover:text-white transition-colors text-light-secondary-text"
-                        aria-label={`Share on ${name}`}
-                      >
-                        <Icon className="size-4" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Comments Section */}
-              <BlogComments blogId={post._id} />
+          {/* Article header */}
+          <div style={{ maxWidth: "760px", margin: "0 auto", padding: "2.5rem 0 1.5rem", textAlign: "center" }}>
+            <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--gray-500)", marginBottom: "1rem" }}>
+              {post.category?.name || "Uncategorized"}
+            </p>
+            <h1 style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, color: "#000", lineHeight: 1.2, marginBottom: "1.5rem" }}>
+              {post.title}
+            </h1>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1.5rem", fontSize: "0.8rem", color: "var(--gray-500)", flexWrap: "wrap" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <Calendar className="size-4" />
+                {new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+              </span>
+              <CommentSidebarTrigger />
+              <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <Eye className="size-4" />
+                {post.views || 0} views
+              </span>
             </div>
           </div>
 
-          <div className="mt-16">
+          {/* Article body */}
+          <div style={{ maxWidth: "720px", margin: "0 auto", paddingTop: "1rem" }}>
+            {/* Words by author */}
+            {post.author?.name && (
+              <p style={{ fontSize: "0.85rem", color: "var(--gray-600)", marginBottom: "2rem", borderTop: "1px solid var(--gray-200)", paddingTop: "1.5rem" }}>
+                Words by <strong>{post.author.name}</strong>
+              </p>
+            )}
+
+            {/* Rich text content */}
+            <div
+              className="
+                break-words overflow-hidden
+                [&_p]:mb-6 [&_p]:text-base [&_p]:leading-[1.8] [&_p]:text-[#333]
+                [&_h1]:font-normal [&_h1]:mt-10 [&_h1]:mb-6 [&_h1]:text-black
+                [&_h2]:font-normal [&_h2]:mt-12 [&_h2]:mb-6 [&_h2]:text-center [&_h2]:text-black
+                [&_h3]:font-normal [&_h3]:mt-8 [&_h3]:mb-4 [&_h3]:text-black
+                [&_img]:w-full [&_img]:object-cover [&_img]:my-10
+                [&_blockquote]:border-l-[3px] [&_blockquote]:border-black [&_blockquote]:pl-6 [&_blockquote]:my-10 [&_blockquote]:italic [&_blockquote]:text-[var(--gray-600)]
+                [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ul]:text-[#333]
+                [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_ol]:text-[#333]
+                [&_a]:text-black [&_a]:underline [&_a]:hover:text-[var(--brand-orange)]
+                [&_pre]:bg-[var(--gray-50)] [&_pre]:p-4 [&_pre]:overflow-x-auto
+                [&_code]:bg-[var(--gray-50)] [&_code]:px-1
+              "
+              style={{
+                fontFamily: "var(--font-poppins), sans-serif",
+              }}
+            >
+              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            </div>
+
+            {/* Tags & Share */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem", borderTop: "1px solid var(--gray-200)", paddingTop: "1.5rem", marginTop: "3rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#000" }}>Tags:</span>
+                {post.tags && post.tags.length > 0 ? (
+                  post.tags.map((tag: string) => (
+                    <span key={tag} style={{ padding: "0.25rem 0.75rem", border: "1px solid var(--gray-300)", fontSize: "0.75rem", color: "#000", cursor: "pointer" }}>
+                      {tag}
+                    </span>
+                  ))
+                ) : (
+                  <span style={{ fontSize: "0.8rem", color: "var(--gray-500)" }}>No tags</span>
+                )}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#000" }}>Share:</span>
+                {[
+                  { name: "facebook", Icon: Facebook },
+                  { name: "twitter", Icon: Twitter },
+                  { name: "instagram", Icon: Instagram },
+                  { name: "linkedin", Icon: Linkedin },
+                ].map(({ name, Icon }) => (
+                  <button key={name} aria-label={`Share on ${name}`}
+                    style={{ color: "var(--gray-500)", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}
+                    className="hover:text-black transition-colors">
+                    <Icon className="size-5" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Comments */}
+            <BlogComments blogId={post._id} />
+          </div>
+
+          {/* Related articles */}
+          <div style={{ marginTop: "5rem" }}>
             <RelatedArticles relatedPosts={relatedPosts} />
           </div>
 
