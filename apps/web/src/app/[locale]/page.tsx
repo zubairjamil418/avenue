@@ -50,6 +50,10 @@ function isRowBanner(banner: AdsBanner): boolean {
   });
 }
 
+function withTimeout<T>(promise: Promise<T>, ms = 8000): Promise<T> {
+  return Promise.race([promise, new Promise<T>((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+}
+
 const DeferredTopSelling = async ({
   locale,
   productTypes,
@@ -61,7 +65,7 @@ const DeferredTopSelling = async ({
   title?: string;
   description?: string;
 }) => {
-  const products = await getProductsByTypeSlug("top-selling-products", 25);
+  const products = await withTimeout(getProductsByTypeSlug("top-selling-products", 25)).catch(() => []);
   const productType = productTypes.find(
     (t) => t.slug === "top-selling-products",
   );
@@ -80,8 +84,8 @@ const DeferredTopSelling = async ({
 
 const DeferredOurProducts = async ({ locale }: { locale: string }) => {
   const [products, categories] = await Promise.all([
-    getOurProducts(),
-    getParentCategories(),
+    withTimeout(getOurProducts()).catch(() => []),
+    withTimeout(getParentCategories()).catch(() => []),
   ]);
   return (
     <OurProducts
@@ -93,7 +97,7 @@ const DeferredOurProducts = async ({ locale }: { locale: string }) => {
 };
 
 const DeferredPromoBanners = async ({ cfg }: { cfg: any }) => {
-  const all = await getAdsBanners();
+  const all = await withTimeout(getAdsBanners()).catch(() => []);
   // If specific banners are assigned in the config, use only those; otherwise use all
   const bannerIds: string[] = cfg?.settings?.bannerIds || [];
   if (!bannerIds.length) return null;
@@ -119,7 +123,7 @@ const DeferredNewlyLaunched = async ({
   title?: string;
   description?: string;
 }) => {
-  const products = await getProductsByTypeSlug("newly-lunch-products", 10);
+  const products = await withTimeout(getProductsByTypeSlug("newly-lunch-products", 10)).catch(() => []);
   const productType = productTypes.find(
     (t) => t.slug === "newly-lunch-products",
   );
@@ -147,7 +151,7 @@ const DeferredBeauty = async ({
   title?: string;
   description?: string;
 }) => {
-  const products = await getProductsByTypeSlug("beauty-products", 8);
+  const products = await withTimeout(getProductsByTypeSlug("beauty-products", 8)).catch(() => []);
   const productType = productTypes.find((t) => t.slug === "beauty-products");
   if (!products.length) return null;
   return (
@@ -163,7 +167,7 @@ const DeferredBeauty = async ({
 };
 
 const DeferredBlogs = async ({ locale, cfg }: { locale: string; cfg: any }) => {
-  const blogs = await getLatestBlogs();
+  const blogs = await withTimeout(getLatestBlogs()).catch(() => []);
   if (!blogs.length) return null;
   return <LatestBlogs locale={locale} blogs={blogs} title={cfg?.title} />;
 };

@@ -178,7 +178,7 @@ export async function getWebsiteConfigs(pageType: string): Promise<WebsiteConfig
     // correctly hide sections the admin has deactivated
     const res = await api.get<{ success: boolean; count: number; data: WebsiteConfig[] }>(
       `${WEBSITE_CONFIG_ENDPOINTS.BY_PAGE(pageType)}?includeAll=true`,
-      { cache: "no-store" },
+      { next: { revalidate: 30 } },
     );
     const raw = res.data?.data;
     return Array.isArray(raw) ? raw : [];

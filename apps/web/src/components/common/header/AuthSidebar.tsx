@@ -14,7 +14,6 @@ import { useHeaderStore } from "@/store/useHeaderStore";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import API_ENDPOINTS from "@/constants/endpoints";
-import Image from "next/image";
 import { toast } from "sonner";
 
 // Firebase imports
@@ -44,7 +43,7 @@ export type AuthView =
   | "reset-password"
   | "otp";
 
-const AuthSidebar = () => {
+const AuthSidebar = ({ logoUrl }: { logoUrl?: string }) => {
   const { isAuthOpen, onAuthClose, authView } = useHeaderStore();
   const { login } = useAuthStore();
   const [currentView, setCurrentView] = useState<AuthView>(authView);
@@ -321,6 +320,7 @@ const AuthSidebar = () => {
       }
 
       // 1. Authenticate with Firebase
+      if (!auth) throw new Error("Firebase auth is not configured.");
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const idToken = await user.getIdToken();
@@ -379,583 +379,317 @@ const AuthSidebar = () => {
   const renderHeader = () => {
     let title = "";
     switch (currentView) {
-      case "login":
-        title = "Log in";
-        break;
-      case "register":
-        title = "Create Account";
-        break;
-      case "forgot-password":
-        title = "Forgot Password";
-        break;
-      case "reset-password":
-        title = "Set Password";
-        break;
-      case "otp":
-        title = "OTP Verification";
-        break;
+      case "login": title = "Log in"; break;
+      case "register": title = "Create Account"; break;
+      case "forgot-password": title = "Forgot Password"; break;
+      case "reset-password": title = "Set Password"; break;
+      case "otp": title = "OTP Verification"; break;
     }
 
     return (
-      <SheetHeader className="flex flex-row items-center justify-between px-6 py-5 border-b border-border bg-background sticky top-0 z-10 space-y-0">
-        <SheetTitle className="text-lg font-bold text-foreground">
+      <SheetHeader className="flex flex-row items-center justify-between px-8 py-5 border-b border-[var(--gray-200)] bg-white sticky top-0 z-10 space-y-0">
+        <SheetTitle
+          style={{
+            fontFamily: "'Playfair Display', var(--font-playfair), serif",
+            fontSize: "1.05rem",
+            fontWeight: 400,
+            color: "#000",
+          }}
+        >
           {title}
         </SheetTitle>
-        <button
-          onClick={onAuthClose}
-          className="inline-flex items-center justify-center size-10 rounded-full bg-muted hover:bg-muted/80 transition-colors"
-        >
-          <X className="size-5 text-foreground" />
+        <button onClick={onAuthClose} className="text-[var(--gray-600)] hover:text-black transition-colors">
+          <X className="size-5" />
         </button>
       </SheetHeader>
     );
   };
 
   const renderLoginView = () => (
-    <div
-      key="login"
-      className="flex flex-col gap-y-8 animate-in fade-in slide-in-from-right-4 duration-300"
-    >
-      <div className="flex justify-center">
-        <Image
-          src="/images/authentication/login-illustration.png"
-          alt="login"
-          className="max-w-[200px]"
-          width={200}
-          height={200}
-        />
+    <div key="login" className="flex flex-col gap-y-7 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex justify-center py-4">
+        {logoUrl ? (
+          <img src={logoUrl} alt="Avenue" style={{ height: "25px", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1rem", letterSpacing: "0.18em", textTransform: "uppercase" }}>AVENUE</span>
+        )}
       </div>
-      <div className="flex flex-col gap-y-6">
-        <div className="flex gap-x-4">
-          <button
-            type="button"
-            onClick={() => handleOAuth("google")}
-            disabled={isLoading}
-            className="flex-1 flex items-center justify-center gap-x-2 py-3 border border-border rounded-full hover:bg-muted transition-colors font-medium disabled:opacity-50"
-          >
-            <img
-              src="https://www.google.com/favicon.ico"
-              alt="Google"
-              className="size-4"
-            />
-            Google
-          </button>
-          <button
-            type="button"
-            onClick={() => handleOAuth("facebook")}
-            disabled={isLoading}
-            className="flex-1 flex items-center justify-center gap-x-2 py-3 border border-border rounded-full hover:bg-muted transition-colors font-medium disabled:opacity-50"
-          >
-            <span className="text-blue-600 font-bold">f</span>
-            Facebook
-          </button>
-        </div>
-        <div className="text-center relative py-4">
-          <span
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <span className="w-full border-t border-gray-200"></span>
-          </span>
-          <span className="relative flex justify-center text-sm">
-            <span className="px-4 bg-background text-muted-foreground">
-              Or log in with
-            </span>
-          </span>
-        </div>
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-y-4">
+      <div className="flex gap-x-3">
+        <button type="button" onClick={() => handleOAuth("google")} disabled={isLoading}
+          className="flex-1 flex items-center justify-center gap-x-2 py-2.5 border border-[var(--gray-300)] hover:bg-[var(--gray-50)] transition-colors disabled:opacity-50"
+          style={{ fontSize: "0.8rem", letterSpacing: "0.05em" }}>
+          <img src="https://www.google.com/favicon.ico" alt="Google" className="size-4" />
+          Google
+        </button>
+        <button type="button" onClick={() => handleOAuth("facebook")} disabled={isLoading}
+          className="flex-1 flex items-center justify-center gap-x-2 py-2.5 border border-[var(--gray-300)] hover:bg-[var(--gray-50)] transition-colors disabled:opacity-50"
+          style={{ fontSize: "0.8rem", letterSpacing: "0.05em" }}>
+          <span className="text-blue-600 font-bold">f</span>
+          Facebook
+        </button>
+      </div>
+
+      <div className="relative flex items-center gap-x-3">
+        <span className="flex-1 border-t border-[var(--gray-200)]" />
+        <span style={{ fontSize: "0.75rem", color: "var(--gray-500)" }}>or</span>
+        <span className="flex-1 border-t border-[var(--gray-200)]" />
+      </div>
+
+      <form onSubmit={handleLogin} className="flex flex-col gap-y-4">
+        <div>
+          <label htmlFor="login-email" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Email *</label>
+          <input type="email" id="login-email" value={loginData.email} onChange={handleLoginChange} required disabled={isLoading}
+            style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
+        </div>
+        <div>
+          <label htmlFor="login-password" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Password *</label>
           <div className="relative">
-            <input
-              type="email"
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-              placeholder="Email"
-              id="login-email"
-              value={loginData.email}
-              onChange={handleLoginChange}
-              required
-              disabled={isLoading}
+            <input type={showLoginPassword ? "text" : "password"} id="login-password" value={loginData.password} onChange={handleLoginChange} required disabled={isLoading}
+              style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 2.5rem 0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+              onFocus={e => e.currentTarget.style.borderColor = "#000"}
+              onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
             />
-            <label
-              htmlFor="login-email"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Email *
-            </label>
-          </div>
-          <div className="relative">
-            <input
-              type={showLoginPassword ? "text" : "password"}
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent pr-12"
-              placeholder="Password"
-              id="login-password"
-              value={loginData.password}
-              onChange={handleLoginChange}
-              required
-              disabled={isLoading}
-            />
-            <button
-              type="button"
-              onClick={() => setShowLoginPassword(!showLoginPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {showLoginPassword ? (
-                <EyeOff className="size-5" />
-              ) : (
-                <Eye className="size-5" />
-              )}
-            </button>
-            <label
-              htmlFor="login-password"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Password *
-            </label>
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={() => setCurrentView("forgot-password")}
-              className="text-primary font-semibold text-sm hover:underline"
-              disabled={isLoading}
-            >
-              Forgot Your Password?
+            <button type="button" onClick={() => setShowLoginPassword(!showLoginPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--gray-500)] hover:text-black transition-colors">
+              {showLoginPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 text-white rounded-full font-bold shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
-          >
-            {isLoading ? (
-              <Loader2 className="size-5 animate-spin" />
-            ) : (
-              "Sign In"
-            )}
-          </Button>
-        </form>
-        <div className="text-center mt-4 text-sm font-medium">
-          Don&apos;t have an account?{" "}
-          <button
-            onClick={() => setCurrentView("register")}
-            className="text-primary font-bold hover:underline"
-            disabled={isLoading}
-          >
-            Create Account
+        </div>
+        <div className="flex justify-end">
+          <button type="button" onClick={() => setCurrentView("forgot-password")} disabled={isLoading}
+            style={{ fontSize: "0.8rem", color: "#000", textDecoration: "underline" }}>
+            Forgot Your Password?
           </button>
         </div>
-      </div>
+        <button type="submit" disabled={isLoading}
+          style={{ width: "100%", background: "#000", color: "#fff", padding: "0.9rem", fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 400, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Sign In"}
+        </button>
+      </form>
+
+      <p style={{ textAlign: "center", fontSize: "0.8rem", color: "var(--gray-500)" }}>
+        Don&apos;t have an account?{" "}
+        <button onClick={() => setCurrentView("register")} disabled={isLoading} style={{ color: "#000", textDecoration: "underline", background: "none", border: "none", cursor: "pointer", fontSize: "0.8rem" }}>
+          Create Account
+        </button>
+      </p>
     </div>
   );
 
   const renderRegisterView = () => (
-    <div
-      key="register"
-      className="flex flex-col gap-y-8 animate-in fade-in slide-in-from-right-4 duration-300"
-    >
-      <div className="flex justify-center">
-        <img
-          src="/images/authentication/register-illustration.png"
-          alt="register"
-          className="max-w-[200px]"
-        />
+    <div key="register" className="flex flex-col gap-y-7 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex justify-center py-4">
+        {logoUrl ? (
+          <img src={logoUrl} alt="Avenue" style={{ height: "25px", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1rem", letterSpacing: "0.18em", textTransform: "uppercase" }}>AVENUE</span>
+        )}
       </div>
-      <div className="flex flex-col gap-y-6">
-        <div className="flex gap-x-4">
-          <button
-            type="button"
-            onClick={() => handleOAuth("google")}
-            disabled={isLoading}
-            className="flex-1 flex items-center justify-center gap-x-2 py-3 border border-border rounded-full hover:bg-muted transition-colors font-medium disabled:opacity-50"
-          >
-            <img
-              src="https://www.google.com/favicon.ico"
-              alt="Google"
-              className="size-4"
-            />
-            Google
-          </button>
-          <button
-            type="button"
-            onClick={() => handleOAuth("facebook")}
-            disabled={isLoading}
-            className="flex-1 flex items-center justify-center gap-x-2 py-3 border border-border rounded-full hover:bg-muted transition-colors font-medium disabled:opacity-50"
-          >
-            <span className="text-blue-600 font-bold">f</span>
-            Facebook
-          </button>
-        </div>
-        <div className="text-center relative py-4">
-          <span
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <span className="w-full border-t border-gray-200"></span>
-          </span>
-          <span className="relative flex justify-center text-sm">
-            <span className="px-4 bg-background text-muted-foreground">
-              Or sign up with
-            </span>
-          </span>
-        </div>
 
-        <form onSubmit={handleRegister} className="flex flex-col gap-y-4">
-          <div className="grid grid-cols-2 gap-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-                placeholder="First Name"
-                id="first-name"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                required
-                disabled={isLoading}
-              />
-              <label
-                htmlFor="first-name"
-                className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-              >
-                First Name *
-              </label>
-            </div>
-            <div className="relative">
-              <input
-                type="text"
-                className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-                placeholder="Last Name"
-                id="last-name"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                required
-                disabled={isLoading}
-              />
-              <label
-                htmlFor="last-name"
-                className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-              >
-                Last Name *
-              </label>
-            </div>
-          </div>
-          <div className="relative">
-            <input
-              type="email"
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-              placeholder="Email"
-              id="register-email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-            <label
-              htmlFor="register-email"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Email *
-            </label>
-          </div>
-          <div className="relative">
-            <input
-              type={showRegisterPassword ? "text" : "password"}
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent pr-12"
-              placeholder="Password"
-              id="register-password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-            <button
-              type="button"
-              onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {showRegisterPassword ? (
-                <EyeOff className="size-5" />
-              ) : (
-                <Eye className="size-5" />
-              )}
-            </button>
-            <label
-              htmlFor="register-password"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Password *
-            </label>
-          </div>
-          <div className="relative">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent pr-12"
-              placeholder="Confirm Password"
-              id="confirm-password"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              required
-              disabled={isLoading}
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {showConfirmPassword ? (
-                <EyeOff className="size-5" />
-              ) : (
-                <Eye className="size-5" />
-              )}
-            </button>
-            <label
-              htmlFor="confirm-password"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Confirm Password *
-            </label>
-          </div>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 text-white rounded-full font-bold shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
-          >
-            {isLoading ? (
-              <Loader2 className="size-5 animate-spin" />
-            ) : (
-              "Create Account"
-            )}
-          </Button>
-        </form>
-        <div className="text-center mt-4 text-sm font-medium">
-          Already have an account?{" "}
-          <button
-            onClick={() => setCurrentView("login")}
-            className="text-primary font-bold hover:underline"
-            disabled={isLoading}
-          >
-            Sign In
-          </button>
-        </div>
+      <div className="flex gap-x-3">
+        <button type="button" onClick={() => handleOAuth("google")} disabled={isLoading}
+          className="flex-1 flex items-center justify-center gap-x-2 py-2.5 border border-[var(--gray-300)] hover:bg-[var(--gray-50)] transition-colors disabled:opacity-50"
+          style={{ fontSize: "0.8rem", letterSpacing: "0.05em" }}>
+          <img src="https://www.google.com/favicon.ico" alt="Google" className="size-4" />
+          Google
+        </button>
+        <button type="button" onClick={() => handleOAuth("facebook")} disabled={isLoading}
+          className="flex-1 flex items-center justify-center gap-x-2 py-2.5 border border-[var(--gray-300)] hover:bg-[var(--gray-50)] transition-colors disabled:opacity-50"
+          style={{ fontSize: "0.8rem", letterSpacing: "0.05em" }}>
+          <span className="text-blue-600 font-bold">f</span>
+          Facebook
+        </button>
       </div>
+
+      <div className="relative flex items-center gap-x-3">
+        <span className="flex-1 border-t border-[var(--gray-200)]" />
+        <span style={{ fontSize: "0.75rem", color: "var(--gray-500)" }}>or</span>
+        <span className="flex-1 border-t border-[var(--gray-200)]" />
+      </div>
+
+      <form onSubmit={handleRegister} className="flex flex-col gap-y-4">
+        <div className="grid grid-cols-2 gap-x-3">
+          <div>
+            <label htmlFor="first-name" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>First Name *</label>
+            <input type="text" id="first-name" value={formData.firstName} onChange={handleInputChange} required disabled={isLoading}
+              style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+              onFocus={e => e.currentTarget.style.borderColor = "#000"}
+              onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+            />
+          </div>
+          <div>
+            <label htmlFor="last-name" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Last Name *</label>
+            <input type="text" id="last-name" value={formData.lastName} onChange={handleInputChange} required disabled={isLoading}
+              style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+              onFocus={e => e.currentTarget.style.borderColor = "#000"}
+              onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="register-email" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Email *</label>
+          <input type="email" id="register-email" value={formData.email} onChange={handleInputChange} required disabled={isLoading}
+            style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
+        </div>
+        <div>
+          <label htmlFor="register-password" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Password *</label>
+          <div className="relative">
+            <input type={showRegisterPassword ? "text" : "password"} id="register-password" value={formData.password} onChange={handleInputChange} required disabled={isLoading}
+              style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 2.5rem 0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+              onFocus={e => e.currentTarget.style.borderColor = "#000"}
+              onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+            />
+            <button type="button" onClick={() => setShowRegisterPassword(!showRegisterPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--gray-500)] hover:text-black transition-colors">
+              {showRegisterPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
+        </div>
+        <div>
+          <label htmlFor="confirm-password" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Confirm Password *</label>
+          <div className="relative">
+            <input type={showConfirmPassword ? "text" : "password"} id="confirm-password" value={formData.confirmPassword} onChange={handleInputChange} required disabled={isLoading}
+              style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 2.5rem 0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+              onFocus={e => e.currentTarget.style.borderColor = "#000"}
+              onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+            />
+            <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--gray-500)] hover:text-black transition-colors">
+              {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
+        </div>
+        <button type="submit" disabled={isLoading}
+          style={{ width: "100%", background: "#000", color: "#fff", padding: "0.9rem", fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 400, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "0.5rem" }}>
+          {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Create Account"}
+        </button>
+      </form>
+
+      <p style={{ textAlign: "center", fontSize: "0.8rem", color: "var(--gray-500)" }}>
+        Already have an account?{" "}
+        <button onClick={() => setCurrentView("login")} disabled={isLoading} style={{ color: "#000", textDecoration: "underline", background: "none", border: "none", cursor: "pointer", fontSize: "0.8rem" }}>
+          Sign In
+        </button>
+      </p>
     </div>
   );
 
   const renderForgotPasswordView = () => (
-    <div
-      key="forgot-password"
-      className="flex flex-col gap-y-8 animate-in fade-in slide-in-from-right-4 duration-300"
-    >
-      <div className="flex justify-center">
-        <img
-          src="/images/authentication/forgot-password-illustration.png"
-          alt="forgot-password"
-          className="max-w-[200px]"
-        />
+    <div key="forgot-password" className="flex flex-col gap-y-7 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex justify-center py-4">
+        {logoUrl ? (
+          <img src={logoUrl} alt="Avenue" style={{ height: "25px", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1rem", letterSpacing: "0.18em", textTransform: "uppercase" }}>AVENUE</span>
+        )}
       </div>
-      <div className="flex flex-col gap-y-6">
-        <div className="text-center">
-          {/* <p className="text-muted-foreground">
-            Enter your email and we&apos;ll send you a code to reset your
-            password.
-          </p> */}
+      <form className="flex flex-col gap-y-4" onSubmit={handleForgotPasswordSubmit}>
+        <div>
+          <label htmlFor="forgot-email" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Email *</label>
+          <input type="email" id="forgot-email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} required disabled={isLoading}
+            style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
         </div>
-        <form
-          className="flex flex-col gap-y-4"
-          onSubmit={handleForgotPasswordSubmit}
-        >
-          <div className="relative">
-            <input
-              type="email"
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-              placeholder="Email"
-              id="forgot-email"
-              value={forgotEmail}
-              onChange={(e) => setForgotEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-            <label
-              htmlFor="forgot-email"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Email *
-            </label>
-          </div>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 text-white rounded-full font-bold shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
-          >
-            {isLoading ? (
-              <Loader2 className="size-5 animate-spin" />
-            ) : (
-              "Send Verification Code"
-            )}
-          </Button>
-        </form>
-        <div className="mt-4">
-          <button
-            onClick={() => setCurrentView("login")}
-            className="text-primary font-semibold text-sm hover:underline hoverEffect"
-            disabled={isLoading}
-          >
-            Back to Sign in
-          </button>
-        </div>
-      </div>
+        <button type="submit" disabled={isLoading}
+          style={{ width: "100%", background: "#000", color: "#fff", padding: "0.9rem", fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 400, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "0.5rem" }}>
+          {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Send Verification Code"}
+        </button>
+      </form>
+      <button onClick={() => setCurrentView("login")} disabled={isLoading}
+        style={{ fontSize: "0.8rem", color: "#000", textDecoration: "underline", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>
+        Back to Sign in
+      </button>
     </div>
   );
 
   const renderOtpView = () => (
-    <div
-      key="otp"
-      className="flex flex-col gap-y-8 animate-in fade-in slide-in-from-right-4 duration-300"
-    >
-      <div className="flex justify-center">
-        <img
-          src="/images/authentication/otp-verification-illustration.png"
-          alt="otp"
-          className="max-w-[200px]"
-        />
+    <div key="otp" className="flex flex-col gap-y-7 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex justify-center py-4">
+        {logoUrl ? (
+          <img src={logoUrl} alt="Avenue" style={{ height: "25px", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1rem", letterSpacing: "0.18em", textTransform: "uppercase" }}>AVENUE</span>
+        )}
       </div>
-      <div className="flex flex-col gap-y-6">
-        <div className="text-center">
-          <h6 className="font-bold text-lg mb-1">
-            Enter the verification code
-          </h6>
-          <p className="text-muted-foreground text-sm">
-            Enter the 6-digit code sent to your email address
-          </p>
-        </div>
-        <div className="flex justify-between gap-x-2">
-          {[0, 1, 2, 3, 4, 5].map((index) => (
-            <input
-              key={index}
-              id={`otp-${index}`}
-              type="text"
-              placeholder="-"
-              maxLength={6}
-              value={otpValues[index]}
-              onChange={(e) => handleOtpChange(index, e.target.value)}
-              onKeyDown={(e) => handleOtpKeyDown(index, e)}
-              disabled={isLoading}
-              className="w-full h-14 border border-border rounded-2xl text-center text-xl font-bold focus:border-primary outline-none transition-colors"
-            />
-          ))}
-        </div>
-        <div className="text-right">
-          <button
-            type="button"
-            onClick={handleForgotPasswordSubmit}
+      <div className="text-center">
+        <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem", fontWeight: 400, marginBottom: "0.4rem" }}>Enter the verification code</p>
+        <p style={{ fontSize: "0.85rem", color: "var(--gray-500)" }}>Enter the 6-digit code sent to your email address</p>
+      </div>
+      <div className="flex justify-between gap-x-2">
+        {[0, 1, 2, 3, 4, 5].map((index) => (
+          <input key={index} id={`otp-${index}`} type="text" placeholder="-" maxLength={6}
+            value={otpValues[index]}
+            onChange={(e) => handleOtpChange(index, e.target.value)}
+            onKeyDown={(e) => handleOtpKeyDown(index, e)}
             disabled={isLoading}
-            className="text-primary text-sm font-semibold hover:underline"
-          >
-            Resend The Code
-          </button>
-        </div>
-        <Button
-          onClick={handleOtpSubmit}
-          disabled={isLoading || otpValues.join("").length !== 6}
-          className="w-full h-14 text-white rounded-full font-bold shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
-        >
-          {isLoading ? <Loader2 className="size-5 animate-spin" /> : "Verify"}
-        </Button>
-        <div className="mt-4">
-          <button
-            onClick={() => setCurrentView("forgot-password")}
-            className="text-primary font-semibold text-sm hover:underline"
-          >
-            Back to Forgot Password
-          </button>
-        </div>
+            style={{ width: "100%", height: "52px", border: "1px solid var(--gray-300)", borderRadius: 0, textAlign: "center", fontSize: "1.2rem", fontWeight: 500, outline: "none" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
+        ))}
       </div>
+      <div className="text-right">
+        <button type="button" onClick={handleForgotPasswordSubmit} disabled={isLoading}
+          style={{ fontSize: "0.8rem", color: "#000", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" }}>
+          Resend The Code
+        </button>
+      </div>
+      <button onClick={handleOtpSubmit} disabled={isLoading || otpValues.join("").length !== 6}
+        style={{ width: "100%", background: "#000", color: "#fff", padding: "0.9rem", fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 400, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: otpValues.join("").length !== 6 ? 0.5 : 1 }}>
+        {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Verify"}
+      </button>
+      <button onClick={() => setCurrentView("forgot-password")}
+        style={{ fontSize: "0.8rem", color: "#000", textDecoration: "underline", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>
+        Back to Forgot Password
+      </button>
     </div>
   );
 
   const renderResetPasswordView = () => (
-    <div
-      key="reset-password"
-      className="flex flex-col gap-y-8 animate-in fade-in slide-in-from-right-4 duration-300"
-    >
-      <div className="flex justify-center">
-        <img
-          src="/images/authentication/reset-illustration.png"
-          alt="reset"
-          className="max-w-[200px]"
-        />
+    <div key="reset-password" className="flex flex-col gap-y-7 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex justify-center py-4">
+        {logoUrl ? (
+          <img src={logoUrl} alt="Avenue" style={{ height: "25px", objectFit: "contain" }} />
+        ) : (
+          <span style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1rem", letterSpacing: "0.18em", textTransform: "uppercase" }}>AVENUE</span>
+        )}
       </div>
-      <div className="flex flex-col gap-y-6">
-        <form
-          className="flex flex-col gap-y-4"
-          onSubmit={handleResetPasswordSubmit}
-        >
-          <div className="relative">
-            <input
-              type="password"
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-              placeholder="New Password"
-              id="new-password"
-              value={resetPasswordState.password}
-              onChange={(e) =>
-                setResetPasswordState((prev) => ({
-                  ...prev,
-                  password: e.target.value,
-                }))
-              }
-              required
-              disabled={isLoading}
-            />
-            <label
-              htmlFor="new-password"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              New Password *
-            </label>
-          </div>
-          <div className="relative">
-            <input
-              type="password"
-              className="w-full px-5 py-3.5 rounded-full border border-border focus:border-primary outline-none transition-colors peer placeholder-transparent"
-              placeholder="Confirm Password"
-              id="confirm-reset-password"
-              value={resetPasswordState.confirmPassword}
-              onChange={(e) =>
-                setResetPasswordState((prev) => ({
-                  ...prev,
-                  confirmPassword: e.target.value,
-                }))
-              }
-              required
-              disabled={isLoading}
-            />
-            <label
-              htmlFor="confirm-reset-password"
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground transition-all peer-placeholder-shown:text-base peer-focus:text-xs peer-focus:top-2 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-2 bg-background px-1"
-            >
-              Confirm Password *
-            </label>
-          </div>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 text-white rounded-full font-bold shadow-lg shadow-primary/20 active:scale-[0.98] mt-2"
-          >
-            {isLoading ? (
-              <Loader2 className="size-5 animate-spin" />
-            ) : (
-              "Change Password"
-            )}
-          </Button>
-        </form>
-        <div className="text-center mt-4">
-          <button
-            onClick={() => setCurrentView("login")}
-            className="text-primary font-bold text-sm hover:underline"
-          >
-            Back to Login
-          </button>
+      <form className="flex flex-col gap-y-4" onSubmit={handleResetPasswordSubmit}>
+        <div>
+          <label htmlFor="new-password" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>New Password *</label>
+          <input type="password" id="new-password" value={resetPasswordState.password}
+            onChange={(e) => setResetPasswordState((prev) => ({ ...prev, password: e.target.value }))}
+            required disabled={isLoading}
+            style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
         </div>
-      </div>
+        <div>
+          <label htmlFor="confirm-reset-password" style={{ display: "block", fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--gray-600)", marginBottom: "0.35rem" }}>Confirm Password *</label>
+          <input type="password" id="confirm-reset-password" value={resetPasswordState.confirmPassword}
+            onChange={(e) => setResetPasswordState((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+            required disabled={isLoading}
+            style={{ width: "100%", border: "1px solid var(--gray-300)", borderRadius: 0, padding: "0.75rem 1rem", fontSize: "0.9rem", outline: "none" }}
+            onFocus={e => e.currentTarget.style.borderColor = "#000"}
+            onBlur={e => e.currentTarget.style.borderColor = "var(--gray-300)"}
+          />
+        </div>
+        <button type="submit" disabled={isLoading}
+          style={{ width: "100%", background: "#000", color: "#fff", padding: "0.9rem", fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 400, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "0.5rem" }}>
+          {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Change Password"}
+        </button>
+      </form>
+      <button onClick={() => setCurrentView("login")}
+        style={{ fontSize: "0.8rem", color: "#000", textDecoration: "underline", background: "none", border: "none", cursor: "pointer", textAlign: "center" }}>
+        Back to Login
+      </button>
     </div>
   );
 
@@ -980,7 +714,7 @@ const AuthSidebar = () => {
     <Sheet open={isAuthOpen} onOpenChange={onAuthClose}>
       <SheetContent
         side="right"
-        className="flex flex-col w-full sm:max-w-[550px] p-0 border-none rounded-2xl overflow-hidden inset-y-2.5 right-2.5 h-[calc(100vh-20px)] shadow-2xl"
+        className="flex flex-col w-full sm:max-w-[480px] p-0 border-none overflow-hidden shadow-xl"
         showCloseButton={false}
       >
         {renderHeader()}

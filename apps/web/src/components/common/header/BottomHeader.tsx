@@ -118,9 +118,9 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                                       : "px-4"
                                 }`}
                               >
-                                <h5 className="text-sm leading-[22px] uppercase font-semibold text-black mb-2">
+                                <span className="text-[0.8rem] leading-[22px] font-bold text-black mb-2 block">
                                   {column.title}
-                                </h5>
+                                </span>
                                 <ul className="flex flex-col gap-y-2">
                                   {column.items.map((subLink, subIdx) => {
                                     const rawHref = subLink.href || "#";
@@ -137,18 +137,24 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                                       formattedHref = `/menu/${cleanHref}`;
                                     }
 
+                                    const isHeading = !rawHref || rawHref === "";
                                     return (
                                       <li
-                                        key={
-                                          subLink._id || subLink.id || subIdx
-                                        }
+                                        key={subLink._id || subLink.id || subIdx}
+                                        className={isHeading ? "mt-3 first:mt-0" : ""}
                                       >
-                                        <Link
-                                          href={formattedHref}
-                                          className="text-black hover:text-primary transition-colors inline-block w-full"
-                                        >
-                                          {subLink.title}
-                                        </Link>
+                                        {isHeading ? (
+                                          <span className="text-[0.8rem] font-bold text-black block">
+                                            {subLink.title}
+                                          </span>
+                                        ) : (
+                                          <Link
+                                            href={formattedHref}
+                                            className="text-black hover:text-primary transition-colors inline-block w-full"
+                                          >
+                                            {subLink.title}
+                                          </Link>
+                                        )}
                                       </li>
                                     );
                                   })}

@@ -47,7 +47,7 @@ import { Switch } from "@/components/ui/switch";
 // Schemas based on previous discussion
 const baseMenuItemSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  href: z.string().min(1, "Link is required"),
+  href: z.string(),
 });
 
 // Define interfaces for recursion
@@ -729,17 +729,16 @@ function MegaMenuColumnEditor({ control, index, remove, setValue }: any) {
                     <Input
                       placeholder="Item Title"
                       {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        const title = e.target.value;
-                        const slug = title
-                          .toLowerCase()
-                          .replace(/[^a-z0-9]+/g, "-")
-                          .replace(/(^-|-$)+/g, "");
-                        setValue(
-                          `megaData.${index}.items.${itemIndex}.href`,
-                          slug,
-                        );
+                      onBlur={(e) => {
+                        field.onBlur();
+                        const currentHref = control._formValues.megaData[index].items[itemIndex].href;
+                        if (!currentHref) {
+                          const slug = e.target.value
+                            .toLowerCase()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/(^-|-$)+/g, "");
+                          setValue(`megaData.${index}.items.${itemIndex}.href`, slug);
+                        }
                       }}
                       className="h-8"
                     />
@@ -753,7 +752,7 @@ function MegaMenuColumnEditor({ control, index, remove, setValue }: any) {
               render={({ field }) => (
                 <FormItem className="flex-1 space-y-0">
                   <FormControl>
-                    <Input placeholder="Link" {...field} className="h-8" />
+                    <Input placeholder="Link (empty = heading)" {...field} className="h-8" />
                   </FormControl>
                 </FormItem>
               )}

@@ -47,7 +47,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
   return (
     <>
       <div
-        className="hidden xl:flex items-center header-middle relative z-50"
+        className="hidden xl:flex items-center header-middle relative z-[60]"
         style={{ height: "64px", background: "var(--gray-200)" }}
       >
         <Container className="w-full">
@@ -95,7 +95,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
                     </button>
 
                     {/* Added pt-4 to act as a bridge for the cursor to travel downwards without losing hover state */}
-                    <div className="absolute right-0 top-full pt-4 z-50 w-[250px] max-w-[250px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                    <div className="absolute right-0 top-full pt-4 z-[200] w-[250px] max-w-[250px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                       <ul className="bg-white rounded-lg shadow-dark-z-24 py-2 m-0 list-none">
                         {!isAuthenticated ? (
                           <>
@@ -248,7 +248,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
       <CartSidebar />
 
       {/* Auth Sidebar */}
-      <AuthSidebar />
+      <AuthSidebar logoUrl={logoUrl} />
     </>
   );
 };

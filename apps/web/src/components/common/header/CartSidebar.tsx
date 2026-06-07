@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/sheet";
 import { Link, useRouter } from "@/i18n/routing";
 import { ShoppingCart, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useHeaderStore } from "@/store/useHeaderStore";
 import { useCartStore } from "@/store/useCartStore";
 import CartSidebarItem from "./CartSidebarItem";
@@ -23,24 +22,19 @@ const CartSidebar = () => {
     <Sheet open={isCartOpen} onOpenChange={(open) => !open && onCartClose()}>
       <SheetContent
         side="right"
-        className="flex flex-col w-full sm:max-w-[600px] p-0 border-none sm:top-4 sm:bottom-4 sm:right-4 h-[calc(100svh-32px)] rounded-2xl overflow-hidden shadow-2xl"
+        className="flex flex-col w-full sm:max-w-[480px] p-0 border-none overflow-hidden shadow-xl"
         showCloseButton={false}
       >
         {/* Header */}
-        <SheetHeader className="flex flex-row items-center justify-between px-6 py-5 border-b border-border bg-background sticky top-0 z-10 space-y-0">
+        <SheetHeader className="flex flex-row items-center justify-between px-8 py-5 border-b border-[var(--gray-200)] bg-white sticky top-0 z-10 space-y-0">
           <div className="flex flex-col gap-1">
-            <SheetTitle className="text-xl font-bold text-foreground">
+            <SheetTitle style={{ fontFamily: "'Playfair Display', var(--font-playfair), serif", fontSize: "1.05rem", fontWeight: 400, color: "#000" }}>
               Shopping Cart
+              <span style={{ fontFamily: "var(--font-poppins), sans-serif", fontSize: "0.75rem", color: "var(--gray-500)", fontWeight: 400, marginLeft: "0.5rem" }}>({cartItems.length} items)</span>
             </SheetTitle>
-            <p className="text-sm text-foreground/80 mt-1">
-              {cartItems.length} items
-            </p>
           </div>
-          <button
-            onClick={onCartClose}
-            className="inline-flex items-center justify-center size-10"
-          >
-            <X className="size-5 text-foreground" />
+          <button onClick={onCartClose} className="text-[var(--gray-600)] hover:text-black transition-colors">
+            <X className="size-5" />
           </button>
         </SheetHeader>
 
@@ -56,17 +50,11 @@ const CartSidebar = () => {
             ))
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center space-y-4 pt-20">
-              <div className="size-20 bg-muted rounded-full flex items-center justify-center">
-                <ShoppingCart className="size-10 text-muted-foreground" />
-              </div>
-              <p className="text-lg font-medium text-foreground">
-                Your cart is empty
-              </p>
-              <button
-                onClick={onCartClose}
-                className="w-full h-12 rounded-xl text-primary border-2 border-primary/20 bg-background font-bold hover:bg-primary/5 transition-colors"
-              >
-                Shopping More
+              <ShoppingCart className="size-12 text-[var(--gray-400)]" />
+              <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 400 }}>Your cart is empty</p>
+              <button onClick={onCartClose}
+                style={{ padding: "0.75rem 2rem", border: "1px solid #000", background: "transparent", fontSize: "0.8rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer" }}>
+                Continue Shopping
               </button>
             </div>
           )}
@@ -83,26 +71,17 @@ const CartSidebar = () => {
                 ${subtotal.toFixed(2)}
               </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                className="w-full h-12 text-sm font-bold rounded-full transition-colors"
-                onClick={() => {
-                  onCartClose();
-                  router.push("/cart");
-                }}
-              >
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => { onCartClose(); router.push("/cart"); }}
+                style={{ padding: "0.85rem", border: "1px solid #000", background: "transparent", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", fontWeight: 400 }}>
                 View Cart
-              </Button>
-              <Button
-                className="w-full h-12 text-sm font-bold text-white rounded-full transition-colors order-first"
-                onClick={() => {
-                  onCartClose();
-                  router.push("/checkout");
-                }}
-              >
-                Proceed to checkout
-              </Button>
+              </button>
+              <button
+                onClick={() => { onCartClose(); router.push("/checkout"); }}
+                style={{ padding: "0.85rem", background: "#000", color: "#fff", border: "1px solid #000", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", fontWeight: 400 }}>
+                Checkout
+              </button>
             </div>
           </div>
         )}
