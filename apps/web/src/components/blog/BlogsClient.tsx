@@ -26,8 +26,13 @@ interface BlogsClientProps {
 
 const POSTS_PER_PAGE = 9;
 
+function toPlainExcerpt(text: string, maxChars = 220): string {
+  const stripped = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return stripped.length > maxChars ? stripped.slice(0, maxChars).replace(/\s\S*$/, "") + "…" : stripped;
+}
+
 const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [view, setView] = useState<"grid" | "list">("list");
   const [blogs] = useState<RealBlog[]>(initialBlogs);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -94,7 +99,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
                   slug: post.slug,
                   category: post.category?.name || "Uncategorized",
                   date: new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
-                  excerpt: post.excerpt || "",
+                  excerpt: post.excerpt ? toPlainExcerpt(post.excerpt) : "So you have heard about this site or you have been to it, but you cannot figure out.",
                   image: post.previewImage,
                   author: { name: post.author?.name || "", avatar: post.author?.image || "" },
                 }}
@@ -113,7 +118,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
                   slug: post.slug,
                   category: post.category?.name || "Uncategorized",
                   date: new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
-                  excerpt: post.excerpt || "",
+                  excerpt: post.excerpt ? toPlainExcerpt(post.excerpt) : "So you have heard about this site or you have been to it, but you cannot figure out.",
                   image: post.previewImage,
                   author: { name: post.author?.name || "", avatar: post.author?.image || "" },
                 }}

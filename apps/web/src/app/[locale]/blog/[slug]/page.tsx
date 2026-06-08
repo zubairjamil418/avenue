@@ -108,7 +108,7 @@ const SingleBlogPage = async ({
           </div>
 
           {/* Article header */}
-          <div style={{ maxWidth: "760px", margin: "0 auto", padding: "2.5rem 0 1.5rem", textAlign: "center" }}>
+          <div style={{ maxWidth: "900px", margin: "0 auto", padding: "2.5rem 0 1.5rem", textAlign: "center" }}>
             <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--gray-500)", marginBottom: "1rem" }}>
               {post.category?.name || "Uncategorized"}
             </p>
@@ -129,7 +129,7 @@ const SingleBlogPage = async ({
           </div>
 
           {/* Article body */}
-          <div style={{ maxWidth: "720px", margin: "0 auto", paddingTop: "1rem" }}>
+          <div style={{ maxWidth: "900px", margin: "0 auto", paddingTop: "1rem" }}>
             {/* Words by author */}
             {post.author?.name && (
               <p style={{ fontSize: "0.85rem", color: "var(--gray-600)", marginBottom: "2rem", borderTop: "1px solid var(--gray-200)", paddingTop: "1.5rem" }}>

@@ -61,7 +61,7 @@ const MiddleHeader = ({ logoUrl }: { logoUrl?: string }) => {
             </div>
             {/* Right: Search + Icons */}
             <div className="flex items-center justify-end gap-x-3">
-              <SearchHeader className="max-w-[220px]" />
+              <SearchHeader className="max-w-[380px]" />
 
               <div className="flex items-center gap-x-1">
                 <ul className="flex items-center gap-x-1">

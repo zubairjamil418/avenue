@@ -6,6 +6,11 @@ import { Link } from "@/i18n/routing";
 import Container from "../common/Container";
 import { Blog } from "./LatestBlogs";
 
+function toPlainExcerpt(text: string, maxChars = 120): string {
+  const stripped = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return stripped.length > maxChars ? stripped.slice(0, maxChars).replace(/\s\S*$/, "") + "…" : stripped;
+}
+
 export default function LatestBlogsClient({ blogs, title = "Avenue Stories" }: { blogs: Blog[]; title?: string }) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -81,11 +86,17 @@ export default function LatestBlogsClient({ blogs, title = "Avenue Stories" }: {
                   fontSize: "1.3rem",
                   fontWeight: 400,
                   lineHeight: 1.3,
-                  marginBottom: "0.75rem",
+                  marginBottom: "0.6rem",
                   color: "var(--black)",
                 }}>
                   {blog.title}
                 </h4>
+
+                {blog.excerpt && (
+                  <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
+                    {toPlainExcerpt(blog.excerpt)}
+                  </p>
+                )}
 
                 <Link
                   href={`/blog/${blog.slug}`}

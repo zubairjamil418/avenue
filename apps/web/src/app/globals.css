@@ -283,9 +283,9 @@
   }
 
   .main-menu > ul > li > a {
-    @apply 2xl:px-3 py-3 px-2 inline-flex items-center justify-center gap-x-1 hover:text-[var(--gray-600)] text-[var(--black)] whitespace-nowrap uppercase;
+    @apply 2xl:px-3 py-3 px-2 inline-flex items-center justify-center gap-x-1 hover:text-[var(--gray-600)] text-[var(--black)] whitespace-nowrap;
     font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.03em;
     font-weight: 500;
   }
 
@@ -299,6 +299,14 @@
 
   .main-menu ul li.has-sub-item:has(.mega-menu) {
     @apply static;
+  }
+
+  .header-bottom {
+    position: relative;
+  }
+
+  .main-menu {
+    position: static;
   }
 
   .main-menu ul li.has-sub-item:hover > ul {
@@ -322,7 +330,9 @@
   }
 
   .main-menu ul li > .mega-menu {
-    @apply absolute left-1/2 -translate-x-1/2 top-full w-full bg-white rounded-lg opacity-0 invisible transition-all duration-300 transform translate-y-4 z-50 shadow-dark-z-24;
+    @apply absolute top-full bg-white rounded-lg opacity-0 invisible transition-all duration-300 transform translate-y-4 z-50 shadow-dark-z-24;
+    left: 0;
+    right: 0;
   }
 
   .main-menu ul li.has-sub-item:hover > .mega-menu {

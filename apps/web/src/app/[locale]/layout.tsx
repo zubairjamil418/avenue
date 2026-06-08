@@ -81,14 +81,10 @@ export default async function LocaleLayout({
 
   // Pre-fetch Header Data (Menus, Category Tree, Currencies) for "Instant" Render
   const [menusRes, categoriesRes, currenciesRes, iconsRes, messages] = await Promise.all([
-    api.get(MENU_ENDPOINTS.PUBLIC, { next: { revalidate: 600 } }),
-    api.get(CATEGORY_ENDPOINTS.TREE, { next: { revalidate: 600 } }),
-    api
-      .get(CURRENCY_ENDPOINTS.BASE, { next: { revalidate: 600 } })
-      .catch(() => ({ data: { data: [] } })),
-    api
-      .get("/api/website-icons?isActive=true", { next: { revalidate: 600 } })
-      .catch(() => ({ data: { data: [] } })),
+    api.get(MENU_ENDPOINTS.PUBLIC, { next: { revalidate: 600 } }).catch(() => ({ data: [] })),
+    api.get(CATEGORY_ENDPOINTS.TREE, { next: { revalidate: 600 } }).catch(() => ({ data: [] })),
+    api.get(CURRENCY_ENDPOINTS.BASE, { next: { revalidate: 600 } }).catch(() => ({ data: { data: [] } })),
+    api.get("/api/website-icons?isActive=true", { next: { revalidate: 600 } }).catch(() => ({ data: { data: [] } })),
     getMessages(),
   ]);
 

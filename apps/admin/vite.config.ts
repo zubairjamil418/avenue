@@ -6,7 +6,8 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   base: "/admin/",
   server: {
-    port: 4000,
+    port: 5173,
+    strictPort: true,
   },
   preview: {
     port: 4000,

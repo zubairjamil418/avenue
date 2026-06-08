@@ -39,11 +39,8 @@ export default function FeaturedDuoSectionClient({
     <section style={{ padding: "4rem var(--site-gutter)" }}>
       <Container>
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "3rem",
-          }}
+          className="grid grid-cols-1 md:grid-cols-2"
+          style={{ gap: "3rem" }}
         >
           {products.slice(0, 2).map((product, index) => {
             const image = product.images?.[0] || product.image;

@@ -69,7 +69,7 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                             >
                               <Link
                                 href={subItem.href}
-                                className={`text-black hover:text-primary transition-colors ${
+                                className={`text-[0.78rem] text-black hover:text-primary transition-colors ${
                                   subItem.subItems &&
                                   subItem.subItems.length > 0
                                     ? "flex items-center justify-between w-full"
@@ -89,7 +89,7 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                                       <li key={thirdItem._id || thirdItem.id}>
                                         <Link
                                           href={thirdItem.href}
-                                          className="text-black hover:text-primary transition-colors block w-full"
+                                          className="text-[0.78rem] text-black hover:text-primary transition-colors block w-full"
                                         >
                                           {thirdItem.title}
                                         </Link>
@@ -105,25 +105,20 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                     {/* Mega Menu */}
                     {item.isMega && item.megaData && (
                       <div className="mega-menu">
-                        <div className="p-10">
-                          <div className="grid grid-cols-6 gap-x-4 divide-x divide-border">
+                        <div className="w-full max-w-screen-2xl mx-auto px-4" style={{ paddingTop: "2.5rem", paddingBottom: "2.5rem" }}>
+                          <div style={{ display: "flex", gap: "4rem", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "flex-start" }}>
                             {item.megaData.map((column, colIdx) => (
                               <div
                                 key={column._id || column.id || colIdx}
-                                className={`flex flex-col gap-y-1.5 ${
-                                  (colIdx + 1) % 10 === 1
-                                    ? "pr-4"
-                                    : (colIdx + 1) % 10 === 6
-                                      ? "pl-4"
-                                      : "px-4"
-                                }`}
+                                style={{ minWidth: "140px" }}
                               >
-                                <span className="text-[0.8rem] leading-[22px] font-bold text-black mb-2 block">
+                                <span className="text-[0.8rem] leading-[22px] font-bold text-black mb-3 block">
                                   {column.title}
                                 </span>
-                                <ul className="flex flex-col gap-y-2">
+                                <ul style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
                                   {column.items.map((subLink, subIdx) => {
-                                    const rawHref = subLink.href || "#";
+                                    const isHeading = !subLink.href || subLink.href.trim() === "";
+                                    const rawHref = isHeading ? "#" : subLink.href;
                                     let formattedHref = rawHref;
 
                                     if (
@@ -136,12 +131,10 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                                         : rawHref;
                                       formattedHref = `/menu/${cleanHref}`;
                                     }
-
-                                    const isHeading = !rawHref || rawHref === "";
                                     return (
                                       <li
                                         key={subLink._id || subLink.id || subIdx}
-                                        className={isHeading ? "mt-3 first:mt-0" : ""}
+                                        style={isHeading ? { marginTop: "1rem" } : {}}
                                       >
                                         {isHeading ? (
                                           <span className="text-[0.8rem] font-bold text-black block">
@@ -150,7 +143,7 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                                         ) : (
                                           <Link
                                             href={formattedHref}
-                                            className="text-black hover:text-primary transition-colors inline-block w-full"
+                                            className="text-[0.78rem] text-black hover:text-primary transition-colors block"
                                           >
                                             {subLink.title}
                                           </Link>
