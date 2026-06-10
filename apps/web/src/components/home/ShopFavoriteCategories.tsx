@@ -43,17 +43,33 @@ export default async function ShopFavoriteCategories({ title = "What's Trending"
           {title}
         </h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1rem" }}>
+        {/* Scrollable on mobile, 5-col grid on desktop */}
+        <div style={{
+          display: "flex",
+          gap: "1rem",
+          overflowX: "auto",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          paddingBottom: "0.5rem",
+        }}>
           {categories.map((category) => (
             <Link
               key={category._id}
               href={`/shop?category=${category.slug}`}
-              style={{ display: "flex", flexDirection: "column", gap: "0.75rem", textDecoration: "none" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.75rem",
+                textDecoration: "none",
+                flex: "0 0 calc(20% - 0.8rem)",
+                minWidth: "140px",
+              }}
             >
               <div style={{
                 background: "var(--gray-100)",
                 padding: "1rem",
                 aspectRatio: "3/4",
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -63,7 +79,7 @@ export default async function ShopFavoriteCategories({ title = "What's Trending"
                   <img
                     src={category.image}
                     alt={category.name}
-                    style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 ) : (
                   <span style={{ color: "var(--gray-400)", fontSize: "2rem", fontWeight: 700 }}>
@@ -77,6 +93,7 @@ export default async function ShopFavoriteCategories({ title = "What's Trending"
                 letterSpacing: "0.05em",
                 color: "var(--black)",
                 textDecoration: "underline",
+                whiteSpace: "nowrap",
               }}>
                 Shop {category.name}
               </span>

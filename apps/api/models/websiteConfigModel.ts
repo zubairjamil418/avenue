@@ -203,6 +203,7 @@ const websiteConfigSchema = new mongoose.Schema<IWebsiteConfigDocument>(
   },
   {
     timestamps: true,
+    strict: false,
   }
 );
 

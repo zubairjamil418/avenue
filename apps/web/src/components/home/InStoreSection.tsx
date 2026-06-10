@@ -9,106 +9,126 @@ interface Props {
 export default function InStoreSection({ config }: Props) {
   const s = config.settings as Record<string, unknown>;
   const image = (s?.images as string[] | undefined)?.[0] || (s?.adImageUrl as string | undefined);
-  const sectionTitle = config.title || "There's More In-Store";
-  const cardTitle = (s?.["Sub Title"] as string | undefined) || sectionTitle;
-  const description = config.description;
-  const linkHref = ((s?.["Link "] || s?.["Link"] || s?.adLink) as string | undefined) || "/contact";
-  const findOutHref = linkHref;
-  const visitHref = linkHref;
+
+  // 1. Custom field — main title shown as top h2
+  const mainTitle = (s?.["Title "] as string | undefined) || "";
+
+  // 2 & 3. From component form (not custom fields)
+  const sectionTitle = config.title || "";
+  const description = config.description || "";
+
+  // 4. Custom field — link below description
+  const linkText = (s?.["Link title"] as string | undefined) || "";
+  const linkHref = (s?.["Link "] as string | undefined) || (s?.adLink as string | undefined) || "/contact";
+
+  // 5. Custom field — bottom CTA button
+  const buttonLabel = (s?.["Button Title"] as string | undefined) || "";
+  const buttonHref = (s?.["Button Url"] as string | undefined) || linkHref;
 
   return (
     <section style={{ padding: "4rem var(--site-gutter) 6rem" }}>
       <Container>
-        {/* Heading */}
-        <h2 style={{
-          fontFamily: "'Playfair Display', var(--font-playfair), serif",
-          fontSize: "2.2rem",
-          fontWeight: 400,
-          textAlign: "center",
-          marginBottom: "2.5rem",
-          color: "var(--black)",
-        }}>
-          {sectionTitle}
-        </h2>
 
-        {/* 2-col grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          alignItems: "center",
-          gap: "4rem",
-        }}>
-          {/* Left: image */}
+        {/* 1. Main Title — custom field */}
+        {mainTitle && (
+          <h2 style={{
+            fontFamily: "'Playfair Display', var(--font-playfair), serif",
+            fontSize: "2.2rem",
+            fontWeight: 400,
+            textAlign: "center",
+            marginBottom: "2.5rem",
+            color: "var(--black)",
+          }}>
+            {mainTitle}
+          </h2>
+        )}
+
+        {/* 2-col grid: image + text */}
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ alignItems: "center", gap: "3rem" }}>
+
+          {/* Image */}
           {image ? (
             <img
               src={image}
-              alt={sectionTitle}
+              alt={mainTitle || sectionTitle}
               style={{ width: "100%", height: "340px", objectFit: "cover", display: "block" }}
             />
           ) : (
             <div style={{ width: "100%", height: "340px", background: "var(--gray-100)" }} />
           )}
 
-          {/* Right: text */}
+          {/* Text column */}
           <div style={{ maxWidth: "420px" }}>
-            <h3 style={{
-              fontFamily: "'Playfair Display', var(--font-playfair), serif",
-              fontSize: "1.8rem",
-              fontWeight: 400,
-              color: "var(--brand-black)",
-              marginBottom: "1rem",
-              lineHeight: 1.2,
-            }}>
-              {cardTitle}
-            </h3>
 
+            {/* 2. Section Title — from component form */}
+            {sectionTitle && (
+              <h3 style={{
+                fontFamily: "'Playfair Display', var(--font-playfair), serif",
+                fontSize: "1.8rem",
+                fontWeight: 400,
+                color: "var(--black)",
+                marginBottom: "1rem",
+                lineHeight: 1.25,
+              }}>
+                {sectionTitle}
+              </h3>
+            )}
+
+            {/* 3. Description — from component form */}
             {description && (
               <p style={{
                 fontSize: "0.9rem",
                 color: "var(--gray-600)",
-                lineHeight: 1.6,
-                marginBottom: "1.5rem",
+                lineHeight: 1.7,
+                marginBottom: "1.25rem",
               }}>
                 {description}
               </p>
             )}
 
-            <Link
-              href={findOutHref as "/contact"}
-              style={{
-                fontSize: "0.8rem",
-                textDecoration: "underline",
-                color: "var(--brand-black)",
-              }}
-            >
-              Find Out More
-            </Link>
+            {/* 4. Link — custom field */}
+            {linkText && (
+              <Link
+                href={linkHref as "/contact"}
+                style={{
+                  fontSize: "0.85rem",
+                  textDecoration: "underline",
+                  color: "var(--black)",
+                  display: "inline-block",
+                }}
+              >
+                {linkText}
+              </Link>
+            )}
           </div>
         </div>
 
-        {/* CTA */}
-        <div style={{ textAlign: "center", marginTop: "3rem" }}>
-          <Link
-            href={visitHref as "/contact"}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "var(--black)",
-              color: "#ffffff",
-              padding: "0.8rem 2.5rem",
-              fontSize: "0.8rem",
-              letterSpacing: "0.05em",
-              textTransform: "uppercase",
-              fontWeight: 400,
-              borderRadius: 0,
-              textDecoration: "none",
-              border: "none",
-            }}
-          >
-            Plan Your Visit
-          </Link>
-        </div>
+        {/* 5. CTA Button — custom field */}
+        {buttonLabel && (
+          <div style={{ textAlign: "center", marginTop: "3rem" }}>
+            <Link
+              href={buttonHref as "/contact"}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "var(--black)",
+                color: "#ffffff",
+                padding: "0.8rem 2.5rem",
+                fontSize: "0.8rem",
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+                fontWeight: 400,
+                borderRadius: 0,
+                textDecoration: "none",
+                border: "none",
+              }}
+            >
+              {buttonLabel}
+            </Link>
+          </div>
+        )}
+
       </Container>
     </section>
   );
