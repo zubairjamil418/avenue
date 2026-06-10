@@ -43,7 +43,6 @@ export default async function ShopFavoriteCategories({ title = "What's Trending"
           {title}
         </h2>
 
-        {/* Scrollable on mobile, 5-col grid on desktop */}
         <div style={{
           display: "flex",
           gap: "1rem",

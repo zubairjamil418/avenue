@@ -99,7 +99,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
                   slug: post.slug,
                   category: post.category?.name || "Uncategorized",
                   date: new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
-                  excerpt: post.excerpt ? toPlainExcerpt(post.excerpt) : "So you have heard about this site or you have been to it, but you cannot figure out.",
+                  excerpt: post.excerpt ? toPlainExcerpt(post.excerpt) : "",
                   image: post.previewImage,
                   author: { name: post.author?.name || "", avatar: post.author?.image || "" },
                 }}
@@ -118,7 +118,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
                   slug: post.slug,
                   category: post.category?.name || "Uncategorized",
                   date: new Date(post.publishedAt || post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
-                  excerpt: post.excerpt ? toPlainExcerpt(post.excerpt) : "So you have heard about this site or you have been to it, but you cannot figure out.",
+                  excerpt: post.excerpt ? toPlainExcerpt(post.excerpt) : "",
                   image: post.previewImage,
                   author: { name: post.author?.name || "", avatar: post.author?.image || "" },
                 }}

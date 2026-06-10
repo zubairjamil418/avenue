@@ -37,7 +37,7 @@ export default function LatestBlogsClient({ blogs, title = "Avenue Stories" }: {
             ref={carouselRef}
             style={{
               display: "flex",
-              gap: "1.5rem",
+              gap: "1rem",
               overflowX: "auto",
               paddingBottom: "1.5rem",
               scrollBehavior: "smooth",
@@ -64,18 +64,24 @@ export default function LatestBlogsClient({ blogs, title = "Avenue Stories" }: {
               window.addEventListener("mouseup", onUp);
             }}
           >
-            {blogs.map((blog) => (
+            {blogs.slice(0, 5).map((blog) => (
               <div
                 key={blog._id}
-                style={{ minWidth: "240px", flexShrink: 0 }}
+                style={{
+                  flex: "0 0 calc(20% - 0.8rem)",
+                  minWidth: "140px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
               >
                 <Link href={`/blog/${blog.slug}`} style={{ display: "block", textDecoration: "none" }}>
-                  <div style={{ width: "100%", height: "320px", position: "relative", overflow: "hidden", marginBottom: "1rem" }}>
+                  <div style={{ width: "100%", aspectRatio: "3/4", position: "relative", overflow: "hidden", background: "var(--gray-100)" }}>
                     <Image
                       src={blog.previewImage || "/placeholder-blog.jpg"}
                       alt={blog.title}
                       fill
-                      sizes="240px"
+                      sizes="(max-width: 768px) 45vw, 20vw"
                       style={{ objectFit: "cover" }}
                     />
                   </div>
@@ -83,20 +89,13 @@ export default function LatestBlogsClient({ blogs, title = "Avenue Stories" }: {
 
                 <h4 style={{
                   fontFamily: "'Playfair Display', var(--font-playfair), serif",
-                  fontSize: "1.3rem",
+                  fontSize: "1rem",
                   fontWeight: 400,
                   lineHeight: 1.3,
-                  marginBottom: "0.6rem",
                   color: "var(--black)",
                 }}>
                   {blog.title}
                 </h4>
-
-                {blog.excerpt && (
-                  <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
-                    {toPlainExcerpt(blog.excerpt)}
-                  </p>
-                )}
 
                 <Link
                   href={`/blog/${blog.slug}`}
