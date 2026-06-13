@@ -20,10 +20,10 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
       className="hidden xl:flex header-bottom z-50"
       style={{ background: "var(--gray-200)", paddingBottom: "0.5rem" }}
     >
-      <Container className="flex items-center w-full">
+      <Container className="flex items-center w-full !px-[var(--site-gutter)]">
           {/* Main Navigation */}
           <nav className="main-menu w-full">
-            <ul className="flex items-center justify-center w-full">
+            <ul className="flex items-center justify-start w-full">
               {menusLoading ? (
                 // Simple skeleton or loading state
                 <div className="flex gap-4">
@@ -105,7 +105,7 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                     {/* Mega Menu */}
                     {item.isMega && item.megaData && (
                       <div className="mega-menu">
-                        <div className="w-full max-w-screen-2xl mx-auto px-4" style={{ paddingTop: "2.5rem", paddingBottom: "2.5rem" }}>
+                        <div className="w-full max-w-screen-2xl mx-auto" style={{ paddingTop: "2.5rem", paddingBottom: "2.5rem", paddingLeft: "var(--site-gutter)", paddingRight: "var(--site-gutter)" }}>
                           <div style={{ display: "flex", gap: "4rem", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "flex-start" }}>
                             {item.megaData.map((column, colIdx) => (
                               <div
@@ -118,19 +118,7 @@ const BottomHeader = ({ initialMenus }: BottomHeaderProps) => {
                                 <ul style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
                                   {column.items.map((subLink, subIdx) => {
                                     const isHeading = !subLink.href || subLink.href.trim() === "";
-                                    const rawHref = isHeading ? "#" : subLink.href;
-                                    let formattedHref = rawHref;
-
-                                    if (
-                                      rawHref !== "#" &&
-                                      !rawHref.startsWith("http") &&
-                                      !rawHref.startsWith("/menu/")
-                                    ) {
-                                      const cleanHref = rawHref.startsWith("/")
-                                        ? rawHref.slice(1)
-                                        : rawHref;
-                                      formattedHref = `/menu/${cleanHref}`;
-                                    }
+                                    const formattedHref = isHeading ? "#" : subLink.href;
                                     return (
                                       <li
                                         key={subLink._id || subLink.id || subIdx}

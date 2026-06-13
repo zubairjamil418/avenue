@@ -41,7 +41,8 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Edit, Loader2, Plus, Trash2, RefreshCw, Wand2 } from "lucide-react";
+import { Edit, Loader2, Plus, Trash2, RefreshCw, Wand2, ClipboardPaste, ChevronDown, ChevronUp } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 
 // Schemas based on previous discussion
@@ -516,17 +517,80 @@ export default function MenusPage() {
                     <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
                       Mega Menu Columns
                     </h3>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="h-8"
-                      onClick={() =>
-                        appendMegaColumn({ title: "New Column", items: [] })
-                      }
-                    >
-                      <Plus className="mr-2 h-4 w-4" /> Add Column
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-8"
+                        onClick={() => {
+                          const el = document.getElementById("mega-json-panel");
+                          if (el) el.classList.toggle("hidden");
+                        }}
+                      >
+                        <ClipboardPaste className="mr-2 h-4 w-4" /> Paste JSON
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-8"
+                        onClick={() =>
+                          appendMegaColumn({ title: "New Column", items: [] })
+                        }
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Add Column
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* JSON Import Panel */}
+                  <div id="mega-json-panel" className="hidden border rounded-lg p-3 bg-background space-y-2">
+                    <p className="text-xs text-muted-foreground">
+                      Paste a <code className="bg-muted px-1 rounded">megaData</code> JSON array. Example:
+                      <code className="block mt-1 bg-muted p-2 rounded text-[11px] whitespace-pre leading-relaxed">{`[{"title":"COLUMN TITLE","items":[{"title":"Item Name","href":"/shop?brand=item-name"}]}]`}</code>
+                    </p>
+                    <Textarea
+                      id="mega-json-input"
+                      placeholder='[{"title":"Column","items":[{"title":"Brand","href":"/shop?brand=brand-slug"}]}]'
+                      className="font-mono text-xs min-h-[120px]"
+                    />
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="h-8"
+                        onClick={() => {
+                          const el = document.getElementById("mega-json-panel");
+                          if (el) el.classList.add("hidden");
+                          const ta = document.getElementById("mega-json-input") as HTMLTextAreaElement;
+                          if (ta) ta.value = "";
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="h-8"
+                        onClick={() => {
+                          const ta = document.getElementById("mega-json-input") as HTMLTextAreaElement;
+                          if (!ta) return;
+                          try {
+                            const parsed: MegaMenuColumn[] = JSON.parse(ta.value);
+                            if (!Array.isArray(parsed)) throw new Error("Must be an array");
+                            form.setValue("megaData", parsed, { shouldValidate: true });
+                            ta.value = "";
+                            document.getElementById("mega-json-panel")?.classList.add("hidden");
+                          } catch (e: any) {
+                            alert("Invalid JSON: " + e.message);
+                          }
+                        }}
+                      >
+                        Apply JSON
+                      </Button>
+                    </div>
                   </div>
                   <div className="space-y-4">
                     {megaDataFields.map((field, index) => (

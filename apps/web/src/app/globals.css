@@ -275,7 +275,7 @@
 
   /* Main Menu */
   .main-menu > ul {
-    @apply hidden xl:flex items-center justify-center w-full;
+    @apply hidden xl:flex items-center justify-start w-full;
   }
 
   .main-menu > ul > li {
@@ -291,6 +291,12 @@
 
   .main-menu > ul > li:hover > a {
     @apply text-primary;
+  }
+
+  .main-menu > ul > li:hover {
+    position: relative;
+    z-index: 51;
+    box-shadow: 0 2px 0 var(--black);
   }
 
   .main-menu ul li.has-sub-item {
