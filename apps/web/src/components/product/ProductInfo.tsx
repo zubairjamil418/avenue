@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -29,6 +30,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || null);
   const [quantity, setQuantity] = useState(1);
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+  const router = useRouter();
 
   const addToCompare = useCompareStore((state) => state.addToCompare);
   const removeFromCompare = useCompareStore((state) => state.removeFromCompare);
@@ -232,6 +234,10 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
         {/* Buy Now — outline */}
         <button
+          onClick={() => {
+            useCartStore.getState().addToCart(cartProduct, quantity, selectedColor, selectedSize);
+            router.push("/checkout");
+          }}
           style={{
             width: "100%", height: 44, background: "transparent", color: "var(--black)",
             border: "1px solid var(--black)", fontSize: "0.75rem", letterSpacing: "0.15em",
