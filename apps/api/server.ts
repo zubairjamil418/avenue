@@ -299,8 +299,8 @@ app.use(
       .swagger-ui .info { margin: 50px 0 }
       .swagger-ui .scheme-container { background: #fafafa; padding: 30px 0 }
     `,
-    customSiteTitle: "Sellzy API Documentation",
-    customfavIcon: "/favicon.ico",
+    customSiteTitle: "Avenue Retail API Documentation",
+    customfavIcon: "https://ik.imagekit.io/2kbwxa9nv/sellzy/websiteIcons/favicon_yopjdPvMz.jpg",
     swaggerOptions: {
       persistAuthorization: true,
       displayRequestDuration: true,
