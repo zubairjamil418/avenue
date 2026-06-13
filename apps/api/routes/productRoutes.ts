@@ -100,24 +100,75 @@ const router = express.Router();
  *               - name
  *               - price
  *               - category
- *               - stock
+ *               - images
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Unique product name
  *               description:
  *                 type: string
  *               price:
  *                 type: number
- *               category:
- *                 type: string
- *               brand:
- *                 type: string
+ *                 description: Selling price
+ *               discountPercentage:
+ *                 type: number
+ *                 minimum: 0
+ *                 maximum: 100
+ *                 default: 0
+ *               purchasedQuantity:
+ *                 type: integer
+ *                 default: 0
+ *                 description: Base sold quantity shown to customers
  *               stock:
  *                 type: integer
+ *                 default: 0
+ *               slug:
+ *                 type: string
+ *                 description: URL slug — auto-generated from name if omitted
+ *               bg:
+ *                 type: string
+ *                 description: Background hex colour e.g. "#F4F3F5"
+ *               isNewItem:
+ *                 type: boolean
+ *                 default: false
+ *                 description: Shows "New Arrival" badge on storefront
+ *               category:
+ *                 type: string
+ *                 description: Category ObjectId
+ *               brand:
+ *                 type: string
+ *                 description: Brand ObjectId
+ *               productBase:
+ *                 type: string
+ *                 description: ProductBase ObjectId
+ *               productTypes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of ProductType ObjectIds
+ *               sizes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of Size ObjectIds
+ *               colors:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of Color ObjectIds
+ *               weights:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of Weight ObjectIds
+ *               badge:
+ *                 type: string
+ *                 description: Badge ObjectId
  *               images:
  *                 type: array
  *                 items:
  *                   type: string
+ *                 description: Array of base64 or URL image strings — uploaded to ImageKit; first becomes the cover image
  *     responses:
  *       201:
  *         description: Product created successfully
@@ -126,11 +177,11 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Product'
  *       400:
- *         description: Validation error
+ *         description: Validation error or duplicate name/slug
  *       401:
  *         description: Unauthorized
  *       403:
- *         description: Admin access required
+ *         description: Admin or vendor access required
  */
 router
   .route("/")
@@ -286,6 +337,137 @@ router.route("/vendor").get(protect, admin, getVendorProducts);
 // Get vendor's own products (Vendor only) - Must be before /:id
 router.route("/vendor/me").get(protect, vendor, getVendorProducts);
 
+/**
+ * @swagger
+ * /api/products/bulk:
+ *   post:
+ *     summary: Bulk create products (max 100)
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - products
+ *             properties:
+ *               products:
+ *                 type: array
+ *                 maxItems: 100
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - name
+ *                     - category
+ *                     - brand
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       description: Unique product name
+ *                     description:
+ *                       type: string
+ *                       default: ""
+ *                     price:
+ *                       type: number
+ *                       default: 0
+ *                     discountPercentage:
+ *                       type: number
+ *                       minimum: 0
+ *                       maximum: 100
+ *                       default: 0
+ *                     purchasePrice:
+ *                       type: number
+ *                       default: 0
+ *                     purchasedQuantity:
+ *                       type: integer
+ *                       default: 0
+ *                     stock:
+ *                       type: integer
+ *                       default: 0
+ *                     slug:
+ *                       type: string
+ *                       description: Auto-generated from name if omitted
+ *                     bg:
+ *                       type: string
+ *                       description: Background hex colour e.g. "#F4F3F5"
+ *                     isNewItem:
+ *                       type: boolean
+ *                       default: false
+ *                     category:
+ *                       type: string
+ *                       description: Category ObjectId
+ *                     brand:
+ *                       type: string
+ *                       description: Brand ObjectId
+ *                     productBase:
+ *                       type: string
+ *                       description: ProductBase ObjectId
+ *                     sizes:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: Array of Size ObjectIds
+ *                     colors:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: Array of Color ObjectIds
+ *                     weights:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: Array of Weight ObjectIds
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: Array of hosted image URLs (not uploaded — stored as-is)
+ *     responses:
+ *       201:
+ *         description: Bulk operation completed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                   example: "Successfully created 2 of 3 products"
+ *                 results:
+ *                   type: object
+ *                   properties:
+ *                     successful:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           index:
+ *                             type: integer
+ *                           product:
+ *                             $ref: '#/components/schemas/Product'
+ *                     failed:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           index:
+ *                             type: integer
+ *                           data:
+ *                             type: object
+ *                           error:
+ *                             type: string
+ *       400:
+ *         description: Products array missing, empty, or exceeds 100 items
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Admin access required
+ */
 // Bulk create products (Admin only) - Must be before /:id
 router.route("/bulk").post(protect, admin, bulkCreateProducts);
 

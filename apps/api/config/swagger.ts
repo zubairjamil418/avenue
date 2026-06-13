@@ -9,25 +9,23 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Sellzy E-commerce API",
+      title: "Avenue Retail API",
       version: "1.0.0",
       description:
         "A comprehensive e-commerce API for managing products, orders, users, and analytics",
       contact: {
         name: "API Support",
-        email: "support@sellzy.com",
+        email: "support@avenueretail.co.uk",
       },
     },
     servers: [
       {
-        url:
-          process.env.NODE_ENV === "production"
-            ? process.env.SERVER_URL || "https://api.sellzy.reactbd.com"
-            : `http://localhost:${process.env.PORT || 8000}`,
-        description:
-          process.env.NODE_ENV === "production"
-            ? "Production server"
-            : "Development server",
+        url: "https://avenueretail.co.uk/backend",
+        description: "Production server",
+      },
+      {
+        url: `http://localhost:${process.env.PORT || 8000}`,
+        description: "Local development server",
       },
     ],
     components: {
