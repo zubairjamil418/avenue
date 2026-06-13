@@ -325,7 +325,7 @@ export default function AbandonedCartPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-[1600px] w-full mb-8">
-      {/* Sellzy Page Global Container matching Orders/Products */}
+      {/* Avenue Retail Page Global Container matching Orders/Products */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

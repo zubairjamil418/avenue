@@ -107,7 +107,7 @@ function ApplyForm({ onApplied }: { onApplied: (v: VendorRecord) => void }) {
           <Store size={22} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-grey-900">Become a Sellzy Vendor</h2>
+          <h2 className="text-xl font-bold text-grey-900">Become an Avenue Retail Vendor</h2>
           <p className="text-sm text-grey-600">
             Tell us about your store. Once approved you'll get the seller dashboard.
           </p>

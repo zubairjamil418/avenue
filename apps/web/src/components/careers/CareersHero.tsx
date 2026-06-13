@@ -35,7 +35,7 @@ const CareersHero = ({ collageImages = [] }: { collageImages?: string[] }) => {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-12 max-w-2xl mx-auto">
-            At Sellzy, we're not just building a marketplace; we're building an
+            At Avenue Retail, we're not just building a marketplace; we're building an
             ecosystem that empowers entrepreneurs worldwide. Join us to solve
             complex, high-scale engineering and design challenges.
           </p>

@@ -1,7 +1,7 @@
 import VendorProductsList from "@/components/vendor-config/VendorProductsList";
 
 export const metadata = {
-  title: "Vendor Products - Sellzy Admin",
+  title: "Vendor Products - Avenue Retail Admin",
   description: "Manage vendor products and approvals",
 };
 

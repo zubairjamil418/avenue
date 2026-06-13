@@ -13,7 +13,7 @@ const privacySections = [
     content: (
       <>
         <p className="mb-4">
-          At Sellzy, we prioritize your privacy. We collect information to
+          At Avenue Retail, we prioritize your privacy. We collect information to
           provide better services to all our users. The types of information we
           gather depend on how you interact with our platform.
         </p>
@@ -43,7 +43,7 @@ const privacySections = [
     content: (
       <>
         <p className="mb-4">
-          Sellzy uses the collected data for various fundamental operational
+          Avenue Retail uses the collected data for various fundamental operational
           purposes, ensuring a seamless and secure eCommerce experience.
         </p>
         <ul className="list-disc pl-6 space-y-2 mb-4 text-muted-foreground">
@@ -117,7 +117,7 @@ const privacySections = [
       <>
         <p className="mb-4">
           Depending on your location, you may have specific rights regarding
-          your personal data. Sellzy extends these core rights globally to all
+          your personal data. Avenue Retail extends these core rights globally to all
           users:
         </p>
         <ul className="list-disc pl-6 space-y-2 mb-4 text-muted-foreground">
@@ -185,7 +185,7 @@ const PrivacyPolicyPage = () => {
             </h1>
             <p className="text-lg text-muted-foreground">
               We believe in transparency. Learn exactly how we collect, use, and
-              protect your personal information on the Sellzy platform.
+              protect your personal information on the Avenue Retail platform.
               <br /> Effective Date: March 2026.
             </p>
           </div>

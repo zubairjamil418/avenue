@@ -211,7 +211,7 @@ const InvoicePage: React.FC = () => {
       
       // Add the image filling exactly the A4 width
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Sellzy_Invoice_${invoiceData.invoiceNumber}.pdf`);
+      pdf.save(`Avenue_Retail_Invoice_${invoiceData.invoiceNumber}.pdf`);
       
       toast({
         title: "Download Complete",
@@ -234,7 +234,7 @@ const InvoicePage: React.FC = () => {
 
     const shareText = `Invoice ${
       invoiceData.invoiceNumber
-    } from Sellzy - Total: $${invoiceData.order.totalAmount.toFixed(2)}`;
+    } from Avenue Retail - Total: $${invoiceData.order.totalAmount.toFixed(2)}`;
     const shareUrl = window.location.href;
 
     switch (platform) {

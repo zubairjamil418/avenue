@@ -403,7 +403,7 @@ export default function BannerPagesPage() {
                     <FormLabel>Title</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. Sellzy | Best eCommerce"
+                        placeholder="e.g. Avenue Retail | Best eCommerce"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);

@@ -82,7 +82,7 @@ export default function VendorSidebar({ open, setOpen }: SidebarProps) {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="flex items-center w-full"
             >
-              <img src="/admin/logo.png" alt="Sellzy" className="h-9 w-auto object-contain" />
+              <img src="/admin/logo.png" alt="Avenue Retail" className="h-9 w-auto object-contain" />
             </motion.div>
           ) : (
             <motion.div
@@ -97,7 +97,7 @@ export default function VendorSidebar({ open, setOpen }: SidebarProps) {
             >
               <img
                 src="/admin/logo-small.png"
-                alt="Sellzy"
+                alt="Avenue Retail"
                 className="h-8 w-8 object-contain"
               />
             </motion.div>

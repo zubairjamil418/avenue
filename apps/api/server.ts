@@ -301,7 +301,7 @@ app.use(
       .swagger-ui .info { margin: 50px 0 }
       .swagger-ui .scheme-container { background: #fafafa; padding: 30px 0 }
     `,
-    customSiteTitle: "Sellzy API Documentation",
+    customSiteTitle: "Avenue Retail API Documentation",
     customfavIcon: "/favicon.ico",
     swaggerOptions: {
       persistAuthorization: true,
@@ -317,7 +317,7 @@ app.use(
 // Home route
 app.get("/", (req: express.Request, res: express.Response) => {
   res.json({
-    message: "Sellzy API is running...",
+    message: "Avenue Retail API is running...",
     version: "1.0.0",
     environment: process.env.NODE_ENV,
     docs: `${req.protocol}://${req.get("host")}/api/docs`,

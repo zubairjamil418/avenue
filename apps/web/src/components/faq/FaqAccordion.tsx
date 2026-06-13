@@ -15,7 +15,7 @@ const faqData = [
       },
       {
         q: "How can I track my order?",
-        a: "Once a vendor marks your order as shipped, you will receive an automatic email notification containing a tracking link. You can also monitor real-time shipping updates by logging into your Sellzy account and checking the 'My Orders' dashboard.",
+        a: "Once a vendor marks your order as shipped, you will receive an automatic email notification containing a tracking link. You can also monitor real-time shipping updates by logging into your Avenue Retail account and checking the 'My Orders' dashboard.",
       },
       {
         q: "How long will it take to receive my order?",
@@ -23,7 +23,7 @@ const faqData = [
       },
       {
         q: "Do you ship internationally?",
-        a: "Yes, because Sellzy is a global multi-vendor platform, many of our vendors offer international shipping. You can verify shipping availability and rates to your specific country directly on the product checkout page.",
+        a: "Yes, because Avenue Retail is a global multi-vendor platform, many of our vendors offer international shipping. You can verify shipping availability and rates to your specific country directly on the product checkout page.",
       },
       {
         q: "Can I cancel or modify my order?",
@@ -53,7 +53,7 @@ const faqData = [
     questions: [
       {
         q: "What is your standard return policy?",
-        a: "Return policies are set individually by each vendor. However, Sellzy mandates a minimum 14-day return window for all items sold that arrive damaged or significantly not as described under our Buyer Protection Guarantee.",
+        a: "Return policies are set individually by each vendor. However, Avenue Retail mandates a minimum 14-day return window for all items sold that arrive damaged or significantly not as described under our Buyer Protection Guarantee.",
       },
       {
         q: "How long does it take to process a refund?",

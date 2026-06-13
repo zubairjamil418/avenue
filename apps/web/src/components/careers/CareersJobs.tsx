@@ -41,10 +41,10 @@ const CareersJobs = ({ initialJobs = [] }: CareersJobsProps) => {
             <p className="text-lg text-muted-foreground leading-relaxed">
               Don&apos;t see a perfect fit? Send your resume to{" "}
               <a
-                href="mailto:careers@sellzy.com"
+                href="mailto:careers@avenueretail.co.uk"
                 className="text-primary font-semibold hover:underline"
               >
-                careers@sellzy.com
+                careers@avenueretail.co.uk
               </a>
               . We&apos;re always looking for exceptional talent to join our
               mission.

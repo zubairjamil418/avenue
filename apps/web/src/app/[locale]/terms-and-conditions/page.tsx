@@ -13,9 +13,9 @@ const termsSections = [
     content: (
       <>
         <p className="mb-4">
-          Welcome to Sellzy ("we", "our", "us"). These Terms and Conditions
+          Welcome to Avenue Retail ("we", "our", "us"). These Terms and Conditions
           govern your use of our website, services, and multi-vendor eCommerce
-          platform. By accessing or using Sellzy, you agree to be bound by these
+          platform. By accessing or using Avenue Retail, you agree to be bound by these
           Terms.
         </p>
         <p>
@@ -33,7 +33,7 @@ const termsSections = [
     content: (
       <>
         <p className="mb-4">
-          To access certain features of Sellzy, you must register for an
+          To access certain features of Avenue Retail, you must register for an
           account. You agree to provide accurate, current, and complete
           information during registration and to update such information to keep
           it accurate.
@@ -61,7 +61,7 @@ const termsSections = [
     content: (
       <>
         <p className="mb-4">
-          Vendors operating on the Sellzy platform are independent contractors.
+          Vendors operating on the Avenue Retail platform are independent contractors.
           By registering as a vendor, you agree to comply with all applicable
           local, national, and international laws regarding the sale of your
           goods.
@@ -69,11 +69,11 @@ const termsSections = [
         <p className="mb-4">
           <strong>Content Ownership:</strong> Vendors retain the rights to the
           product images and descriptions they upload. However, by uploading
-          content, vendors grant Sellzy a non-exclusive, worldwide license to
+          content, vendors grant Avenue Retail a non-exclusive, worldwide license to
           display and promote these items.
         </p>
         <p>
-          <strong>Commission & Payouts:</strong> Sellzy deducts a standard
+          <strong>Commission & Payouts:</strong> Avenue Retail deducts a standard
           commission fee from every successful transaction. Payouts are
           processed according to the schedule outlined in the Vendor Agreement
           Dashboard.
@@ -87,7 +87,7 @@ const termsSections = [
     content: (
       <>
         <p className="mb-4">
-          Prices for products are determined by individual vendors. Sellzy acts
+          Prices for products are determined by individual vendors. Avenue Retail acts
           solely as a facilitator for transactions between buyers and vendors.
         </p>
         <p>
@@ -105,14 +105,14 @@ const termsSections = [
     content: (
       <>
         <p className="mb-4">
-          Because Sellzy is a multi-vendor platform, return and refund policies
+          Because Avenue Retail is a multi-vendor platform, return and refund policies
           may vary strictly by vendor. Buyers are encouraged to read the
           individual vendor's policy before completing a purchase.
         </p>
         <p>
-          In the event of a dispute between a buyer and a vendor, Sellzy
+          In the event of a dispute between a buyer and a vendor, Avenue Retail
           provides a resolution center to facilitate communication. However,
-          Sellzy is not legally responsible for resolving disputes or mandating
+          Avenue Retail is not legally responsible for resolving disputes or mandating
           refunds unless a transaction violates our core buyer protection
           guarantees.
         </p>
@@ -126,7 +126,7 @@ const termsSections = [
       <>
         <p className="mb-4">
           All original content, features, and functionality provided directly by
-          Sellzy (excluding vendor-uploaded content) are owned by Sellzy and are
+          Avenue Retail (excluding vendor-uploaded content) are owned by Avenue Retail and are
           protected by international copyright, trademark, patent, trade secret,
           and other intellectual property laws.
         </p>
@@ -143,7 +143,7 @@ const termsSections = [
     content: (
       <>
         <p className="mb-4">
-          In no event shall Sellzy, nor its directors, employees, partners,
+          In no event shall Avenue Retail, nor its directors, employees, partners,
           agents, suppliers, or affiliates, be liable for any indirect,
           incidental, special, consequential or punitive damages, including
           without limitation, loss of profits, data, use, goodwill, or other
@@ -184,7 +184,7 @@ const TermsAndConditionsPage = () => {
             </h1>
             <p className="text-lg text-muted-foreground">
               Please read these terms and conditions carefully before using the
-              Sellzy platform. Last updated: March 2026.
+              Avenue Retail platform. Last updated: March 2026.
             </p>
           </div>
 

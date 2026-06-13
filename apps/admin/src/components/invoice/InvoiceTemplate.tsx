@@ -57,7 +57,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ invoiceData }) => {
       <div className="flex justify-between items-start mb-8">
         <div className="space-y-2">
           <div className="flex items-center gap-2 mb-2">
-            <img src="/admin/logo.png" alt="Sellzy" className="h-12 w-auto object-contain" />
+            <img src="/admin/logo.png" alt="Avenue Retail" className="h-12 w-auto object-contain" />
           </div>
           <div className="text-sm text-grey-600">
             <p>123 Commerce Avenue</p>
@@ -227,7 +227,7 @@ const InvoiceTemplate: React.FC<InvoiceTemplateProps> = ({ invoiceData }) => {
 
       {/* Footer */}
       <div className="mt-8 pt-4 border-t border-grey-300 text-center text-sm text-grey-500">
-        <p>Thank you for choosing Sellzy!</p>
+        <p>Thank you for choosing Avenue Retail!</p>
         <p>Your premium e-commerce destination</p>
       </div>
     </div>
