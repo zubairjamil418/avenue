@@ -74,6 +74,7 @@ import {
   Copy,
   Search,
   Eye,
+  ExternalLink,
 } from "lucide-react";
 import { AxiosError } from "axios";
 import ProductSkeleton from "@/components/skeleton/ProductSkeleton";
@@ -1326,83 +1327,74 @@ export default function ProductsPage() {
                       }`}
                     >
                       <TableCell className="py-3">
-                        <div className="flex items-center">
-                          {product?.images && product.images.length > 0 ? (
-                            <>
-                              {product.images.slice(0, 3).map((img, i) => (
-                                <div
-                                  key={i}
-                                  className={`h-10 w-10 rounded-full overflow-hidden bg-muted shadow-sm border shrink-0 ${
-                                    i > 0 ? "-ml-3" : ""
-                                  } ring-2 ring-white relative z-${30 - i * 10}`}
-                                >
-                                  <img
-                                    src={img}
-                                    alt={`${product?.name} image ${i + 1}`}
-                                    className="h-full w-full object-cover"
-                                    onError={(e) => {
-                                      const target = e.currentTarget;
-                                      const currentSrc = target.src;
-                                      if (
-                                        currentSrc.includes(
-                                          "/placeholder-image.jpg",
-                                        )
-                                      )
-                                        return;
-                                      if (
-                                        currentSrc.includes("cloudinary.com") &&
-                                        !target.dataset.retryCount
-                                      ) {
-                                        target.dataset.retryCount = "1";
-                                        setTimeout(() => {
-                                          target.src = `${currentSrc}${currentSrc.includes("?") ? "&" : "?"}retry=${Date.now()}`;
-                                        }, 2000);
-                                      } else if (
-                                        target.dataset.retryCount === "1"
-                                      ) {
-                                        target.dataset.retryCount = "2";
-                                        setTimeout(() => {
-                                          target.src = `${currentSrc.split("retry=")[0]}retry=${Date.now()}`;
-                                        }, 5000);
-                                      } else {
-                                        target.src = "/placeholder-image.jpg";
-                                      }
-                                    }}
-                                  />
-                                </div>
-                              ))}
-                              {product.images.length > 3 && (
-                                <div className="flex -ml-3 h-10 w-10 items-center justify-center rounded-full bg-[#F8F9FA] border border-[#E9ECEF] text-xs font-bold text-gray-600 shrink-0 ring-2 ring-white z-0 overflow-hidden font-['DM_Sans',sans-serif]">
-                                  +{product.images.length - 3}
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <div className="h-10 w-10 rounded-full overflow-hidden bg-muted shadow-sm border shrink-0 ring-2 ring-white relative">
-                              <img
-                                src={product?.image || "/placeholder-image.jpg"}
-                                alt={product?.name || "Placeholder"}
-                                className="h-full w-full object-cover"
-                                onError={(e) => {
-                                  (e.currentTarget as HTMLImageElement).src =
-                                    "/placeholder-image.jpg";
-                                }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-medium text-foreground py-3">
-                        <div className="flex flex-col">
-                          <span
-                            className="max-w-[150px] sm:max-w-xs truncate text-[#212529] font-semibold font-['DM_Sans',sans-serif] text-sm"
-                            title={product?.name}
-                          >
-                            {product?.name}
-                          </span>
-                          <span className="text-xs text-[#6C757D] font-['Outfit',sans-serif] capitalize truncate max-w-[150px] sm:max-w-xs">
-                            {product?.productBase?.title || "Base"}
-                          </span>
+                        <div className="flex items-center gap-3">
+                          {/* Images */}
+                          <div className="flex items-center shrink-0">
+                            {product?.images && product.images.length > 0 ? (
+                              <>
+                                {product.images.slice(0, 3).map((img, i) => (
+                                  <div
+                                    key={i}
+                                    className={`h-10 w-10 rounded-full overflow-hidden bg-muted shadow-sm border shrink-0 ${
+                                      i > 0 ? "-ml-3" : ""
+                                    } ring-2 ring-white relative z-${30 - i * 10}`}
+                                  >
+                                    <img
+                                      src={img}
+                                      alt={`${product?.name} image ${i + 1}`}
+                                      className="h-full w-full object-cover"
+                                      onError={(e) => {
+                                        const target = e.currentTarget;
+                                        const currentSrc = target.src;
+                                        if (currentSrc.includes("/placeholder-image.jpg")) return;
+                                        if (currentSrc.includes("cloudinary.com") && !target.dataset.retryCount) {
+                                          target.dataset.retryCount = "1";
+                                          setTimeout(() => { target.src = `${currentSrc}${currentSrc.includes("?") ? "&" : "?"}retry=${Date.now()}`; }, 2000);
+                                        } else if (target.dataset.retryCount === "1") {
+                                          target.dataset.retryCount = "2";
+                                          setTimeout(() => { target.src = `${currentSrc.split("retry=")[0]}retry=${Date.now()}`; }, 5000);
+                                        } else {
+                                          target.src = "/placeholder-image.jpg";
+                                        }
+                                      }}
+                                    />
+                                  </div>
+                                ))}
+                                {product.images.length > 3 && (
+                                  <div className="flex -ml-3 h-10 w-10 items-center justify-center rounded-full bg-[#F8F9FA] border border-[#E9ECEF] text-xs font-bold text-gray-600 shrink-0 ring-2 ring-white z-0 overflow-hidden font-['DM_Sans',sans-serif]">
+                                    +{product.images.length - 3}
+                                  </div>
+                                )}
+                              </>
+                            ) : (
+                              <div className="h-10 w-10 rounded-full overflow-hidden bg-muted shadow-sm border shrink-0 ring-2 ring-white relative">
+                                <img
+                                  src={product?.image || "/placeholder-image.jpg"}
+                                  alt={product?.name || "Placeholder"}
+                                  className="h-full w-full object-cover"
+                                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder-image.jpg"; }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                          {/* Name + base */}
+                          <div className="flex flex-col min-w-0">
+                            <a
+                              href={`${import.meta.env.VITE_CLIENT_URL || "http://localhost:3000"}/en/product/${product?.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 group max-w-[150px] sm:max-w-xs"
+                              title="View on storefront"
+                            >
+                              <span className="truncate text-[#212529] font-semibold font-['DM_Sans',sans-serif] text-sm group-hover:text-primary transition-colors">
+                                {product?.name}
+                              </span>
+                              <ExternalLink className="h-3 w-3 shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
+                            </a>
+                            <span className="text-xs text-[#6C757D] font-['Outfit',sans-serif] capitalize truncate max-w-[150px] sm:max-w-xs">
+                              {product?.productBase?.title || "Base"}
+                            </span>
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell className="py-3">
@@ -2927,6 +2919,10 @@ export default function ProductsPage() {
         onOpenChange={setIsBulkUploadModalOpen}
         categories={categories}
         brands={brands}
+        sizes={availableSizes}
+        colors={availableColors}
+        weights={availableWeights}
+        productBases={availableProductBases}
         onSuccess={() => {
           fetchProducts(true); // Refresh products after bulk upload
         }}

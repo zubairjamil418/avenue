@@ -222,7 +222,7 @@ const productSchema = new mongoose.Schema<IProductDocument>(
     ],
     image: {
       type: String,
-      required: true,
+      default: "",
     },
     bg: {
       type: String,
@@ -306,7 +306,7 @@ productSchema.index({ name: "text" });
 
 // Generate slug from product details before save
 productSchema.pre("save", async function (this: IProductDocument) {
-  if (!this.slug || this.isModified("name")) {
+  if (!this.slug) {
     const slugParts = [];
 
     // Add product name

@@ -1146,7 +1146,6 @@ const bulkCreateProducts = asyncHandler(
         // Validate required fields
         if (
           !productData.name ||
-          !productData.description ||
           !productData.category ||
           !productData.brand
         ) {
@@ -1174,15 +1173,23 @@ const bulkCreateProducts = asyncHandler(
         // Create product
         const product = await Product.create({
           name: productData.name,
-          description: productData.description,
+          description: productData.description || "",
           price: productData.price || 0,
           discountPercentage: productData.discountPercentage || 0,
+          purchasePrice: productData.purchasePrice || 0,
+          purchasedQuantity: productData.purchasedQuantity || 0,
           stock: productData.stock || 0,
+          slug: productData.slug || undefined,
+          bg: productData.bg || undefined,
+          isNewItem: productData.isNewItem || false,
           category: productData.category,
           brand: productData.brand,
           images: productData.images || [],
           image: productData.images?.[0] || "",
           productBase: productData.productBase || undefined,
+          sizes: productData.sizes?.length ? productData.sizes : undefined,
+          colors: productData.colors?.length ? productData.colors : undefined,
+          weights: productData.weights?.length ? productData.weights : undefined,
         });
 
         results.successful.push({
