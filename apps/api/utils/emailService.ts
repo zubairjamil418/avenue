@@ -70,7 +70,7 @@ const generateOrderEmailHTML = (userName: string, order: IOrder): string => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Confirmation - Sellzy</title>
+  <title>Order Confirmation - Avenue Retail</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f7fa; line-height: 1.6;">
   
@@ -86,7 +86,7 @@ const generateOrderEmailHTML = (userName: string, order: IOrder): string => {
           <tr>
             <td style="background: linear-gradient(135deg, #078178 0%, #05535c 100%); padding: 40px 30px; text-align: center;">
               <div style="background-color: white; display: inline-block; padding: 15px 25px; border-radius: 8px; margin-bottom: 20px;">
-                <h1 style="margin: 0; color: #05535c; font-size: 28px; font-weight: 700;">Sellzy</h1>
+                <h1 style="margin: 0; color: #05535c; font-size: 28px; font-weight: 700;">Avenue Retail</h1>
               </div>
               <h2 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">${emailTitle} ${order.status === "delivered" ? "🚚" : "🎉"}</h2>
               <p style="margin: 10px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px;">${order.status === "delivered" ? "Your order has been delivered!" : "Thank you for your purchase"}</p>
@@ -278,7 +278,7 @@ const generateOrderEmailHTML = (userName: string, order: IOrder): string => {
               <div style="background-color: #fef3c7; border-radius: 8px; padding: 20px; text-align: center; border: 1px solid #fde68a;">
                 <p style="margin: 0 0 15px 0; color: #92400e; font-size: 15px; font-weight: 600;">Need Help? We're Here! 💬</p>
                 <p style="margin: 0; color: #78350f; font-size: 14px;">
-                  📧 <a href="mailto:support@sellzy.com" style="color: #92400e; text-decoration: none; font-weight: 600;">support@sellzy.com</a><br>
+                  📧 <a href="mailto:support@avenueretail.co.uk" style="color: #92400e; text-decoration: none; font-weight: 600;">support@avenueretail.co.uk</a><br>
                   📞 +1 (555) 123-4567<br>
                   🕒 Mon-Fri: 9AM - 6PM EST
                 </p>
@@ -289,7 +289,7 @@ const generateOrderEmailHTML = (userName: string, order: IOrder): string => {
           <!-- Footer -->
           <tr>
             <td style="background-color: #1f2937; padding: 30px; text-align: center;">
-              <p style="margin: 0 0 15px 0; color: #ffffff; font-size: 16px; font-weight: 600;">Thank you for choosing Sellzy!</p>
+              <p style="margin: 0 0 15px 0; color: #ffffff; font-size: 16px; font-weight: 600;">Thank you for choosing Avenue Retail!</p>
               <p style="margin: 0 0 20px 0; color: #9ca3af; font-size: 14px;">
                 We appreciate your business and trust in our products.
               </p>
@@ -301,7 +301,7 @@ const generateOrderEmailHTML = (userName: string, order: IOrder): string => {
                 <a href="#" style="display: inline-block; margin: 0 10px; color: #078178; text-decoration: none; font-size: 14px;">Twitter</a>
               </div>
               <p style="margin: 0; color: #6b7280; font-size: 12px;">
-                © 2025 Sellzy. All rights reserved.<br>
+                © 2025 Avenue Retail. All rights reserved.<br>
                 123 Commerce Street, New York, NY 10001
               </p>
             </td>
@@ -350,7 +350,7 @@ const generateOrderEmailContent = (
     .join("\n");
 
   return {
-    subject: `${emailTitle} #${order._id} - Sellzy`,
+    subject: `${emailTitle} #${order._id} - Avenue Retail`,
     message: `
 Hi ${userName},
 
@@ -398,11 +398,11 @@ Estimated delivery: 3-5 business days`
 }
 
 Need Help?
-Email: support@sellzy.com
+Email: support@avenueretail.co.uk
 Phone: +1 (555) 123-4567
 Hours: Mon-Fri: 9AM - 6PM EST
 
-Thanks for choosing Sellzy!
+Thanks for choosing Avenue Retail!
     `,
   };
 };
@@ -424,7 +424,7 @@ const sendOrderConfirmationEmail = async ({
     const transporter: Transporter = createTransporter();
 
     const mailOptions = {
-      from: `"Sellzy" <${
+      from: `"Avenue Retail" <${
         process.env.SENDER_EMAIL_ADDRESS || "noor.jsdivs@gmail.com"
       }>`,
       to: userEmail,
@@ -468,7 +468,7 @@ const sendInvoiceEmail = async ({
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: `"Sellzy" <${
+      from: `"Avenue Retail" <${
         process.env.SENDER_EMAIL_ADDRESS || "reactjsbd@gmail.com"
       }>`,
       to,
@@ -477,7 +477,7 @@ const sendInvoiceEmail = async ({
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h2 style="color: #005249; margin: 0;">Sellzy - Invoice</h2>
+            <h2 style="color: #005249; margin: 0;">Avenue Retail - Invoice</h2>
           </div>
           
           <div style="background-color: white; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px;">
@@ -492,8 +492,8 @@ const sendInvoiceEmail = async ({
           
           <div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f8fafc; border-radius: 8px;">
             <p style="color: #6b7280; font-size: 14px; margin: 0;">
-              Thank you for choosing Sellzy!<br>
-              If you have any questions, please contact us at support@sellzy.com
+              Thank you for choosing Avenue Retail!<br>
+              If you have any questions, please contact us at support@avenueretail.co.uk
             </p>
           </div>
         </div>
@@ -528,7 +528,7 @@ const sendEmail = async ({
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: `"Sellzy" <${
+      from: `"Avenue Retail" <${
         process.env.SENDER_EMAIL_ADDRESS || "reactjsbd@gmail.com"
       }>`,
       to,
@@ -539,7 +539,7 @@ const sendEmail = async ({
         `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h2 style="color: #005249; margin: 0;">Sellzy</h2>
+            <h2 style="color: #005249; margin: 0;">Avenue Retail</h2>
           </div>
           
           <div style="background-color: white; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
@@ -550,8 +550,8 @@ const sendEmail = async ({
           
           <div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f8fafc; border-radius: 8px;">
             <p style="color: #6b7280; font-size: 14px; margin: 0;">
-              Thank you for choosing Sellzy!<br>
-              If you have any questions, please contact us at support@sellzy.com
+              Thank you for choosing Avenue Retail!<br>
+              If you have any questions, please contact us at support@avenueretail.co.uk
             </p>
           </div>
         </div>
@@ -584,7 +584,7 @@ const sendPasswordResetEmail = async (
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Your Password - Sellzy</title>
+  <title>Reset Your Password - Avenue Retail</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f7fa; line-height: 1.6;">
   
@@ -598,7 +598,7 @@ const sendPasswordResetEmail = async (
           <tr>
             <td style="background: linear-gradient(135deg, #078178 0%, #05535c 100%); padding: 40px 30px; text-align: center;">
               <div style="background-color: white; display: inline-block; padding: 15px 25px; border-radius: 8px; margin-bottom: 20px;">
-                <h1 style="margin: 0; color: #05535c; font-size: 28px; font-weight: 700;">Sellzy</h1>
+                <h1 style="margin: 0; color: #05535c; font-size: 28px; font-weight: 700;">Avenue Retail</h1>
               </div>
               <h2 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">🔐 Reset Your Password</h2>
             </td>
@@ -609,7 +609,7 @@ const sendPasswordResetEmail = async (
             <td style="padding: 40px 30px;">
               <h3 style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 20px; font-weight: 600;">Hi ${userName}! 👋</h3>
               <p style="margin: 0 0 20px 0; color: #666; font-size: 15px; line-height: 1.6;">
-                We received a request to reset your password for your Sellzy account. If you didn't make this request, you can safely ignore this email.
+                We received a request to reset your password for your Avenue Retail account. If you didn't make this request, you can safely ignore this email.
               </p>
               
               <p style="margin: 0 0 30px 0; color: #666; font-size: 15px; line-height: 1.6;">
@@ -652,10 +652,10 @@ const sendPasswordResetEmail = async (
             <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
               <p style="margin: 0 0 10px 0; color: #666; font-size: 13px;">
                 Best regards,<br>
-                <strong>The Sellzy Team</strong>
+                <strong>The Avenue Retail Team</strong>
               </p>
               <p style="margin: 0; color: #999; font-size: 12px;">
-                © ${new Date().getFullYear()} Sellzy. All rights reserved.
+                © ${new Date().getFullYear()} Avenue Retail. All rights reserved.
               </p>
             </td>
           </tr>
@@ -670,9 +670,9 @@ const sendPasswordResetEmail = async (
   `;
 
   const mailOptions = {
-    from: `"Sellzy" <${process.env.SENDER_EMAIL_ADDRESS}>`,
+    from: `"Avenue Retail" <${process.env.SENDER_EMAIL_ADDRESS}>`,
     to: email,
-    subject: "Reset Your Password - Sellzy",
+    subject: "Reset Your Password - Avenue Retail",
     html: htmlContent,
   };
 
@@ -703,7 +703,7 @@ const sendPasswordResetOtpEmail = async (
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Your Password - Sellzy</title>
+  <title>Reset Your Password - Avenue Retail</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f7fa; line-height: 1.6;">
   
@@ -717,7 +717,7 @@ const sendPasswordResetOtpEmail = async (
           <tr>
             <td style="background: linear-gradient(135deg, #078178 0%, #05535c 100%); padding: 40px 30px; text-align: center;">
               <div style="background-color: white; display: inline-block; padding: 15px 25px; border-radius: 8px; margin-bottom: 20px;">
-                <h1 style="margin: 0; color: #05535c; font-size: 28px; font-weight: 700;">Sellzy</h1>
+                <h1 style="margin: 0; color: #05535c; font-size: 28px; font-weight: 700;">Avenue Retail</h1>
               </div>
               <h2 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">🔐 Password Reset Code</h2>
             </td>
@@ -728,7 +728,7 @@ const sendPasswordResetOtpEmail = async (
             <td style="padding: 40px 30px;">
               <h3 style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 20px; font-weight: 600;">Hi ${userName}! 👋</h3>
               <p style="margin: 0 0 20px 0; color: #666; font-size: 15px; line-height: 1.6;">
-                We received a request to reset your password for your Sellzy account. If you didn't make this request, you can safely ignore this email.
+                We received a request to reset your password for your Avenue Retail account. If you didn't make this request, you can safely ignore this email.
               </p>
               
               <p style="margin: 0 0 20px 0; color: #666; font-size: 15px; line-height: 1.6;">
@@ -764,10 +764,10 @@ const sendPasswordResetOtpEmail = async (
             <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
               <p style="margin: 0 0 10px 0; color: #666; font-size: 13px;">
                 Best regards,<br>
-                <strong>The Sellzy Team</strong>
+                <strong>The Avenue Retail Team</strong>
               </p>
               <p style="margin: 0; color: #999; font-size: 12px;">
-                © ${new Date().getFullYear()} Sellzy. All rights reserved.
+                © ${new Date().getFullYear()} Avenue Retail. All rights reserved.
               </p>
             </td>
           </tr>
@@ -782,9 +782,9 @@ const sendPasswordResetOtpEmail = async (
   `;
 
   const mailOptions = {
-    from: `"Sellzy" <${process.env.SENDER_EMAIL_ADDRESS}>`,
+    from: `"Avenue Retail" <${process.env.SENDER_EMAIL_ADDRESS}>`,
     to: email,
-    subject: "Your Password Reset Code - Sellzy",
+    subject: "Your Password Reset Code - Avenue Retail",
     html: htmlContent,
   };
 

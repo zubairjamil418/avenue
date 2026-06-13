@@ -70,6 +70,7 @@ import customerReviewRoutes from "./routes/customerReviewRoutes.js";
 import jobApplicationRoutes from "./routes/jobApplicationRoutes.js";
 import setupRoutes from "./routes/setupRoutes.js";
 import currencyRoutes from "./routes/currencyRoutes.js";
+import emailRoutes from "./routes/emailRoutes.js";
 import { handleStripeWebhook } from "./controllers/paymentController.js";
 
 // Load env vars
@@ -287,6 +288,7 @@ app.use("/api/team-members", teamMemberRoutes);
 app.use("/api/customer-reviews", customerReviewRoutes);
 app.use("/api/setup", setupRoutes);
 app.use("/api/currencies", currencyRoutes);
+app.use("/api/email", emailRoutes);
 
 // API Documentation
 app.use(

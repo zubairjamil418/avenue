@@ -8,8 +8,7 @@ interface AuthRequest extends Request {
   user?: IUser;
 }
 
-// Initialize Stripe with secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2026-02-25.clover",
 });
 
@@ -65,7 +64,7 @@ export const createCheckoutSession = asyncHandler(
       const amountInCents = Math.round(order.total * 100);
       const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
 
-      const session = await stripe.checkout.sessions.create({
+      const session = await getStripe().checkout.sessions.create({
         payment_method_types: ["card"],
         customer_email: req.user.email,
         line_items: [
@@ -168,7 +167,7 @@ export const createPaymentIntent = asyncHandler(
 
       const amountInCents = Math.round(order.total * 100);
 
-      const paymentIntent = await stripe.paymentIntents.create({
+      const paymentIntent = await getStripe().paymentIntents.create({
         amount: amountInCents,
         currency: currency.toLowerCase(),
         metadata: {
@@ -223,7 +222,7 @@ export const handleStripeWebhook = asyncHandler(
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+      event = getStripe().webhooks.constructEvent(req.body, sig, endpointSecret);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("❌ Webhook signature verification failed:", errorMessage);
